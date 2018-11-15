@@ -1,0 +1,28 @@
+[{
+	"inputFiles": [
+        "bower_components/greensock/src/uncompressed/easing/EasePack.js",
+        "bower_components/greensock/src/uncompressed/TweenLite.js",
+        "bower_components/greensock/src/uncompressed/TweenMax.js"
+    ],
+	"outputFileName": "docs/js/vendors.js",
+	"minify": {
+		"enabled": true
+	}
+}, {
+	"inputFiles": [
+        "docs/css/docs.css"
+    ],
+	"outputFileName": "docs/css/docs.css",
+	"minify": {
+		"enabled": true
+	}
+}, {
+	"inputFiles": [
+        "src/js/utils/prototype.js",
+        "src/js/docs.js"
+    ],
+	"outputFileName": "docs/js/docs.js",
+	"minify": {
+		"enabled": true
+	}
+}]

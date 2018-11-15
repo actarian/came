@@ -1,0 +1,22 @@
+{
+    "name": "ica-ambiente",
+    "description": "Ica Ambiente",
+    "main": "./bower_components",
+    "authors": [
+        "actarian <lzampetti@gmail.com>"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "glsl"
+    ],
+    "homepage": "https://github.com/actarian/ica-ambiente",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "greensock": "https://github.com/greensock/GreenSock-JS.git#2.0.1"
+    }
+}
