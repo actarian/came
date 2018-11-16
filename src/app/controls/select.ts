@@ -54,11 +54,11 @@ export class MtmSelect extends MtmControl {
 				this.didChange(item, this);
 			}
 		}
-		console.log('MtmSelect.onUpdate', select.value);
+		// console.log('MtmSelect.onUpdate', select.value);
 	}
 
 	onChange?(e: Event): void {
-		console.log('MtmSelect.onChange', e.target);
+		// console.log('MtmSelect.onChange', e.target);
 		this.onUpdate(e.target as HTMLSelectElement);
 	}
 

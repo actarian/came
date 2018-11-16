@@ -9,14 +9,16 @@ export default class MtmConfigurator {
 
 	element: HTMLElement;
 	options: MtmControl[];
+	cols: MtmControl[] = [];
+	rows: number[][] = [];
 
 	constructor(selector: string) {
 		this.element = document.querySelector(selector) as HTMLElement;
 		this.addMediaScrollListener();
 		this.addRecapScrollListener();
 		MtmDataService.fetch((cols: MtmControl[], rows: number[][]) => {
-			console.log(cols[0]);
-			console.log(rows[0]);
+			this.cols = cols;
+			this.rows = rows;
 			let options = [
 				new MtmGroup({
 					key: 'knownTecnology',
@@ -47,6 +49,8 @@ export default class MtmConfigurator {
 				MtmDataService.optionWithKey('keypad'),
 				MtmDataService.optionWithKey('infoModule'),
 				MtmDataService.optionWithKey('proximity'),
+				MtmDataService.optionWithKey('finish'),
+				MtmDataService.optionWithKey('mount'),
 				MtmDataService.optionWithKey('system'),
 				MtmDataService.optionWithKey('moduleSize'),
 			];
@@ -62,13 +66,64 @@ export default class MtmConfigurator {
 					case 'constrainedDimension':
 
 						break;
+					default:
+						this.onSearch();
 				}
 			});
 			this.options = options;
 			this.render();
+			this.onSearch();
 		}, (error: any) => {
 			console.log('error', error);
 		});
+	}
+
+	onSearch() {
+		// FILTERS
+		const filters = this.options.map(x => {
+			const index = this.cols.indexOf(x);
+			if (index !== -1) {
+				const control = x;
+				const selectedValue = x.values.find(v => v.active);
+				const value = selectedValue ? selectedValue.id : -1;
+				const price = selectedValue ? selectedValue.price : 0;
+				return { index, value, price, control };
+			} else {
+				return { index };
+			}
+		}).filter(x => x.index !== -1 && x.value !== 0);
+		// TOTALPRICE ?
+		const totalPrice = filters.reduce((p, x) => {
+			console.log(p, x.price);
+			return p + x.price;
+		}, 0);
+		// FILTER RESULTS
+		const results = this.rows.filter(x => {
+			let has = true;
+			filters.forEach(f => has = has && x[f.index] === f.value);
+			return has;
+		}).map(r => {
+			const result: any = {};
+			this.cols.forEach((c, i) => {
+				const value = c.values.find(v => v.id === r[i]);
+				result[c.key] = value ? value.name : '-';
+			});
+			return result;
+		});
+		if (results.length > 0) {
+			const result = results[0];
+			this.element.querySelector('.result-price').innerHTML = `€ ${totalPrice.toFixed(2)}`;
+			this.element.querySelector('.result-code').innerHTML = result.code;
+			// this.element.querySelectorAll('.result-code').forEach(x => x.innerHTML = result.code);
+			this.element.querySelector('.result-description').innerHTML = result.Description;
+			if (results.length === 1) {
+				console.log('MtmConfigurato.onSearch', result);
+			} else {
+				console.log('onSearch.error', results);
+			}
+		} else {
+			console.log('onSearch.error', results);
+		}
 	}
 
 	render() {

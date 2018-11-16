@@ -3,6 +3,7 @@ export class MtmValue {
 	id: number;
 	name: string;
 	price?: number = 0;
+	count?: number = 1;
 	active?: boolean = false;
 
 	getPrice?(): string {

@@ -12,6 +12,7 @@ export class MtmControl {
 	cache?: any = {};
 	count?: number = 0;
 	className?: string = '';
+	nullable?: boolean = false;
 	element?: HTMLElement = null;
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
@@ -78,21 +79,25 @@ export class MtmControl {
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
 		buttons.forEach((x: Element) => Dom.removeClass(x, 'active'));
 		Dom.addClass(button, 'active');
+		this.values.forEach(x => x.active = false);
 		const id = parseInt(button.getAttribute('data-id'));
 		const item: MtmValue = this.values.find(x => x.id === id);
+		item.active = true;
 		this.currentItem = item;
 		if (typeof this.didChange === 'function') {
 			this.didChange(item, this);
 		}
-		console.log('MtmControl.onClick', 'button', button, 'item', item);
+		// console.log('MtmControl.onClick', 'button', button, 'item', item);
 	}
 
 	addValue?(name: string): number {
 		if (name.trim() !== '') {
 			let item = this.cache[name];
-			if (this.cache[name] == undefined) {
+			if (item == undefined) {
 				item = new MtmValue({ id: ++this.count, name });
 				this.values.push(item);
+			} else {
+				item.count++;
 			}
 			this.cache[name] = item;
 			return item.id;
@@ -100,8 +105,9 @@ export class MtmControl {
 	}
 
 	sort?() {
-		this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-		if (this.values.length === 1) {
+		// this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+		this.values.sort((a, b) => (a.count > b.count) ? -1 : ((b.count > a.count) ? 1 : 0));
+		if (this.nullable) {
 			this.values.unshift(new MtmValue({
 				id: 0,
 				name: 'No',

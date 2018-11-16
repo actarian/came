@@ -558,6 +558,40 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     MtmControlType[MtmControlType["Grid"] = 4] = "Grid";
   })(MtmControlType = exports.MtmControlType || (exports.MtmControlType = {}));
 
+  var MtmControlEnum;
+
+  (function (MtmControlEnum) {
+    MtmControlEnum["Code"] = "Code";
+    MtmControlEnum["SingleModuleFrame"] = "Single Module Frame";
+    MtmControlEnum["Finish"] = "Finish";
+    MtmControlEnum["ModuleSize"] = "Module Size";
+    MtmControlEnum["Mount"] = "Mount";
+    MtmControlEnum["System"] = "System";
+    MtmControlEnum["AudioVideo"] = "A/V";
+    MtmControlEnum["Keypad"] = "Keypad";
+    MtmControlEnum["Proximity"] = "Proximity";
+    MtmControlEnum["InfoModule"] = "Info Module";
+    MtmControlEnum["HearingModule"] = "Hearing Module";
+    MtmControlEnum["DigitalDisplay"] = "Digital Display";
+    MtmControlEnum["AdditionalModules"] = "moduli aggiuntivi";
+    MtmControlEnum["Buttons"] = "Buttons";
+    MtmControlEnum["Divided"] = "Divided";
+    MtmControlEnum["Mounting"] = "Mounting";
+    MtmControlEnum["FlushRainshield"] = "Flush Rainshield";
+    MtmControlEnum["Frame"] = "Frame";
+    MtmControlEnum["Module1"] = "Electronics Module 1";
+    MtmControlEnum["Front1"] = "Front Piece 1";
+    MtmControlEnum["Module2"] = "Electronics Module 2";
+    MtmControlEnum["Front2"] = "Front Piece 2";
+    MtmControlEnum["Module3"] = "Electronics Module 3";
+    MtmControlEnum["Front3"] = "Front Piece 3";
+    MtmControlEnum["Module4"] = "Electronics Module 4";
+    MtmControlEnum["Front4"] = "Front Piece 4";
+    MtmControlEnum["Identifier"] = "CI";
+    MtmControlEnum["Description"] = "";
+  })(MtmControlEnum = exports.MtmControlEnum || (exports.MtmControlEnum = {})); // Code,Single Module Frame,Finish,Module Size,Mount,System,A/V,Keypad,Proximity,Info Module,Hearing Module,Digital Display,moduli aggiuntivi,Buttons,Divided,Mounting,Flush Rainshield,Frame,Electronics Module 1,Front Piece 1,Electronics Module 2,Front Piece 2,Electronics Module 3,Front Piece 3,Electronics Module 4,Front Piece 4,CI,
+
+
   exports.MTM_MAP = {
     'Code': {
       key: 'code',
@@ -568,7 +602,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     'Finish': {
       key: 'finish',
-      name: 'Finitura'
+      name: 'Finitura',
+      type: MtmControlType.Group
     },
     'ModuleSize': {
       key: 'moduleSize',
@@ -577,7 +612,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       type: MtmControlType.Group
     },
     'Mount': {
-      key: 'mount'
+      key: 'mount',
+      name: 'Montatura',
+      type: MtmControlType.List
     },
     'System': {
       key: 'system',
@@ -594,29 +631,34 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       key: 'keypad',
       name: 'Tastiera per il controllo accessi',
       description: 'Tastiera numerica per la sicurezza',
-      type: MtmControlType.Group
+      type: MtmControlType.List,
+      nullable: true
     },
     'Proximity': {
       key: 'proximity',
       name: 'Modulo di prossimità',
       description: 'Accesso automatico tramite scansione RFID',
-      type: MtmControlType.Group
+      type: MtmControlType.Group,
+      nullable: true
     },
     'InfoModule': {
       key: 'infoModule',
       name: 'Modulo informazioni',
       description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato',
-      type: MtmControlType.Group
+      type: MtmControlType.Group,
+      nullable: true
     },
     'HearingModule': {
       key: 'hearingModule',
       name: 'Modulo di sintesi vocale',
       description: 'Disponi di apparecchio acustico con interfaccia magnetica?',
-      type: MtmControlType.Group
+      type: MtmControlType.Group,
+      nullable: true
     },
     'DigitalDisplay': {
       key: 'digitalDisplay',
-      name: 'Display Digitale'
+      name: 'Display Digitale',
+      nullable: true
     },
     'moduliaggiuntivi': {
       key: 'additionalModules'
@@ -624,7 +666,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     'Buttons': {
       key: 'buttons',
       name: 'Pulsanti di chiamata',
-      type: MtmControlType.List
+      type: MtmControlType.List,
+      nullable: true
     },
     'Divided': {
       key: 'divided'
@@ -734,6 +777,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.cache = {};
       this.count = 0;
       this.className = '';
+      this.nullable = false;
       this.element = null;
       this.currentItem = null;
       this.didChange = null;
@@ -816,17 +860,20 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           return dom_1.default.removeClass(x, 'active');
         });
         dom_1.default.addClass(button, 'active');
+        this.values.forEach(function (x) {
+          return x.active = false;
+        });
         var id = parseInt(button.getAttribute('data-id'));
         var item = this.values.find(function (x) {
           return x.id === id;
         });
+        item.active = true;
         this.currentItem = item;
 
         if (typeof this.didChange === 'function') {
           this.didChange(item, this);
-        }
+        } // console.log('MtmControl.onClick', 'button', button, 'item', item);
 
-        console.log('MtmControl.onClick', 'button', button, 'item', item);
       }
     }, {
       key: "addValue",
@@ -834,12 +881,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         if (name.trim() !== '') {
           var item = this.cache[name];
 
-          if (this.cache[name] == undefined) {
+          if (item == undefined) {
             item = new value_1.MtmValue({
               id: ++this.count,
               name: name
             });
             this.values.push(item);
+          } else {
+            item.count++;
           }
 
           this.cache[name] = item;
@@ -849,11 +898,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "sort",
       value: function sort() {
+        // this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.values.sort(function (a, b) {
-          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+          return a.count > b.count ? -1 : b.count > a.count ? 1 : 0;
         });
 
-        if (this.values.length === 1) {
+        if (this.nullable) {
           this.values.unshift(new value_1.MtmValue({
             id: 0,
             name: 'No'
@@ -938,7 +988,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        console.log(item);
         return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"info\">info</button>\n\t</div>");
       }
     }]);
@@ -1195,14 +1244,13 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           if (typeof this.didChange === 'function') {
             this.didChange(item, this);
           }
-        }
+        } // console.log('MtmSelect.onUpdate', select.value);
 
-        console.log('MtmSelect.onUpdate', select.value);
       }
     }, {
       key: "onChange",
       value: function onChange(e) {
-        console.log('MtmSelect.onChange', e.target);
+        // console.log('MtmSelect.onChange', e.target);
         this.onUpdate(e.target);
       }
     }]);
@@ -1245,6 +1293,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _classCallCheck(this, MtmValue);
 
       this.price = 0;
+      this.count = 1;
       this.active = false;
 
       if (options) {
@@ -1317,12 +1366,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
       _classCallCheck(this, MtmConfigurator);
 
+      this.cols = [];
+      this.rows = [];
       this.element = document.querySelector(selector);
       this.addMediaScrollListener();
       this.addRecapScrollListener();
       data_service_1.default.fetch(function (cols, rows) {
-        console.log(cols[0]);
-        console.log(rows[0]);
+        _this.cols = cols;
+        _this.rows = rows;
         var options = [new group_1.MtmGroup({
           key: 'knownTecnology',
           name: 'Conosci già la tecnologia da adottare?',
@@ -1354,7 +1405,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               name: (i + 1).toFixed(0)
             };
           })
-        }), data_service_1.default.optionWithKey('audioVideo'), data_service_1.default.optionWithKey('keypad'), data_service_1.default.optionWithKey('infoModule'), data_service_1.default.optionWithKey('proximity'), data_service_1.default.optionWithKey('system'), data_service_1.default.optionWithKey('moduleSize')];
+        }), data_service_1.default.optionWithKey('audioVideo'), data_service_1.default.optionWithKey('keypad'), data_service_1.default.optionWithKey('infoModule'), data_service_1.default.optionWithKey('proximity'), data_service_1.default.optionWithKey('finish'), data_service_1.default.optionWithKey('mount'), data_service_1.default.optionWithKey('system'), data_service_1.default.optionWithKey('moduleSize')];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
             console.log('MtmConfigurator.didChange', control.key, item);
@@ -1376,18 +1427,95 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
               case 'constrainedDimension':
                 break;
+
+              default:
+                _this.onSearch();
+
             }
           };
         });
         _this.options = options;
 
         _this.render();
+
+        _this.onSearch();
       }, function (error) {
         console.log('error', error);
       });
     }
 
     _createClass(MtmConfigurator, [{
+      key: "onSearch",
+      value: function onSearch() {
+        var _this2 = this;
+
+        // FILTERS
+        var filters = this.options.map(function (x) {
+          var index = _this2.cols.indexOf(x);
+
+          if (index !== -1) {
+            var control = x;
+            var selectedValue = x.values.find(function (v) {
+              return v.active;
+            });
+            var value = selectedValue ? selectedValue.id : -1;
+            var price = selectedValue ? selectedValue.price : 0;
+            return {
+              index: index,
+              value: value,
+              price: price,
+              control: control
+            };
+          } else {
+            return {
+              index: index
+            };
+          }
+        }).filter(function (x) {
+          return x.index !== -1 && x.value !== 0;
+        }); // TOTALPRICE ?
+
+        var totalPrice = filters.reduce(function (p, x) {
+          console.log(p, x.price);
+          return p + x.price;
+        }, 0); // FILTER RESULTS
+
+        var results = this.rows.filter(function (x) {
+          var has = true;
+          filters.forEach(function (f) {
+            return has = has && x[f.index] === f.value;
+          });
+          return has;
+        }).map(function (r) {
+          var result = {};
+
+          _this2.cols.forEach(function (c, i) {
+            var value = c.values.find(function (v) {
+              return v.id === r[i];
+            });
+            result[c.key] = value ? value.name : '-';
+          });
+
+          return result;
+        });
+
+        if (results.length > 0) {
+          var result = results[0];
+          this.element.querySelector('.result-price').innerHTML = "\u20AC ".concat(totalPrice.toFixed(2));
+          this.element.querySelector('.result-code').innerHTML = result.code; // this.element.querySelectorAll('.result-code').forEach(x => x.innerHTML = result.code);
+
+          this.element.querySelector('.result-description').innerHTML = result.Description;
+
+          if (results.length === 1) {
+            console.log('MtmConfigurato.onSearch', result);
+          } else {
+            console.log('onSearch.error', results);
+          }
+        } else {
+          console.log('onSearch.error', results);
+        }
+      }
+    }, {
       key: "render",
       value: function render() {
         var outlet = this.element.querySelector('.options-outlet');
@@ -1575,7 +1703,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       key: "optionWithKey",
       value: function optionWithKey(key) {
         return MtmDataService.cols.find(function (x) {
-          console.log(x.key, key);
+          // console.log(x.key, key);
           return x.key === key;
         });
       }

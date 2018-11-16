@@ -56,7 +56,7 @@ export default class MtmDataService {
 
 	static optionWithKey(key: string): MtmControl {
 		return MtmDataService.cols.find(x => {
-			console.log(x.key, key);
+			// console.log(x.key, key);
 			return x.key === key;
 		});
 	}
