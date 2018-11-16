@@ -532,239 +532,1175 @@
 })));
 
 },{}],2:[function(require,module,exports){
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var MtmControlType;
+
+  (function (MtmControlType) {
+    MtmControlType[MtmControlType["Select"] = 1] = "Select";
+    MtmControlType[MtmControlType["Group"] = 2] = "Group";
+    MtmControlType[MtmControlType["List"] = 3] = "List";
+    MtmControlType[MtmControlType["Grid"] = 4] = "Grid";
+  })(MtmControlType = exports.MtmControlType || (exports.MtmControlType = {}));
+
+  exports.MTM_MAP = {
+    'Code': {
+      key: 'code',
+      name: 'Codice'
+    },
+    'SingleModuleFrame': {
+      key: 'singleModuleFrame'
+    },
+    'Finish': {
+      key: 'finish',
+      name: 'Finitura'
+    },
+    'ModuleSize': {
+      key: 'moduleSize',
+      name: 'Numero di moduli',
+      description: 'Quanto spazio ti serve? Consulta la guida.',
+      type: MtmControlType.Group
+    },
+    'Mount': {
+      key: 'mount'
+    },
+    'System': {
+      key: 'system',
+      name: 'Sistema',
+      description: 'Scopri le tecnologie e funzionalità dei sistemi Came.',
+      type: MtmControlType.Grid
+    },
+    'AV': {
+      key: 'audioVideo',
+      name: 'Caratteristiche Audio / Video',
+      type: MtmControlType.Group
+    },
+    'Keypad': {
+      key: 'keypad',
+      name: 'Tastiera per il controllo accessi',
+      description: 'Tastiera numerica per la sicurezza',
+      type: MtmControlType.Group
+    },
+    'Proximity': {
+      key: 'proximity',
+      name: 'Modulo di prossimità',
+      description: 'Accesso automatico tramite scansione RFID',
+      type: MtmControlType.Group
+    },
+    'InfoModule': {
+      key: 'infoModule',
+      name: 'Modulo informazioni',
+      description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato',
+      type: MtmControlType.Group
+    },
+    'HearingModule': {
+      key: 'hearingModule',
+      name: 'Modulo di sintesi vocale',
+      description: 'Disponi di apparecchio acustico con interfaccia magnetica?',
+      type: MtmControlType.Group
+    },
+    'DigitalDisplay': {
+      key: 'digitalDisplay',
+      name: 'Display Digitale'
+    },
+    'moduliaggiuntivi': {
+      key: 'additionalModules'
+    },
+    'Buttons': {
+      key: 'buttons',
+      name: 'Pulsanti di chiamata',
+      type: MtmControlType.List
+    },
+    'Divided': {
+      key: 'divided'
+    },
+    'Mounting': {
+      key: 'mounting'
+    },
+    'FlushRainshield': {
+      key: 'flushRainshield'
+    },
+    'Frame': {
+      key: 'frame'
+    },
+    'ElectronicsModule1': {
+      key: 'electronicsModule1'
+    },
+    'FrontPiece1': {
+      key: 'frontPiece1'
+    },
+    'ElectronicsModule2': {
+      key: 'electronicsModule2'
+    },
+    'FrontPiece2': {
+      key: 'frontPiece2'
+    },
+    'ElectronicsModule3': {
+      key: 'electronicsModule3'
+    },
+    'FrontPiece3': {
+      key: 'frontPiece3'
+    },
+    'ElectronicsModule4': {
+      key: 'electronicsModule4'
+    },
+    'FrontPiece4': {
+      key: 'frontPiece4'
+    },
+    'CI': {
+      key: 'identifierCode'
+    },
+    '': {
+      key: 'Description'
+    },
+    Price: {
+      key: 'price'
+    },
+    Default: {
+      key: 'key',
+      name: 'name',
+      description: 'description',
+      type: MtmControlType.Group
+    }
+  };
+});
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
 };
+
 (function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./models/mtm-data.service", "./utils/dom"], factory);
-    }
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "../utils/dom", "./consts", "./value"], factory);
+  }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var mtm_data_service_1 = __importDefault(require("./models/mtm-data.service"));
-    var dom_1 = __importDefault(require("./utils/dom"));
-    var MtmConfigurator = /** @class */ (function () {
-        function MtmConfigurator(selector) {
-            this.element = document.querySelector(selector);
-            this.addMediaScrollListener();
-            this.addRecapScrollListener();
-            mtm_data_service_1.default.fetch();
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var dom_1 = __importDefault(require("../utils/dom"));
+
+  var consts_1 = require("./consts");
+
+  var value_1 = require("./value");
+
+  var MtmControl =
+  /*#__PURE__*/
+  function () {
+    function MtmControl(options) {
+      var _this = this;
+
+      _classCallCheck(this, MtmControl);
+
+      this.type = consts_1.MtmControlType.Grid;
+      this.key = '';
+      this.name = '';
+      this.description = '';
+      this.originalName = '';
+      this.values = [];
+      this.cache = {};
+      this.count = 0;
+      this.className = '';
+      this.element = null;
+      this.currentItem = null;
+      this.didChange = null;
+
+      if (typeof options == 'string') {
+        var map = consts_1.MTM_MAP[options] || consts_1.MTM_MAP.Default;
+        this.key = map.key;
+        this.name = map.name;
+        this.description = map.description;
+        this.originalName = options;
+        this.values = [];
+        this.cache = {};
+        this.count = 0;
+      } else {
+        options = options;
+        Object.assign(this, options);
+        this.originalName = this.name;
+
+        if (options.values) {
+          this.values = options.values.map(function (x) {
+            return new value_1.MtmValue(x);
+          });
+          this.values.forEach(function (x) {
+            _this.cache[x.name] = x;
+            _this.count++;
+          });
+
+          if (this.values.length) {
+            this.values[0].active = true;
+          }
         }
-        MtmConfigurator.prototype.addMediaScrollListener = function () {
-            var media = this.element.querySelector('.media');
-            var picture = media.querySelector('.picture');
-            window.addEventListener('scroll', function () {
-                var rect = media.getBoundingClientRect();
-                if (rect.top < 60) {
-                    dom_1.default.addClass(picture, 'fixed');
-                }
-                else {
-                    dom_1.default.removeClass(picture, 'fixed');
-                }
-            }, false);
-        };
-        MtmConfigurator.prototype.addRecapScrollListener = function () {
-            var inner = this.element.querySelector('.section--recap > .inner');
-            var lastScrollTop = dom_1.default.scrollTop();
-            window.addEventListener('scroll', function () {
-                var scrollTop = dom_1.default.scrollTop();
-                if (scrollTop > lastScrollTop) {
-                    dom_1.default.addClass(inner, 'fixed');
-                }
-                else {
-                    dom_1.default.removeClass(inner, 'fixed');
-                }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
-            }, false);
-        };
-        return MtmConfigurator;
-    }());
-    exports.default = MtmConfigurator;
-    var configurator = new MtmConfigurator(".configurator");
+      }
+    }
+
+    _createClass(MtmControl, [{
+      key: "getTemplate",
+      value: function getTemplate() {
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control ").concat(this.className, "\"></div>\n\t</div>");
+      }
+    }, {
+      key: "getChildTemplate",
+      value: function getChildTemplate(item) {
+        return "<button type=\"button\" class=\"btn btn--option ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<span class=\"label\">").concat(item.name, "</span>").concat(item.getPrice(), "\n\t</button>");
+      }
+    }, {
+      key: "getFragment",
+      value: function getFragment() {
+        var fragment = dom_1.default.fragmentFromHTML(this.getTemplate());
+        this.element = dom_1.default.fragmentFirstElement(fragment);
+        return fragment;
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        var fragment = this.getFragment();
+        var group = fragment.querySelector('.btn-control');
+        var fragments = this.values.map(function (x) {
+          return dom_1.default.fragmentFromHTML(_this2.getChildTemplate(x));
+        });
+        var buttons = fragments.map(function (x) {
+          return dom_1.default.fragmentFirstElement(x);
+        });
+        buttons.forEach(function (x) {
+          return x.addEventListener('click', function (e) {
+            return _this2.onClick(x);
+          });
+        });
+        fragments.forEach(function (x) {
+          return group.appendChild(x);
+        });
+        return fragment;
+      }
+    }, {
+      key: "onClick",
+      value: function onClick(button) {
+        var buttons = Array.prototype.slice.call(button.parentNode.childNodes);
+        buttons.forEach(function (x) {
+          return dom_1.default.removeClass(x, 'active');
+        });
+        dom_1.default.addClass(button, 'active');
+        var id = parseInt(button.getAttribute('data-id'));
+        var item = this.values.find(function (x) {
+          return x.id === id;
+        });
+        this.currentItem = item;
+
+        if (typeof this.didChange === 'function') {
+          this.didChange(item, this);
+        }
+
+        console.log('MtmControl.onClick', 'button', button, 'item', item);
+      }
+    }, {
+      key: "addValue",
+      value: function addValue(name) {
+        if (name.trim() !== '') {
+          var item = this.cache[name];
+
+          if (this.cache[name] == undefined) {
+            item = new value_1.MtmValue({
+              id: ++this.count,
+              name: name
+            });
+            this.values.push(item);
+          }
+
+          this.cache[name] = item;
+          return item.id;
+        }
+      }
+    }, {
+      key: "sort",
+      value: function sort() {
+        this.values.sort(function (a, b) {
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+
+        if (this.values.length === 1) {
+          this.values.unshift(new value_1.MtmValue({
+            id: 0,
+            name: 'No'
+          }));
+        }
+
+        this.values.forEach(function (x, i) {
+          return x.price = 4.99 * i;
+        });
+
+        if (this.values.length) {
+          this.values[0].active = true;
+        }
+      }
+    }]);
+
+    return MtmControl;
+  }();
+
+  exports.MtmControl = MtmControl;
 });
 
-},{"./models/mtm-data.service":3,"./utils/dom":4}],3:[function(require,module,exports){
+},{"../utils/dom":11,"./consts":2,"./value":8}],4:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 (function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "whatwg-fetch"], factory);
-    }
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "./consts", "./control"], factory);
+  }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    require("whatwg-fetch");
-    var MtmValue = /** @class */ (function () {
-        function MtmValue(id, name) {
-            this.id = id;
-            this.name = name;
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var consts_1 = require("./consts");
+
+  var control_1 = require("./control");
+
+  var MtmGrid =
+  /*#__PURE__*/
+  function (_control_1$MtmControl) {
+    _inherits(MtmGrid, _control_1$MtmControl);
+
+    function MtmGrid(options) {
+      var _this;
+
+      _classCallCheck(this, MtmGrid);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmGrid).call(this, options));
+      _this.type = consts_1.MtmControlType.Grid;
+      return _this;
+    }
+
+    _createClass(MtmGrid, [{
+      key: "getTemplate",
+      value: function getTemplate() {
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-grid ").concat(this.className, "\"></div>\n\t</div>");
+      }
+    }, {
+      key: "getChildTemplate",
+      value: function getChildTemplate(item) {
+        console.log(item);
+        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"info\">info</button>\n\t</div>");
+      }
+    }]);
+
+    return MtmGrid;
+  }(control_1.MtmControl);
+
+  exports.MtmGrid = MtmGrid;
+});
+
+},{"./consts":2,"./control":3}],5:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "./consts", "./control"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var consts_1 = require("./consts");
+
+  var control_1 = require("./control");
+
+  var MtmGroup =
+  /*#__PURE__*/
+  function (_control_1$MtmControl) {
+    _inherits(MtmGroup, _control_1$MtmControl);
+
+    function MtmGroup(options) {
+      var _this;
+
+      _classCallCheck(this, MtmGroup);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmGroup).call(this, options));
+      _this.type = consts_1.MtmControlType.Group;
+      return _this;
+    }
+
+    _createClass(MtmGroup, [{
+      key: "getTemplate",
+      value: function getTemplate() {
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-group ").concat(this.values.length === 4 ? "btn-group--4" : "", " ").concat(this.className, "\"></div>\n\t</div>");
+      }
+    }]);
+
+    return MtmGroup;
+  }(control_1.MtmControl);
+
+  exports.MtmGroup = MtmGroup;
+});
+
+},{"./consts":2,"./control":3}],6:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "./consts", "./control"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var consts_1 = require("./consts");
+
+  var control_1 = require("./control");
+
+  var MtmList =
+  /*#__PURE__*/
+  function (_control_1$MtmControl) {
+    _inherits(MtmList, _control_1$MtmControl);
+
+    function MtmList(options) {
+      var _this;
+
+      _classCallCheck(this, MtmList);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmList).call(this, options));
+      _this.type = consts_1.MtmControlType.List;
+      return _this;
+    }
+
+    _createClass(MtmList, [{
+      key: "getTemplate",
+      value: function getTemplate() {
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-list ").concat(this.className, "\"></div>\n\t</div>");
+      }
+    }]);
+
+    return MtmList;
+  }(control_1.MtmControl);
+
+  exports.MtmList = MtmList;
+});
+
+},{"./consts":2,"./control":3}],7:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "../utils/dom", "./consts", "./control"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var dom_1 = __importDefault(require("../utils/dom"));
+
+  var consts_1 = require("./consts");
+
+  var control_1 = require("./control");
+
+  var MtmSelect =
+  /*#__PURE__*/
+  function (_control_1$MtmControl) {
+    _inherits(MtmSelect, _control_1$MtmControl);
+
+    function MtmSelect(options) {
+      var _this;
+
+      _classCallCheck(this, MtmSelect);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmSelect).call(this, options));
+      _this.type = consts_1.MtmControlType.Select;
+      return _this;
+    }
+
+    _createClass(MtmSelect, [{
+      key: "getTemplate",
+      value: function getTemplate() {
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        var fragment = this.getFragment();
+        var select = fragment.querySelector('.form-control--select');
+        this.values.map(function (x) {
+          var html = "\n\t\t<option value=\"".concat(x.id, "\">").concat(x.name, "</option>\n\t\t");
+          var fragment = dom_1.default.fragmentFromHTML(html);
+          return fragment;
+        }).forEach(function (x) {
+          return select.appendChild(x);
+        });
+        select.addEventListener('change', function (e) {
+          return _this2.onChange(e);
+        });
+        var value = this.values.find(function (x) {
+          return x.active;
+        });
+
+        if (value) {
+          select.value = value.id.toFixed();
         }
-        return MtmValue;
-    }());
-    exports.MtmValue = MtmValue;
-    var MTM_MAP = {
-        'Code': { key: 'code', name: 'Codice', description: '' },
-        'SingleModuleFrame': { key: 'singleModuleFrame', name: '', description: '' },
-        'Finish': { key: 'finish', name: 'Finitura', description: '' },
-        'ModuleSize': { key: 'moduleSize', name: 'Numero di moduli', description: 'Quanto spazio ti serve? Consulta la guida.' },
-        'Mount': { key: 'mount', name: '', description: '' },
-        'System': { key: 'system', name: 'Sistema', description: 'Scopri le tecnologie e funzionalità dei sistemi Came.' },
-        'AV': { key: 'audioVideo', name: 'Caratteristiche Audio / Video', description: '' },
-        'Keypad': { key: 'keypad', name: 'Tastiera per il controllo accessi', description: 'Tastiera numerica per la sicurezza' },
-        'Proximity': { key: 'proximity', name: 'Modulo di prossimità', description: 'Accesso automatico tramite scansione RFID' },
-        'InfoModule': { key: 'infoModule', name: 'Modulo informazioni', description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato' },
-        'HearingModule': { key: 'hearingModule', name: 'Modulo di sintesi vocale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?' },
-        'DigitalDisplay': { key: 'digitalDisplay', name: 'Display Digitale', description: '' },
-        'moduliaggiuntivi': { key: 'additionalModules', name: '', description: '' },
-        'Buttons': { key: 'buttons', name: 'Pulsanti di chiamata', description: '' },
-        'Divided': { key: 'divided', name: '', description: '' },
-        'Mounting': { key: 'mounting', name: '', description: '' },
-        'FlushRainshield': { key: 'flushRainshield', name: '', description: '' },
-        'Frame': { key: 'frame', name: '', description: '' },
-        'ElectronicsModule1': { key: 'electronicsModule1', name: '', description: '' },
-        'FrontPiece1': { key: 'frontPiece1', name: '', description: '' },
-        'ElectronicsModule2': { key: 'electronicsModule2', name: '', description: '' },
-        'FrontPiece2': { key: 'frontPiece2', name: '', description: '' },
-        'ElectronicsModule3': { key: 'electronicsModule3', name: '', description: '' },
-        'FrontPiece3': { key: 'frontPiece3', name: '', description: '' },
-        'ElectronicsModule4': { key: 'electronicsModule4', name: '', description: '' },
-        'FrontPiece4': { key: 'frontPiece4', name: '', description: '' },
-        'CI': { key: 'identifierCode', name: '', description: '' },
-        '': { key: 'Description', name: '', description: '' },
-        Default: { key: 'key', name: 'name', description: 'description' },
-    };
-    var MtmOption = /** @class */ (function () {
-        function MtmOption(originalName) {
-            if (originalName === void 0) { originalName = ''; }
-            var map = MTM_MAP[originalName] || MTM_MAP.Default;
-            this.key = map.key;
-            this.name = map.name;
-            this.description = map.description;
-            this.originalName = originalName;
-            this.values = [];
-            this.cache = {};
-            this.count = 0;
+
+        this.onUpdate(select);
+        return fragment;
+      }
+    }, {
+      key: "onUpdate",
+      value: function onUpdate(select) {
+        if (select) {
+          var id = parseInt(select.value);
+          var item = this.values.find(function (x) {
+            return x.id === id;
+          });
+
+          if (item) {
+            var label = this.element.querySelector('.label');
+            label.innerHTML = item.name;
+          }
+
+          if (typeof this.didChange === 'function') {
+            this.didChange(item, this);
+          }
         }
-        MtmOption.prototype.addValue = function (value) {
-            var item = this.cache[value];
-            if (this.cache[value] == undefined) {
-                item = new MtmValue(++this.count, value);
-                this.values.push(item);
-            }
-            this.cache[value] = item;
-            return item.id;
-        };
-        MtmOption.prototype.sort = function () {
-            this.values.sort(function (a, b) { return a.name.toLowerCase().localeCompare(b.name.toLowerCase()); });
-            // this.values.forEach((x, i) => x.id = i + 1);
-        };
-        return MtmOption;
-    }());
-    exports.MtmOption = MtmOption;
-    var MtmDataService = /** @class */ (function () {
-        function MtmDataService() {
-        }
-        MtmDataService.fetch = function (callback) {
-            /*
-            fetch('data/data.json')
-                .then((response) => response.json())
-                .then((json) => {
-                    console.log('json', json);
+
+        console.log('MtmSelect.onUpdate', select.value);
+      }
+    }, {
+      key: "onChange",
+      value: function onChange(e) {
+        console.log('MtmSelect.onChange', e.target);
+        this.onUpdate(e.target);
+      }
+    }]);
+
+    return MtmSelect;
+  }(control_1.MtmControl);
+
+  exports.MtmSelect = MtmSelect;
+});
+
+},{"../utils/dom":11,"./consts":2,"./control":3}],8:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var MtmValue =
+  /*#__PURE__*/
+  function () {
+    function MtmValue(options) {
+      _classCallCheck(this, MtmValue);
+
+      this.price = 0;
+      this.active = false;
+
+      if (options) {
+        Object.assign(this, options);
+      }
+    }
+
+    _createClass(MtmValue, [{
+      key: "getPrice",
+      value: function getPrice() {
+        return this.price ? "<span class=\"price\">+ \u20AC ".concat(this.price.toFixed(2), "</span>") : "";
+      }
+    }, {
+      key: "getKey",
+      value: function getKey() {
+        return this.name.replace(/ /g, "");
+      }
+    }]);
+
+    return MtmValue;
+  }();
+
+  exports.MtmValue = MtmValue;
+});
+
+},{}],9:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "./controls/group", "./controls/select", "./models/data.service", "./utils/dom"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var group_1 = require("./controls/group");
+
+  var select_1 = require("./controls/select");
+
+  var data_service_1 = __importDefault(require("./models/data.service"));
+
+  var dom_1 = __importDefault(require("./utils/dom"));
+
+  var MtmConfigurator =
+  /*#__PURE__*/
+  function () {
+    function MtmConfigurator(selector) {
+      var _this = this;
+
+      _classCallCheck(this, MtmConfigurator);
+
+      this.element = document.querySelector(selector);
+      this.addMediaScrollListener();
+      this.addRecapScrollListener();
+      data_service_1.default.fetch(function (cols, rows) {
+        console.log(cols[0]);
+        console.log(rows[0]);
+        var options = [new group_1.MtmGroup({
+          key: 'knownTecnology',
+          name: 'Conosci già la tecnologia da adottare?',
+          values: [{
+            id: 1,
+            name: 'No'
+          }, {
+            id: 2,
+            name: 'Sì'
+          }],
+          className: 'btn-group--sm'
+        }), new group_1.MtmGroup({
+          key: 'constrainedDimension',
+          name: 'Hai un vincolo sul numero di moduli e dimensione del pannello?',
+          values: [{
+            id: 1,
+            name: 'No'
+          }, {
+            id: 2,
+            name: 'Sì'
+          }],
+          className: 'btn-group--sm'
+        }), new select_1.MtmSelect({
+          key: 'apartmentNumber',
+          name: 'Quanti appartamenti o punti interni devi gestire?',
+          values: new Array(20).fill(0).map(function (x, i) {
+            return {
+              id: i + 1,
+              name: (i + 1).toFixed(0)
+            };
+          })
+        }), data_service_1.default.optionWithKey('audioVideo'), data_service_1.default.optionWithKey('keypad'), data_service_1.default.optionWithKey('infoModule'), data_service_1.default.optionWithKey('proximity'), data_service_1.default.optionWithKey('system'), data_service_1.default.optionWithKey('moduleSize')];
+        options.forEach(function (x) {
+          return x.didChange = function (item, control) {
+            console.log('MtmConfigurator.didChange', control.key, item);
+
+            switch (control.key) {
+              case 'knownTecnology':
+                var controls = _this.options.map(function (x) {
+                  return x.element;
                 });
-            */
-            fetch('data/data.csv')
-                .then(function (response) { return response.text(); })
-                .then(function (text) {
-                var csv = text.split('\n');
-                var cols = MtmDataService.parseCsvArray(csv.shift() || '').map(function (x) { return x.trim().replace(/ |\//gm, ''); }).map(function (x) { return new MtmOption(x); });
-                var rows = csv.map(function (x) { return MtmDataService.parseCsvArray(x).map(function (x) { return x.trim(); }); });
-                // console.log('rows', rows.length, cols, rows[0]);
-                var records = rows.map(function (values) { return values.map(function (value, i) { return cols[i].addValue(value); }); });
-                cols.forEach(function (x) { return x.sort(); });
-                MtmDataService.options = cols;
-                // console.log(MtmDataService.options);
-            });
+
+                controls.unshift(controls.pop());
+
+                var outlet = _this.element.querySelector('.options-outlet');
+
+                controls.forEach(function (x) {
+                  return outlet.appendChild(x);
+                });
+                break;
+
+              case 'constrainedDimension':
+                break;
+            }
+          };
+        });
+        _this.options = options;
+
+        _this.render();
+      }, function (error) {
+        console.log('error', error);
+      });
+    }
+
+    _createClass(MtmConfigurator, [{
+      key: "render",
+      value: function render() {
+        var outlet = this.element.querySelector('.options-outlet');
+        this.options.map(function (x) {
+          return x.render();
+        }).forEach(function (x) {
+          return outlet.appendChild(x);
+        });
+        console.log('render.outlet', outlet);
+      }
+    }, {
+      key: "addMediaScrollListener",
+      value: function addMediaScrollListener() {
+        var media = this.element.querySelector('.media');
+        var picture = media.querySelector('.picture');
+
+        var onScroll = function onScroll() {
+          var rect = media.getBoundingClientRect();
+
+          if (rect.top < 60) {
+            dom_1.default.addClass(picture, 'fixed');
+          } else {
+            dom_1.default.removeClass(picture, 'fixed');
+          }
         };
-        MtmDataService.parseCsvArray = function (value) {
-            var isValid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/;
-            var matchValues = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g;
-            // Return NULL if input string is not well formed CSV string.
-            if (!isValid.test(value))
-                return [];
-            var a = [];
-            value.replace(matchValues, function (m0, m1, m2, m3) {
-                // Remove backslash from \' in single quoted values.
-                if (m1 !== undefined) {
-                    a.push(m1.replace(/\\'/g, "'"));
-                }
-                // Remove backslash from \" in double quoted values.
-                else if (m2 !== undefined) {
-                    a.push(m2.replace(/\\"/g, '"'));
-                }
-                else if (m3 !== undefined) {
-                    a.push(m3);
-                }
-                return '';
-            });
-            // Handle special case of empty last value.
-            if (/,\s*$/.test(value))
-                a.push('');
-            return a;
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, false);
+      }
+    }, {
+      key: "addRecapScrollListener",
+      value: function addRecapScrollListener() {
+        var inner = this.element.querySelector('.section--recap > .inner');
+        var lastScrollTop = dom_1.default.scrollTop();
+
+        var onScroll = function onScroll() {
+          var scrollTop = dom_1.default.scrollTop();
+
+          if (scrollTop > lastScrollTop) {
+            dom_1.default.addClass(inner, 'fixed');
+          } else {
+            dom_1.default.removeClass(inner, 'fixed');
+          }
+
+          lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
         };
-        MtmDataService.options = [];
-        return MtmDataService;
-    }());
-    exports.default = MtmDataService;
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, false);
+      }
+    }]);
+
+    return MtmConfigurator;
+  }();
+
+  exports.default = MtmConfigurator;
+  var configurator = new MtmConfigurator(".configurator");
 });
 
-},{"whatwg-fetch":1}],4:[function(require,module,exports){
+},{"./controls/group":5,"./controls/select":7,"./models/data.service":10,"./utils/dom":11}],10:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports", "whatwg-fetch", "../controls/consts", "../controls/control", "../controls/grid", "../controls/group", "../controls/list", "../controls/select"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  require("whatwg-fetch");
+
+  var consts_1 = require("../controls/consts");
+
+  var control_1 = require("../controls/control");
+
+  var grid_1 = require("../controls/grid");
+
+  var group_1 = require("../controls/group");
+
+  var list_1 = require("../controls/list");
+
+  var select_1 = require("../controls/select");
+
+  var MtmDataService =
+  /*#__PURE__*/
+  function () {
+    function MtmDataService() {
+      _classCallCheck(this, MtmDataService);
+    }
+
+    _createClass(MtmDataService, null, [{
+      key: "fetch",
+      value: function (_fetch) {
+        function fetch(_x, _x2) {
+          return _fetch.apply(this, arguments);
+        }
+
+        fetch.toString = function () {
+          return _fetch.toString();
+        };
+
+        return fetch;
+      }(function (callback, error) {
+        fetch('data/data.csv').then(function (response) {
+          return response.text();
+        }).then(function (text) {
+          var csv = text.split('\n');
+          var cols = MtmDataService.parseCsvArray(csv.shift() || '').map(function (x) {
+            return x.trim().replace(/ |\//gm, '');
+          }).map(function (x) {
+            return MtmDataService.newControlByKey(x);
+          });
+          var records = csv.map(function (x) {
+            return MtmDataService.parseCsvArray(x).map(function (x) {
+              return x.trim();
+            });
+          });
+          var rows = records.map(function (values) {
+            return values.map(function (value, i) {
+              return cols[i].addValue(value);
+            }).filter(function (x) {
+              return x;
+            });
+          });
+          cols.forEach(function (x) {
+            return x.sort();
+          });
+          MtmDataService.cols = cols;
+          MtmDataService.rows = rows;
+
+          if (typeof callback === 'function') {
+            callback(cols, rows);
+          }
+        }).catch(function (reason) {
+          if (typeof error === 'function') {
+            error(reason);
+          }
+        });
+      })
+    }, {
+      key: "newControlByKey",
+      value: function newControlByKey(key) {
+        var map = consts_1.MTM_MAP[key] || consts_1.MTM_MAP.Default;
+        var control;
+
+        switch (map.type) {
+          case consts_1.MtmControlType.Select:
+            control = new select_1.MtmSelect(map);
+            break;
+
+          case consts_1.MtmControlType.Group:
+            control = new group_1.MtmGroup(map);
+            break;
+
+          case consts_1.MtmControlType.List:
+            control = new list_1.MtmList(map);
+            break;
+
+          case consts_1.MtmControlType.Grid:
+            control = new grid_1.MtmGrid(map);
+            break;
+
+          default:
+            control = new control_1.MtmControl(map);
+        }
+
+        return control;
+      }
+    }, {
+      key: "optionWithKey",
+      value: function optionWithKey(key) {
+        return MtmDataService.cols.find(function (x) {
+          console.log(x.key, key);
+          return x.key === key;
+        });
+      }
+    }, {
+      key: "parseCsvArray",
+      value: function parseCsvArray(value) {
+        var isValid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/;
+        var matchValues = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g;
+
+        if (!isValid.test(value)) {
+          return [];
+        }
+
+        var a = [];
+        value.replace(matchValues, function (m0, m1, m2, m3) {
+          if (m1 !== undefined) {
+            a.push(m1.replace(/\\'/g, "'"));
+          } else if (m2 !== undefined) {
+            a.push(m2.replace(/\\"/g, "\""));
+          } else if (m3 !== undefined) {
+            a.push(m3);
+          }
+
+          return '';
+        });
+
+        if (/,\s*$/.test(value)) {
+          a.push('');
+        }
+
+        return a;
+      }
+    }]);
+
+    return MtmDataService;
+  }();
+
+  MtmDataService.cols = [];
+  MtmDataService.rows = [];
+  exports.default = MtmDataService;
+});
+
+},{"../controls/consts":2,"../controls/control":3,"../controls/grid":4,"../controls/group":5,"../controls/list":6,"../controls/select":7,"whatwg-fetch":1}],11:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /* global window, document, console, GlslCanvas, Swiper, TweenLite */
 (function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports"], factory);
+  }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Dom = /** @class */ (function () {
-        function Dom() {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var Dom =
+  /*#__PURE__*/
+  function () {
+    function Dom() {
+      _classCallCheck(this, Dom);
+    }
+
+    _createClass(Dom, null, [{
+      key: "fragmentFirstElement",
+      value: function fragmentFirstElement(fragment) {
+        return Array.prototype.slice.call(fragment.children).find(function (x) {
+          return x.nodeType === Node.ELEMENT_NODE;
+        });
+      }
+    }, {
+      key: "fragmentFromHTML",
+      value: function fragmentFromHTML(html) {
+        return document.createRange().createContextualFragment(html);
+      }
+    }, {
+      key: "hasClass",
+      value: function hasClass(element, name) {
+        return element && new RegExp("(?:^|\\s+)".concat(name, "(?:\\s+|$)")).test(element.className);
+      }
+    }, {
+      key: "addClass",
+      value: function addClass(element, name) {
+        if (element && !Dom.hasClass(element, name)) {
+          element.className = element.className ? "".concat(element.className, " ").concat(name) : name;
         }
-        Dom.hasClass = function (element, name) {
-            return element && new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(element.className);
-        };
-        Dom.addClass = function (element, name) {
-            if (element && !Dom.hasClass(element, name)) {
-                element.className = element.className ? (element.className + " " + name) : name;
-            }
-            return Dom;
-        };
-        Dom.removeClass = function (element, name) {
-            if (element && Dom.hasClass(element, name)) {
-                element.className = element.className.split(name).join("").replace(/\s\s+/g, " "); // .replace(new RegExp('(?:^|\\s+)' + name + '(?:\\s+|$)', 'g'), '');
-            }
-            return Dom;
-        };
-        Dom.scrollTop = function () {
-            var pageYOffset = window ? window.pageXOffset : 0;
-            var scrollTop = document && document.documentElement ? document.documentElement.scrollTop : 0;
-            return pageYOffset || scrollTop;
-        };
+
         return Dom;
-    }());
-    exports.default = Dom;
+      }
+    }, {
+      key: "removeClass",
+      value: function removeClass(element, name) {
+        if (element && Dom.hasClass(element, name)) {
+          element.className = element.className.split(name).join("").replace(/\s\s+/g, " "); // .replace(new RegExp('(?:^|\\s+)' + name + '(?:\\s+|$)', 'g'), '');
+        }
+
+        return Dom;
+      }
+    }, {
+      key: "scrollTop",
+      value: function scrollTop() {
+        var pageYOffset = window ? window.pageXOffset : 0;
+        var scrollTop = document && document.documentElement ? document.documentElement.scrollTop : 0;
+        return pageYOffset || scrollTop;
+      }
+    }]);
+
+    return Dom;
+  }();
+
+  exports.default = Dom;
 });
 
-},{}]},{},[2]);
+},{}]},{},[9]);
 
 //# sourceMappingURL=main.js.map

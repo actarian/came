@@ -2,6 +2,14 @@
 
 export default class Dom {
 
+	static fragmentFirstElement(fragment: DocumentFragment): HTMLElement {
+		return Array.prototype.slice.call(fragment.children).find((x: Node) => x.nodeType === Node.ELEMENT_NODE);
+	}
+
+	static fragmentFromHTML(html: string): DocumentFragment {
+		return document.createRange().createContextualFragment(html);
+	}
+
 	static hasClass(element: Element, name: string): boolean {
 		return element && new RegExp(`(?:^|\\s+)${name}(?:\\s+|$)`).test(element.className);
 	}

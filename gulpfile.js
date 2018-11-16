@@ -1,5 +1,4 @@
-var bro = require('gulp-bro'),
-	fs = require('fs'),
+var fs = require('fs'),
 	gulp = require('gulp'),
 	gulpif = require('gulp-if'),
 	merge = require("merge-stream"),
@@ -13,30 +12,29 @@ var bro = require('gulp-bro'),
 	rename = require('gulp-rename'),
 	sass = require('gulp-sass'),
 	sourcemaps = require('gulp-sourcemaps'),
-	typescript = require('gulp-typescript'),
-	babel = require('gulp-babel'),
-	uglifyify = require('uglifyify'),
-	babelify = require('babelify'),
+	// uglifyify = require('uglifyify'),
 	uglify = require('gulp-uglify'),
 	webserver = require('gulp-webserver'),
-	tsify = require('tsify'),
 	browserify = require('browserify'),
+	tsify = require('tsify'),
 	through2 = require('through2');
 
-var tsconfig = typescript.createProject("tsconfig.json");
+// var tsconfig = typescript.createProject("tsconfig.json");
 
+// TYPESCRIPT
 gulp.task('bundle:typescript', function() {
 	return gulp.src('src/app/main.ts')
 		.pipe(plumber())
 		.pipe(sourcemaps.init())
 		.pipe(through2.obj(function(file, enc, next) {
 				browserify(file.path)
-					.plugin(tsify, { noImplicitAny: true })
-					.bundle(function(error, res) {
+					.plugin(tsify)
+					.transform('babelify', { plugins: ['@babel/plugin-transform-flow-strip-types'], extensions: ['.ts'] })
+					.bundle(function(error, response) {
 						if (error) {
 							console.log('browserify.bundle.error', error);
 						} else {
-							file.contents = res;
+							file.contents = response;
 							next(null, file);
 						}
 					})
@@ -52,8 +50,6 @@ gulp.task('bundle:typescript', function() {
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('docs/js'));
 });
-
-//
 
 // COMPILE
 gulp.task('compile:sass', function() {
