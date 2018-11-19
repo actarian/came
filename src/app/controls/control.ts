@@ -115,7 +115,7 @@ export class MtmControl {
 	}
 
 	updateState?() {
-		console.log('MtmControl.updateState', this.element);
+		// console.log('MtmControl.updateState', this.element);
 		if (this.element) {
 			const group = this.element.querySelector('.control');
 			this.values.forEach((x, i) => {
@@ -130,27 +130,33 @@ export class MtmControl {
 	}
 
 	addValue?(name: string): number {
-		if (name.trim() !== '') {
-			let item = this.cache[name];
-			if (item == undefined) {
-				item = new MtmValue({ id: ++this.count, name });
-				this.values.push(item);
-			} else {
-				item.count++;
-			}
-			this.cache[name] = item;
-			return item.id;
+		name = name.trim() !== '' ? name : 'No';
+		let item = this.cache[name];
+		if (item == undefined) {
+			item = new MtmValue({ id: ++this.count, name });
+			this.values.push(item);
+		} else {
+			item.count++;
 		}
+		this.cache[name] = item;
+		return item.id;
 	}
 
 	sort?() {
+		const nullValue = this.values.find(x => x.name === 'No');
+		if (nullValue) {
+			this.values.splice(this.values.indexOf(nullValue), 1);
+		}
 		this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 		// this.values.sort((a, b) => (a.count > b.count) ? 1 : ((b.count > a.count) ? -1 : 0));
 		if (this.nullable) {
+			this.values.unshift(nullValue);
+			/*
 			this.values.unshift(new MtmValue({
-				id: 0,
+				id: nullValue ? nullValue.id : 0,
 				name: 'No',
 			}));
+			*/
 		}
 		this.values.forEach((x, i) => x.price = 4.99 * i);
 		if (this.values.length) {

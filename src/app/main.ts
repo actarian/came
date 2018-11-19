@@ -33,7 +33,7 @@ export default class MtmConfigurator {
 				MtmDataService.optionWithKey(MtmControlEnum.ModuleSize),
 			];
 			options.forEach(x => x.didChange = (item: MtmValue, control: MtmControl) => {
-				console.log('MtmConfigurator.didChange', control.key, item);
+				// console.log('MtmConfigurator.didChange', control.key, item);
 				switch (control.key) {
 					case MtmControlEnum.KnownTecnology:
 					case MtmControlEnum.ConstrainedDimension:
@@ -58,6 +58,7 @@ export default class MtmConfigurator {
 			this.onSearch();
 		}, (error: any) => {
 			console.log('error', error);
+
 		});
 	}
 
@@ -76,14 +77,14 @@ export default class MtmConfigurator {
 			id: ++i,
 			name: `DIGI1`,
 			value: 1,
-			order: 10 - 1,
+			order: 10 - 2,
 			data: { buttons: digi1 }
 		}));
 		values.push(new MtmValue({
 			id: ++i,
 			name: `DIGI2`,
 			value: 2,
-			order: 20 - 2,
+			order: 20 - 1,
 			data: { buttons: digi2 }
 		}));
 		numericButtons.forEach(x => {
@@ -99,14 +100,14 @@ export default class MtmConfigurator {
 				id: ++i,
 				name: `Modulo DIGI1 + ${value > 1 ? value + ' pulsanti' : '1 pulsante'}`,
 				value: value + 1,
-				order: (value + 1) * 10 - 1,
+				order: (value + 1) * 10 - 2,
 				data: { buttons: x } // + digi1
 			}));
 			values.push(new MtmValue({
 				id: ++i,
 				name: `Modulo DIGI2 + ${value > 1 ? value + ' pulsanti' : '1 pulsante'}`,
 				value: value + 2,
-				order: (value + 2) * 10 - 2,
+				order: (value + 2) * 10 - 1,
 				data: { buttons: x } // + digi2
 			}));
 		})
@@ -151,7 +152,7 @@ export default class MtmConfigurator {
 		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
 		const digitalDisplay = MtmDataService.optionWithKey(MtmControlEnum.DigitalDisplay);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
+		// console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
 		if (callButtons.currentItem && callButtons.currentItem.data) {
 			buttons.onSelect(callButtons.currentItem.data.buttons);
 			digitalDisplay.onSelect(callButtons.currentItem.data.digitalDisplay);
@@ -227,12 +228,14 @@ export default class MtmConfigurator {
 				const control = x;
 				const selectedValue = x.values.find(v => v.active);
 				const value = selectedValue ? selectedValue.id : -1;
+				const name = selectedValue ? selectedValue.name : '-';
 				const price = selectedValue ? selectedValue.price : 0;
-				return { index, value, price, control };
+				return { index, value, name, price, control };
 			} else {
 				return { index };
 			}
-		}).filter(x => x.index !== -1 && x.value !== 0);
+		}).filter(x => x.index !== -1 && x.value !== -1);
+		console.log(filters.map(x => x.control.name + ' ' + x.name + ' ' + x.value).join('\n'));
 		// TOTALPRICE ?
 		const totalPrice = filters.reduce((p, x) => {
 			// console.log(p, x.price);
@@ -246,8 +249,12 @@ export default class MtmConfigurator {
 		}).map(r => {
 			const result: any = {};
 			this.cols.forEach((c, i) => {
-				const value = c.values.find(v => v.id === r[i]);
-				result[c.key] = value ? value.name : '-';
+				if (r[i]) {
+					const value = c.values.find(v => v.id === r[i]);
+					result[c.key] = value ? value.name : '-';
+				} else {
+					result[c.key] = null;
+				}
 			});
 			return result;
 		});

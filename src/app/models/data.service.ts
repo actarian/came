@@ -34,6 +34,14 @@ export default class MtmDataService {
 				cols.forEach(x => x.sort());
 				MtmDataService.cols = cols;
 				MtmDataService.rows = rows;
+				/*
+				const row = rows[10];
+				console.log(row);
+				console.log(row.map((id, i) => {
+					const value = cols[i].values.find(x => x.id === id);
+					return value ? value.name : null;
+				}));
+				*/
 				if (typeof callback === 'function') {
 					callback(cols, rows);
 				}

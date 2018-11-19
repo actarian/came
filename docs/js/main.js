@@ -923,8 +923,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "updateState",
       value: function updateState() {
-        console.log('MtmControl.updateState', this.element);
-
+        // console.log('MtmControl.updateState', this.element);
         if (this.element) {
           var group = this.element.querySelector('.control');
           this.values.forEach(function (x, i) {
@@ -941,35 +940,45 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "addValue",
       value: function addValue(name) {
-        if (name.trim() !== '') {
-          var item = this.cache[name];
+        name = name.trim() !== '' ? name : 'No';
+        var item = this.cache[name];
 
-          if (item == undefined) {
-            item = new value_1.MtmValue({
-              id: ++this.count,
-              name: name
-            });
-            this.values.push(item);
-          } else {
-            item.count++;
-          }
-
-          this.cache[name] = item;
-          return item.id;
+        if (item == undefined) {
+          item = new value_1.MtmValue({
+            id: ++this.count,
+            name: name
+          });
+          this.values.push(item);
+        } else {
+          item.count++;
         }
+
+        this.cache[name] = item;
+        return item.id;
       }
     }, {
       key: "sort",
       value: function sort() {
+        var nullValue = this.values.find(function (x) {
+          return x.name === 'No';
+        });
+
+        if (nullValue) {
+          this.values.splice(this.values.indexOf(nullValue), 1);
+        }
+
         this.values.sort(function (a, b) {
           return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         }); // this.values.sort((a, b) => (a.count > b.count) ? 1 : ((b.count > a.count) ? -1 : 0));
 
         if (this.nullable) {
-          this.values.unshift(new value_1.MtmValue({
-            id: 0,
-            name: 'No'
+          this.values.unshift(nullValue);
+          /*
+          this.values.unshift(new MtmValue({
+              id: nullValue ? nullValue.id : 0,
+              name: 'No',
           }));
+          */
         }
 
         this.values.forEach(function (x, i) {
@@ -1444,8 +1453,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
-            console.log('MtmConfigurator.didChange', control.key, item);
-
+            // console.log('MtmConfigurator.didChange', control.key, item);
             switch (control.key) {
               case constants_1.MtmControlEnum.KnownTecnology:
               case constants_1.MtmControlEnum.ConstrainedDimension:
@@ -1512,7 +1520,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           id: ++i,
           name: "DIGI1",
           value: 1,
-          order: 10 - 1,
+          order: 10 - 2,
           data: {
             buttons: digi1
           }
@@ -1521,7 +1529,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           id: ++i,
           name: "DIGI2",
           value: 2,
-          order: 20 - 2,
+          order: 20 - 1,
           data: {
             buttons: digi2
           }
@@ -1541,7 +1549,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             id: ++i,
             name: "Modulo DIGI1 + ".concat(value > 1 ? value + ' pulsanti' : '1 pulsante'),
             value: value + 1,
-            order: (value + 1) * 10 - 1,
+            order: (value + 1) * 10 - 2,
             data: {
               buttons: x // + digi1
 
@@ -1551,7 +1559,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             id: ++i,
             name: "Modulo DIGI2 + ".concat(value > 1 ? value + ' pulsanti' : '1 pulsante'),
             value: value + 2,
-            order: (value + 2) * 10 - 2,
+            order: (value + 2) * 10 - 1,
             data: {
               buttons: x // + digi2
 
@@ -1615,8 +1623,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var digitalDisplay = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay);
         var callButtons = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.CallButtons;
-        });
-        console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
+        }); // console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
 
         if (callButtons.currentItem && callButtons.currentItem.data) {
           buttons.onSelect(callButtons.currentItem.data.buttons);
@@ -1735,10 +1742,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               return v.active;
             });
             var value = selectedValue ? selectedValue.id : -1;
+            var name = selectedValue ? selectedValue.name : '-';
             var price = selectedValue ? selectedValue.price : 0;
             return {
               index: index,
               value: value,
+              name: name,
               price: price,
               control: control
             };
@@ -1748,8 +1757,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             };
           }
         }).filter(function (x) {
-          return x.index !== -1 && x.value !== 0;
-        }); // TOTALPRICE ?
+          return x.index !== -1 && x.value !== -1;
+        });
+        console.log(filters.map(function (x) {
+          return x.control.name + ' ' + x.name + ' ' + x.value;
+        }).join('\n')); // TOTALPRICE ?
 
         var totalPrice = filters.reduce(function (p, x) {
           // console.log(p, x.price);
@@ -1766,10 +1778,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           var result = {};
 
           _this2.cols.forEach(function (c, i) {
-            var value = c.values.find(function (v) {
-              return v.id === r[i];
-            });
-            result[c.key] = value ? value.name : '-';
+            if (r[i]) {
+              var value = c.values.find(function (v) {
+                return v.id === r[i];
+              });
+              result[c.key] = value ? value.name : '-';
+            } else {
+              result[c.key] = null;
+            }
           });
 
           return result;
@@ -1946,6 +1962,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           });
           MtmDataService.cols = cols;
           MtmDataService.rows = rows;
+          /*
+          const row = rows[10];
+          console.log(row);
+          console.log(row.map((id, i) => {
+              const value = cols[i].values.find(x => x.id === id);
+              return value ? value.name : null;
+          }));
+          */
 
           if (typeof callback === 'function') {
             callback(cols, rows);
