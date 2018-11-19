@@ -1,10 +1,10 @@
-import { MtmControlType } from './consts';
+import { MtmControlType } from './constants';
 import { MtmControl } from './control';
 import { MtmValue } from './value';
 
 export class MtmGrid extends MtmControl {
 
-	constructor(options: string | MtmControl) {
+	constructor(options: MtmControl) {
 		super(options);
 		this.type = MtmControlType.Grid;
 	}
@@ -14,7 +14,7 @@ export class MtmGrid extends MtmControl {
 		<div class="title">${this.name}</div>${
 			this.description ? `<div class="subtitle">${this.description}</div>` : ``
 			}
-		<div class="btn-control btn-grid ${this.className}"></div>
+		<div class="control control--grid ${this.className}"></div>
 	</div>`;
 	}
 

@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { MtmControlType, MTM_MAP } from '../controls/consts';
+import { MtmControlEnum, MtmControls, MtmControlType } from '../controls/constants';
 import { MtmControl } from '../controls/control';
 import { MtmGrid } from '../controls/grid';
 import { MtmGroup } from '../controls/group';
@@ -10,13 +10,25 @@ export default class MtmDataService {
 
 	static cols: MtmControl[] = [];
 	static rows: number[][] = [];
-
+	static map: { [key: string]: keyof typeof MtmControlEnum } = {}; //: Map<string, string> = {};
+	static controlsMap: { [key: string]: any } = {};
 	static fetch(callback?: Function, error?: Function) {
+		Object.keys(MtmControlEnum).forEach((k: string) => {
+			const key = k as keyof typeof MtmControlEnum;
+			const value = MtmControlEnum[key] as string;
+			MtmDataService.map[value] = key;
+		});
+		MtmControls.forEach(x => {
+			MtmDataService.controlsMap[x.key] = x;
+		});
+		// MtmDataService.controlsMap[value] = MtmControls.find(x => x.type === value);
+		// console.log('MtmControlEnum', MtmControlEnum);
+		// console.log('controlsMap', MtmDataService.controlsMap);
 		fetch('data/data.csv')
 			.then((response) => response.text())
 			.then((text: string) => {
 				const csv = text.split('\n');
-				const cols = MtmDataService.parseCsvArray(csv.shift() || '').map(x => x.trim().replace(/ |\//gm, '')).map(x => MtmDataService.newControlByKey(x));
+				const cols = MtmDataService.parseCsvArray(csv.shift() || '').map(x => MtmDataService.renameColumn(x.trim())).map(x => MtmDataService.newControlByKey(x));
 				const records = csv.map(x => MtmDataService.parseCsvArray(x).map(x => x.trim()));
 				const rows = records.map((values: string[]) => values.map((value: string, i: number) => cols[i].addValue(value)).filter(x => x));
 				cols.forEach(x => x.sort());
@@ -32,8 +44,17 @@ export default class MtmDataService {
 			});
 	}
 
+	static renameColumn(name: string): MtmControlEnum {
+		if (name === '') {
+			name = 'Description';
+		}
+		return name as MtmControlEnum; // MtmDataService.map[name];
+		// return name.replace(/ |\//gm, '');
+	}
+
 	static newControlByKey(key: string): MtmControl {
-		const map = MTM_MAP[key] || MTM_MAP.Default;
+		const map = MtmDataService.controlsMap[key] || MtmDataService.controlsMap.Default;
+		// console.log('newControlByKey', key);
 		let control: MtmControl;
 		switch (map.type) {
 			case MtmControlType.Select:
@@ -54,9 +75,8 @@ export default class MtmDataService {
 		return control;
 	}
 
-	static optionWithKey(key: string): MtmControl {
+	static optionWithKey(key: MtmControlEnum): MtmControl {
 		return MtmDataService.cols.find(x => {
-			// console.log(x.key, key);
 			return x.key === key;
 		});
 	}

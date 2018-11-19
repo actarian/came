@@ -549,6 +549,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  var MtmMaxApartments = 48;
   var MtmControlType;
 
   (function (MtmControlType) {
@@ -588,139 +589,154 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     MtmControlEnum["Module4"] = "Electronics Module 4";
     MtmControlEnum["Front4"] = "Front Piece 4";
     MtmControlEnum["Identifier"] = "CI";
-    MtmControlEnum["Description"] = "";
+    MtmControlEnum["Description"] = "Description";
+    MtmControlEnum["Price"] = "Price"; // customs
+
+    MtmControlEnum["KnownTecnology"] = "KnownTecnology";
+    MtmControlEnum["ConstrainedDimension"] = "ConstrainedDimension";
+    MtmControlEnum["ApartmentNumber"] = "ApartmentNumber";
+    MtmControlEnum["CallButtons"] = "CallButtons"; // default
+
+    MtmControlEnum["Default"] = "None";
   })(MtmControlEnum = exports.MtmControlEnum || (exports.MtmControlEnum = {})); // Code,Single Module Frame,Finish,Module Size,Mount,System,A/V,Keypad,Proximity,Info Module,Hearing Module,Digital Display,moduli aggiuntivi,Buttons,Divided,Mounting,Flush Rainshield,Frame,Electronics Module 1,Front Piece 1,Electronics Module 2,Front Piece 2,Electronics Module 3,Front Piece 3,Electronics Module 4,Front Piece 4,CI,
 
 
-  exports.MTM_MAP = {
-    'Code': {
-      key: 'code',
-      name: 'Codice'
-    },
-    'SingleModuleFrame': {
-      key: 'singleModuleFrame'
-    },
-    'Finish': {
-      key: 'finish',
-      name: 'Finitura',
-      type: MtmControlType.Group
-    },
-    'ModuleSize': {
-      key: 'moduleSize',
-      name: 'Numero di moduli',
-      description: 'Quanto spazio ti serve? Consulta la guida.',
-      type: MtmControlType.Group
-    },
-    'Mount': {
-      key: 'mount',
-      name: 'Montatura',
-      type: MtmControlType.List
-    },
-    'System': {
-      key: 'system',
-      name: 'Sistema',
-      description: 'Scopri le tecnologie e funzionalità dei sistemi Came.',
-      type: MtmControlType.Grid
-    },
-    'AV': {
-      key: 'audioVideo',
-      name: 'Caratteristiche Audio / Video',
-      type: MtmControlType.Group
-    },
-    'Keypad': {
-      key: 'keypad',
-      name: 'Tastiera per il controllo accessi',
-      description: 'Tastiera numerica per la sicurezza',
-      type: MtmControlType.List,
-      nullable: true
-    },
-    'Proximity': {
-      key: 'proximity',
-      name: 'Modulo di prossimità',
-      description: 'Accesso automatico tramite scansione RFID',
-      type: MtmControlType.Group,
-      nullable: true
-    },
-    'InfoModule': {
-      key: 'infoModule',
-      name: 'Modulo informazioni',
-      description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato',
-      type: MtmControlType.Group,
-      nullable: true
-    },
-    'HearingModule': {
-      key: 'hearingModule',
-      name: 'Modulo di sintesi vocale',
-      description: 'Disponi di apparecchio acustico con interfaccia magnetica?',
-      type: MtmControlType.Group,
-      nullable: true
-    },
-    'DigitalDisplay': {
-      key: 'digitalDisplay',
-      name: 'Display Digitale',
-      nullable: true
-    },
-    'moduliaggiuntivi': {
-      key: 'additionalModules'
-    },
-    'Buttons': {
-      key: 'buttons',
-      name: 'Pulsanti di chiamata',
-      type: MtmControlType.List,
-      nullable: true
-    },
-    'Divided': {
-      key: 'divided'
-    },
-    'Mounting': {
-      key: 'mounting'
-    },
-    'FlushRainshield': {
-      key: 'flushRainshield'
-    },
-    'Frame': {
-      key: 'frame'
-    },
-    'ElectronicsModule1': {
-      key: 'electronicsModule1'
-    },
-    'FrontPiece1': {
-      key: 'frontPiece1'
-    },
-    'ElectronicsModule2': {
-      key: 'electronicsModule2'
-    },
-    'FrontPiece2': {
-      key: 'frontPiece2'
-    },
-    'ElectronicsModule3': {
-      key: 'electronicsModule3'
-    },
-    'FrontPiece3': {
-      key: 'frontPiece3'
-    },
-    'ElectronicsModule4': {
-      key: 'electronicsModule4'
-    },
-    'FrontPiece4': {
-      key: 'frontPiece4'
-    },
-    'CI': {
-      key: 'identifierCode'
-    },
-    '': {
-      key: 'Description'
-    },
-    Price: {
-      key: 'price'
-    },
-    Default: {
-      key: 'key',
-      name: 'name',
-      description: 'description',
-      type: MtmControlType.Group
-    }
-  };
+  exports.MtmControls = [{
+    key: MtmControlEnum.Code,
+    name: 'Codice'
+  }, {
+    key: MtmControlEnum.SingleModuleFrame
+  }, {
+    key: MtmControlEnum.Finish,
+    name: 'Finitura',
+    type: MtmControlType.Group
+  }, {
+    key: MtmControlEnum.ModuleSize,
+    name: 'Numero di moduli',
+    description: 'Quanto spazio ti serve? Consulta la guida.',
+    type: MtmControlType.Group
+  }, {
+    key: MtmControlEnum.Mount,
+    name: 'Installazione',
+    type: MtmControlType.List
+  }, {
+    key: MtmControlEnum.System,
+    name: 'Sistema',
+    description: 'Scopri le tecnologie e funzionalità dei sistemi Came.',
+    type: MtmControlType.Grid
+  }, {
+    key: MtmControlEnum.AudioVideo,
+    name: 'Caratteristiche Audio / Video',
+    type: MtmControlType.Group
+  }, {
+    key: MtmControlEnum.Keypad,
+    name: 'Tastiera per il controllo accessi',
+    description: 'Tastiera numerica per la sicurezza',
+    type: MtmControlType.List,
+    nullable: true
+  }, {
+    key: MtmControlEnum.Proximity,
+    name: 'Modulo di prossimità',
+    description: 'Accesso automatico tramite scansione RFID',
+    type: MtmControlType.Group,
+    nullable: true
+  }, {
+    key: MtmControlEnum.InfoModule,
+    name: 'Modulo informazioni',
+    description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato',
+    type: MtmControlType.Group,
+    nullable: true
+  }, {
+    key: MtmControlEnum.HearingModule,
+    name: 'Modulo di sintesi vocale',
+    description: 'Disponi di apparecchio acustico con interfaccia magnetica?',
+    type: MtmControlType.Group,
+    nullable: true
+  }, {
+    key: MtmControlEnum.DigitalDisplay,
+    name: 'Display Digitale'
+  }, {
+    key: MtmControlEnum.AdditionalModules
+  }, {
+    key: MtmControlEnum.Buttons,
+    name: 'Pulsanti di chiamata',
+    type: MtmControlType.List
+  }, {
+    key: MtmControlEnum.Divided
+  }, {
+    key: MtmControlEnum.Mounting
+  }, {
+    key: MtmControlEnum.FlushRainshield
+  }, {
+    key: MtmControlEnum.Frame
+  }, {
+    key: MtmControlEnum.Module1
+  }, {
+    key: MtmControlEnum.Front1
+  }, {
+    key: MtmControlEnum.Module2
+  }, {
+    key: MtmControlEnum.Front2
+  }, {
+    key: MtmControlEnum.Module3
+  }, {
+    key: MtmControlEnum.Front3
+  }, {
+    key: MtmControlEnum.Module4
+  }, {
+    key: MtmControlEnum.Front4
+  }, {
+    key: MtmControlEnum.Identifier
+  }, {
+    key: MtmControlEnum.Description
+  }, {
+    key: MtmControlEnum.Price
+  }, {
+    key: MtmControlEnum.KnownTecnology,
+    name: 'Conosci già la tecnologia da adottare?',
+    type: MtmControlType.Group,
+    values: [{
+      id: 1,
+      name: 'No'
+    }, {
+      id: 2,
+      name: 'Sì'
+    }],
+    className: 'control--group--sm'
+  }, {
+    key: MtmControlEnum.ConstrainedDimension,
+    name: 'Hai un vincolo sul numero di moduli e dimensione del pannello?',
+    type: MtmControlType.Group,
+    values: [{
+      id: 1,
+      name: 'No'
+    }, {
+      id: 2,
+      name: 'Sì'
+    }],
+    className: 'control--group--sm'
+  }, {
+    key: MtmControlEnum.ApartmentNumber,
+    name: 'Quanti appartamenti o punti interni devi gestire?',
+    type: MtmControlType.Select,
+    values: new Array(MtmMaxApartments).fill(0).map(function (x, i) {
+      return {
+        id: i + 1,
+        name: (i + 1).toFixed(0)
+      };
+    }),
+    className: 'control--list--sm'
+  }, {
+    key: MtmControlEnum.CallButtons,
+    name: 'Pulsanti di chiamata',
+    type: MtmControlType.List,
+    values: []
+  }, {
+    key: MtmControlEnum.Default,
+    name: 'name',
+    description: 'description',
+    type: MtmControlType.Group
+  }];
 });
 
 },{}],3:[function(require,module,exports){
@@ -745,7 +761,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "../utils/dom", "./consts", "./value"], factory);
+    define(["require", "exports", "../utils/dom", "./constants", "./value"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -756,7 +772,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
   var dom_1 = __importDefault(require("../utils/dom"));
 
-  var consts_1 = require("./consts");
+  var constants_1 = require("./constants");
 
   var value_1 = require("./value");
 
@@ -768,8 +784,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
       _classCallCheck(this, MtmControl);
 
-      this.type = consts_1.MtmControlType.Grid;
-      this.key = '';
+      this.type = constants_1.MtmControlType.Grid;
+      this.key = constants_1.MtmControlEnum.Default;
       this.name = '';
       this.description = '';
       this.originalName = '';
@@ -781,41 +797,44 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.element = null;
       this.currentItem = null;
       this.didChange = null;
-
+      /*
       if (typeof options == 'string') {
-        var map = consts_1.MTM_MAP[options] || consts_1.MTM_MAP.Default;
-        this.key = map.key;
-        this.name = map.name;
-        this.description = map.description;
-        this.originalName = options;
-        this.values = [];
-        this.cache = {};
-        this.count = 0;
+          const map = MTM_MAP[options as string] || MTM_MAP.Default;
+          this.key = map.key;
+          this.name = map.name;
+          this.description = map.description;
+          this.originalName = options;
+          this.values = [];
+          this.cache = {};
+          this.count = 0;
       } else {
-        options = options;
-        Object.assign(this, options);
-        this.originalName = this.name;
+          */
 
-        if (options.values) {
-          this.values = options.values.map(function (x) {
-            return new value_1.MtmValue(x);
-          });
-          this.values.forEach(function (x) {
-            _this.cache[x.name] = x;
-            _this.count++;
-          });
+      options = options;
+      Object.assign(this, options);
+      this.originalName = this.name;
 
-          if (this.values.length) {
-            this.values[0].active = true;
-          }
+      if (options.values) {
+        this.values = options.values.map(function (x) {
+          return new value_1.MtmValue(x);
+        });
+        this.values.forEach(function (x) {
+          _this.cache[x.name] = x;
+          _this.count++;
+        });
+
+        if (this.values.length) {
+          this.values[0].active = true;
+          this.currentItem = this.values[0];
         }
-      }
+      } // }
+
     }
 
     _createClass(MtmControl, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control ").concat(this.className, "\"></div>\n\t</div>");
       }
     }, {
       key: "getChildTemplate",
@@ -835,7 +854,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var _this2 = this;
 
         var fragment = this.getFragment();
-        var group = fragment.querySelector('.btn-control');
+        var group = fragment.querySelector('.control');
         var fragments = this.values.map(function (x) {
           return dom_1.default.fragmentFromHTML(_this2.getChildTemplate(x));
         });
@@ -855,6 +874,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "onClick",
       value: function onClick(button) {
+        /*
+        const group = this.element.querySelector('.control');
+        const buttons = Array.prototype.slice.call(group.childNodes);
+        const index = buttons.indexOf(button);
+        if (index !== -1) {
+            this.onSelected(this.values[index].id);
+        }
+        */
         var buttons = Array.prototype.slice.call(button.parentNode.childNodes);
         buttons.forEach(function (x) {
           return dom_1.default.removeClass(x, 'active');
@@ -874,6 +901,42 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           this.didChange(item, this);
         } // console.log('MtmControl.onClick', 'button', button, 'item', item);
 
+      }
+    }, {
+      key: "onSelect",
+      value: function onSelect(value) {
+        this.values.forEach(function (x) {
+          return x.active = false;
+        });
+        this.currentItem = value;
+
+        if (value) {
+          value.active = true;
+
+          if (this.element) {
+            var group = this.element.querySelector('.control');
+            var button = group.querySelector("[data-id]=\"".concat(value.id, "\""));
+            this.onClick(button);
+          }
+        }
+      }
+    }, {
+      key: "updateState",
+      value: function updateState() {
+        console.log('MtmControl.updateState', this.element);
+
+        if (this.element) {
+          var group = this.element.querySelector('.control');
+          this.values.forEach(function (x, i) {
+            var button = group.childNodes[i];
+
+            if (x.disabled) {
+              dom_1.default.addClass(button, 'disabled');
+            } else {
+              dom_1.default.removeClass(button, 'disabled');
+            }
+          });
+        }
       }
     }, {
       key: "addValue",
@@ -898,10 +961,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "sort",
       value: function sort() {
-        // this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         this.values.sort(function (a, b) {
-          return a.count > b.count ? -1 : b.count > a.count ? 1 : 0;
-        });
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        }); // this.values.sort((a, b) => (a.count > b.count) ? 1 : ((b.count > a.count) ? -1 : 0));
 
         if (this.nullable) {
           this.values.unshift(new value_1.MtmValue({
@@ -916,6 +978,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
         if (this.values.length) {
           this.values[0].active = true;
+          this.currentItem = this.values[0];
         }
       }
     }]);
@@ -926,7 +989,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   exports.MtmControl = MtmControl;
 });
 
-},{"../utils/dom":11,"./consts":2,"./value":8}],4:[function(require,module,exports){
+},{"../utils/dom":11,"./constants":2,"./value":8}],4:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -952,7 +1015,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./consts", "./control"], factory);
+    define(["require", "exports", "./constants", "./control"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -961,7 +1024,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     value: true
   });
 
-  var consts_1 = require("./consts");
+  var constants_1 = require("./constants");
 
   var control_1 = require("./control");
 
@@ -976,14 +1039,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _classCallCheck(this, MtmGrid);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmGrid).call(this, options));
-      _this.type = consts_1.MtmControlType.Grid;
+      _this.type = constants_1.MtmControlType.Grid;
       return _this;
     }
 
     _createClass(MtmGrid, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-grid ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--grid ").concat(this.className, "\"></div>\n\t</div>");
       }
     }, {
       key: "getChildTemplate",
@@ -998,7 +1061,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   exports.MtmGrid = MtmGrid;
 });
 
-},{"./consts":2,"./control":3}],5:[function(require,module,exports){
+},{"./constants":2,"./control":3}],5:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1024,7 +1087,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./consts", "./control"], factory);
+    define(["require", "exports", "./constants", "./control"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1033,7 +1096,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     value: true
   });
 
-  var consts_1 = require("./consts");
+  var constants_1 = require("./constants");
 
   var control_1 = require("./control");
 
@@ -1048,14 +1111,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _classCallCheck(this, MtmGroup);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmGroup).call(this, options));
-      _this.type = consts_1.MtmControlType.Group;
+      _this.type = constants_1.MtmControlType.Group;
       return _this;
     }
 
     _createClass(MtmGroup, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-group ").concat(this.values.length === 4 ? "btn-group--4" : "", " ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--group ").concat(this.values.length === 4 ? "btn-group--4" : "", " ").concat(this.className, "\"></div>\n\t</div>");
       }
     }]);
 
@@ -1065,7 +1128,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   exports.MtmGroup = MtmGroup;
 });
 
-},{"./consts":2,"./control":3}],6:[function(require,module,exports){
+},{"./constants":2,"./control":3}],6:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1091,7 +1154,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./consts", "./control"], factory);
+    define(["require", "exports", "./constants", "./control"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1100,7 +1163,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     value: true
   });
 
-  var consts_1 = require("./consts");
+  var constants_1 = require("./constants");
 
   var control_1 = require("./control");
 
@@ -1115,14 +1178,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _classCallCheck(this, MtmList);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmList).call(this, options));
-      _this.type = consts_1.MtmControlType.List;
+      _this.type = constants_1.MtmControlType.List;
       return _this;
     }
 
     _createClass(MtmList, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-list ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\"></div>\n\t</div>");
       }
     }]);
 
@@ -1132,7 +1195,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   exports.MtmList = MtmList;
 });
 
-},{"./consts":2,"./control":3}],7:[function(require,module,exports){
+},{"./constants":2,"./control":3}],7:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1164,7 +1227,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "../utils/dom", "./consts", "./control"], factory);
+    define(["require", "exports", "../utils/dom", "./constants", "./control"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1175,7 +1238,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
   var dom_1 = __importDefault(require("../utils/dom"));
 
-  var consts_1 = require("./consts");
+  var constants_1 = require("./constants");
 
   var control_1 = require("./control");
 
@@ -1190,14 +1253,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       _classCallCheck(this, MtmSelect);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmSelect).call(this, options));
-      _this.type = consts_1.MtmControlType.Select;
+      _this.type = constants_1.MtmControlType.Select;
       return _this;
     }
 
     _createClass(MtmSelect, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"btn-control btn-list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
+        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
       }
     }, {
       key: "render",
@@ -1235,6 +1298,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           var item = this.values.find(function (x) {
             return x.id === id;
           });
+          this.currentItem = item;
 
           if (item) {
             var label = this.element.querySelector('.label');
@@ -1261,7 +1325,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   exports.MtmSelect = MtmSelect;
 });
 
-},{"../utils/dom":11,"./consts":2,"./control":3}],8:[function(require,module,exports){
+},{"../utils/dom":11,"./constants":2,"./control":3}],8:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1294,7 +1358,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       this.price = 0;
       this.count = 1;
+      this.order = 0;
+      this.value = 0;
       this.active = false;
+      this.disabled = false;
 
       if (options) {
         Object.assign(this, options);
@@ -1341,7 +1408,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./controls/group", "./controls/select", "./models/data.service", "./utils/dom"], factory);
+    define(["require", "exports", "./controls/constants", "./controls/value", "./models/data.service", "./utils/dom"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1350,9 +1417,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     value: true
   });
 
-  var group_1 = require("./controls/group");
+  var constants_1 = require("./controls/constants");
 
-  var select_1 = require("./controls/select");
+  var value_1 = require("./controls/value");
 
   var data_service_1 = __importDefault(require("./models/data.service"));
 
@@ -1374,58 +1441,28 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       data_service_1.default.fetch(function (cols, rows) {
         _this.cols = cols;
         _this.rows = rows;
-        var options = [new group_1.MtmGroup({
-          key: 'knownTecnology',
-          name: 'Conosci già la tecnologia da adottare?',
-          values: [{
-            id: 1,
-            name: 'No'
-          }, {
-            id: 2,
-            name: 'Sì'
-          }],
-          className: 'btn-group--sm'
-        }), new group_1.MtmGroup({
-          key: 'constrainedDimension',
-          name: 'Hai un vincolo sul numero di moduli e dimensione del pannello?',
-          values: [{
-            id: 1,
-            name: 'No'
-          }, {
-            id: 2,
-            name: 'Sì'
-          }],
-          className: 'btn-group--sm'
-        }), new select_1.MtmSelect({
-          key: 'apartmentNumber',
-          name: 'Quanti appartamenti o punti interni devi gestire?',
-          values: new Array(20).fill(0).map(function (x, i) {
-            return {
-              id: i + 1,
-              name: (i + 1).toFixed(0)
-            };
-          })
-        }), data_service_1.default.optionWithKey('audioVideo'), data_service_1.default.optionWithKey('keypad'), data_service_1.default.optionWithKey('infoModule'), data_service_1.default.optionWithKey('proximity'), data_service_1.default.optionWithKey('finish'), data_service_1.default.optionWithKey('mount'), data_service_1.default.optionWithKey('system'), data_service_1.default.optionWithKey('moduleSize')];
+        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
             console.log('MtmConfigurator.didChange', control.key, item);
 
             switch (control.key) {
-              case 'knownTecnology':
-                var controls = _this.options.map(function (x) {
-                  return x.element;
-                });
+              case constants_1.MtmControlEnum.KnownTecnology:
+              case constants_1.MtmControlEnum.ConstrainedDimension:
+                _this.doReorder();
 
-                controls.unshift(controls.pop());
-
-                var outlet = _this.element.querySelector('.options-outlet');
-
-                controls.forEach(function (x) {
-                  return outlet.appendChild(x);
-                });
                 break;
 
-              case 'constrainedDimension':
+              case constants_1.MtmControlEnum.ApartmentNumber:
+                _this.updateCallButtons();
+
+                break;
+
+              case constants_1.MtmControlEnum.CallButtons:
+                _this.didSelectCallButton();
+
+                _this.onSearch();
+
                 break;
 
               default:
@@ -1436,7 +1473,13 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         });
         _this.options = options;
 
+        _this.initCallButtons();
+
         _this.render();
+
+        _this.updateCallButtons();
+
+        _this.didSelectCallButton();
 
         _this.onSearch();
       }, function (error) {
@@ -1445,6 +1488,239 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }
 
     _createClass(MtmConfigurator, [{
+      key: "initCallButtons",
+      value: function initCallButtons() {
+        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
+        var digi1 = buttons.values.filter(function (x) {
+          return x.name === 'DIGI1';
+        });
+        var digi2 = buttons.values.filter(function (x) {
+          return x.name === 'DIGI2';
+        });
+        var numericButtons = buttons.values.filter(function (x) {
+          return parseInt(x.name).toString() === x.name;
+        });
+        var digitalDisplay = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay);
+        var digitalDisplayButton = digitalDisplay.values.find(function (x) {
+          return x.name === 'Digital Display';
+        }); // console.log(buttons.values); // 26
+        // Modulo 1 Pulsante
+
+        var values = [];
+        var i = 0;
+        values.push(new value_1.MtmValue({
+          id: ++i,
+          name: "DIGI1",
+          value: 1,
+          order: 10 - 1,
+          data: {
+            buttons: digi1
+          }
+        }));
+        values.push(new value_1.MtmValue({
+          id: ++i,
+          name: "DIGI2",
+          value: 2,
+          order: 20 - 2,
+          data: {
+            buttons: digi2
+          }
+        }));
+        numericButtons.forEach(function (x) {
+          var value = parseInt(x.name);
+          values.push(new value_1.MtmValue({
+            id: ++i,
+            name: "Modulo ".concat(value > 1 ? value + ' pulsanti' : '1 pulsante'),
+            value: value,
+            order: value * 10,
+            data: {
+              buttons: x
+            }
+          }));
+          values.push(new value_1.MtmValue({
+            id: ++i,
+            name: "Modulo DIGI1 + ".concat(value > 1 ? value + ' pulsanti' : '1 pulsante'),
+            value: value + 1,
+            order: (value + 1) * 10 - 1,
+            data: {
+              buttons: x // + digi1
+
+            }
+          }));
+          values.push(new value_1.MtmValue({
+            id: ++i,
+            name: "Modulo DIGI2 + ".concat(value > 1 ? value + ' pulsanti' : '1 pulsante'),
+            value: value + 2,
+            order: (value + 2) * 10 - 2,
+            data: {
+              buttons: x // + digi2
+
+            }
+          }));
+        });
+        values.push(new value_1.MtmValue({
+          id: ++i,
+          name: "Digital Display",
+          value: 1000,
+          order: 10000,
+          data: {
+            digitalDisplay: digitalDisplayButton
+          }
+        }));
+        values.sort(function (a, b) {
+          return a.order > b.order ? 1 : b.order > a.order ? -1 : 0;
+        });
+        var callButtons = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.CallButtons;
+        });
+        callButtons.values = values;
+        callButtons.values.forEach(function (x, i) {
+          return x.price = 4.99 * i;
+        });
+
+        if (callButtons.values.length) {
+          callButtons.values[0].active = true;
+          callButtons.currentItem = callButtons.values[0];
+        }
+      }
+    }, {
+      key: "updateCallButtons",
+      value: function updateCallButtons() {
+        var apartmentNumber = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ApartmentNumber;
+        });
+        var apartmentNumberValue = apartmentNumber.currentItem.id;
+        var callButtons = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.CallButtons;
+        });
+        callButtons.values.forEach(function (x) {
+          switch (x.name) {
+            case 'Digital Display':
+              x.disabled = false;
+              break;
+
+            default:
+              x.disabled = x.value !== apartmentNumberValue;
+              break;
+          }
+        }); // console.log(callButtons.values.filter(x => !x.disabled).map(x => x.name));
+
+        callButtons.updateState(); // const callButtonsCurrentItem = callButtons.currentItem;
+        // console.log('updateCallButtons', apartmentNumberValue, callButtonsCurrentItem.name);
+      }
+    }, {
+      key: "didSelectCallButton",
+      value: function didSelectCallButton() {
+        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
+        var digitalDisplay = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay);
+        var callButtons = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.CallButtons;
+        });
+        console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
+
+        if (callButtons.currentItem && callButtons.currentItem.data) {
+          buttons.onSelect(callButtons.currentItem.data.buttons);
+          digitalDisplay.onSelect(callButtons.currentItem.data.digitalDisplay);
+        }
+        /*
+        buttons.values.forEach(x => x.active = false);
+        digitalDisplay.values.forEach(x => x.active = false);
+        if (callButtons.currentItem.name === 'Digital Display') {
+            digitalDisplay.currentItem = digitalDisplay.values.find(x => x.id === callButtons.currentItem.id);
+            digitalDisplay.currentItem.active = true;
+            buttons.currentItem = null;
+        } else {
+            buttons.currentItem = buttons.values.find(x => x.id === callButtons.currentItem.id);
+            buttons.currentItem.active = true;
+            digitalDisplay.currentItem = null;
+        }
+        */
+
+      }
+    }, {
+      key: "doReorder",
+      value: function doReorder() {
+        var controls = [];
+        var knownTecnology = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.KnownTecnology;
+        });
+        var system = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.System;
+        });
+        var constrainedDimension = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ConstrainedDimension;
+        });
+        var moduleSize = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ModuleSize;
+        });
+        controls.push(knownTecnology.element);
+
+        if (knownTecnology.currentItem.id === 2) {
+          controls.push(system.element);
+        }
+
+        controls.push(constrainedDimension.element);
+
+        if (constrainedDimension.currentItem.id === 2) {
+          controls.push(moduleSize.element);
+        }
+
+        var apartmentNumber = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ApartmentNumber;
+        });
+        var callButtons = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.CallButtons;
+        });
+        var audioVideo = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.AudioVideo;
+        });
+        var keypad = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.Keypad;
+        });
+        var infoModule = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.InfoModule;
+        });
+        var proximity = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.Proximity;
+        });
+        var finish = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.Finish;
+        });
+        var mount = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.Mount;
+        });
+        controls.push(apartmentNumber.element);
+        controls.push(callButtons.element);
+        controls.push(audioVideo.element);
+        controls.push(keypad.element);
+        controls.push(infoModule.element);
+        controls.push(proximity.element);
+        controls.push(finish.element);
+        controls.push(mount.element);
+
+        if (knownTecnology.currentItem.id === 1) {
+          controls.push(system.element);
+        }
+
+        if (constrainedDimension.currentItem.id === 1) {
+          controls.push(moduleSize.element);
+        } // const controls = this.options.map(x => x.element);
+        // controls.unshift(controls.pop());
+
+
+        this.options.map(function (x) {
+          return x.element;
+        }).forEach(function (x) {
+          if (x.parentNode) {
+            x.parentNode.removeChild(x);
+          }
+        });
+        var outlet = this.element.querySelector('.options-outlet');
+        controls.forEach(function (x) {
+          return outlet.appendChild(x);
+        }); // console.log('doReorder');
+      }
+    }, {
       key: "onSearch",
       value: function onSearch() {
         var _this2 = this;
@@ -1476,7 +1752,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         }); // TOTALPRICE ?
 
         var totalPrice = filters.reduce(function (p, x) {
-          console.log(p, x.price);
+          // console.log(p, x.price);
           return p + x.price;
         }, 0); // FILTER RESULTS
 
@@ -1523,8 +1799,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           return x.render();
         }).forEach(function (x) {
           return outlet.appendChild(x);
-        });
-        console.log('render.outlet', outlet);
+        }); // console.log('render.outlet', outlet);
       }
     }, {
       key: "addMediaScrollListener",
@@ -1575,7 +1850,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   var configurator = new MtmConfigurator(".configurator");
 });
 
-},{"./controls/group":5,"./controls/select":7,"./models/data.service":10,"./utils/dom":11}],10:[function(require,module,exports){
+},{"./controls/constants":2,"./controls/value":8,"./models/data.service":10,"./utils/dom":11}],10:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1591,7 +1866,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "whatwg-fetch", "../controls/consts", "../controls/control", "../controls/grid", "../controls/group", "../controls/list", "../controls/select"], factory);
+    define(["require", "exports", "whatwg-fetch", "../controls/constants", "../controls/control", "../controls/grid", "../controls/group", "../controls/list", "../controls/select"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1602,7 +1877,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   require("whatwg-fetch");
 
-  var consts_1 = require("../controls/consts");
+  var constants_1 = require("../controls/constants");
 
   var control_1 = require("../controls/control");
 
@@ -1634,12 +1909,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
         return fetch;
       }(function (callback, error) {
+        Object.keys(constants_1.MtmControlEnum).forEach(function (k) {
+          var key = k;
+          var value = constants_1.MtmControlEnum[key];
+          MtmDataService.map[value] = key;
+        });
+        constants_1.MtmControls.forEach(function (x) {
+          MtmDataService.controlsMap[x.key] = x;
+        }); // MtmDataService.controlsMap[value] = MtmControls.find(x => x.type === value);
+        // console.log('MtmControlEnum', MtmControlEnum);
+        // console.log('controlsMap', MtmDataService.controlsMap);
+
         fetch('data/data.csv').then(function (response) {
           return response.text();
         }).then(function (text) {
           var csv = text.split('\n');
           var cols = MtmDataService.parseCsvArray(csv.shift() || '').map(function (x) {
-            return x.trim().replace(/ |\//gm, '');
+            return MtmDataService.renameColumn(x.trim());
           }).map(function (x) {
             return MtmDataService.newControlByKey(x);
           });
@@ -1671,25 +1957,36 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         });
       })
     }, {
+      key: "renameColumn",
+      value: function renameColumn(name) {
+        if (name === '') {
+          name = 'Description';
+        }
+
+        return name; // MtmDataService.map[name];
+        // return name.replace(/ |\//gm, '');
+      }
+    }, {
       key: "newControlByKey",
       value: function newControlByKey(key) {
-        var map = consts_1.MTM_MAP[key] || consts_1.MTM_MAP.Default;
+        var map = MtmDataService.controlsMap[key] || MtmDataService.controlsMap.Default; // console.log('newControlByKey', key);
+
         var control;
 
         switch (map.type) {
-          case consts_1.MtmControlType.Select:
+          case constants_1.MtmControlType.Select:
             control = new select_1.MtmSelect(map);
             break;
 
-          case consts_1.MtmControlType.Group:
+          case constants_1.MtmControlType.Group:
             control = new group_1.MtmGroup(map);
             break;
 
-          case consts_1.MtmControlType.List:
+          case constants_1.MtmControlType.List:
             control = new list_1.MtmList(map);
             break;
 
-          case consts_1.MtmControlType.Grid:
+          case constants_1.MtmControlType.Grid:
             control = new grid_1.MtmGrid(map);
             break;
 
@@ -1703,7 +2000,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       key: "optionWithKey",
       value: function optionWithKey(key) {
         return MtmDataService.cols.find(function (x) {
-          // console.log(x.key, key);
           return x.key === key;
         });
       }
@@ -1743,10 +2039,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   MtmDataService.cols = [];
   MtmDataService.rows = [];
+  MtmDataService.map = {}; //: Map<string, string> = {};
+
+  MtmDataService.controlsMap = {};
   exports.default = MtmDataService;
 });
 
-},{"../controls/consts":2,"../controls/control":3,"../controls/grid":4,"../controls/group":5,"../controls/list":6,"../controls/select":7,"whatwg-fetch":1}],11:[function(require,module,exports){
+},{"../controls/constants":2,"../controls/control":3,"../controls/grid":4,"../controls/group":5,"../controls/list":6,"../controls/select":7,"whatwg-fetch":1}],11:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

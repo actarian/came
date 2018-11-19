@@ -59,61 +59,6 @@
     width: 40px;
     flex: 0 0 40px; }
 
-.btn-group--sm .btn {
-  min-height: 60px; }
-
-.btn-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row; }
-  .btn-group .btn {
-    width: 50%;
-    flex: 1 1 50%;
-    border-radius: 0; }
-    .btn-group .btn:hover, .btn-group .btn:active, .btn-group .btn.active {
-      z-index: 1; }
-    .btn-group .btn:first-child {
-      border-radius: 4px 0 0 4px; }
-    .btn-group .btn:last-child {
-      border-radius: 0 4px 4px 0; }
-  .btn-group .btn + .btn {
-    margin-left: -2px; }
-
-.btn-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; }
-  .btn-list .btn {
-    width: 100%;
-    flex: 1 1 100%; }
-  .btn-list .btn + .btn {
-    margin-top: 12px; }
-
-.btn-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap; }
-  .btn-grid .btn {
-    width: 50%;
-    flex: 1 1 50%;
-    border-radius: 0; }
-    .btn-grid .btn:hover, .btn-grid .btn:active, .btn-grid .btn.active {
-      z-index: 1; }
-    .btn-grid .btn:first-child {
-      border-radius: 4px 0 0 0; }
-    .btn-grid .btn:nth-child(2) {
-      border-radius: 0 4px 0 0; }
-    .btn-grid .btn:nth-last-child(-n+2) {
-      border-radius: 0 0 0 4px; }
-    .btn-grid .btn:last-child {
-      border-radius: 0 0 4px 0; }
-  .btn-grid .btn {
-    margin: 0 -2px -2px 0; }
-
 .btn--select {
   position: relative;
   display: inline-flex;
@@ -134,6 +79,68 @@
     font-size: 16px;
     line-height: 1.875;
     font-weight: 700; }
+
+.control--group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; }
+  .control--group .btn {
+    width: 50%;
+    flex: 1 1 50%;
+    border-radius: 0; }
+    .control--group .btn:hover, .control--group .btn:active, .control--group .btn.active {
+      z-index: 1; }
+    .control--group .btn:first-child {
+      border-radius: 4px 0 0 4px; }
+    .control--group .btn:last-child {
+      border-radius: 0 4px 4px 0; }
+  .control--group .btn + .btn {
+    margin-left: -2px; }
+
+.control--group--sm .btn {
+  min-height: 60px; }
+
+.control--list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; }
+  .control--list .btn {
+    width: 100%;
+    flex: 1 1 100%; }
+    .control--list .btn.disabled {
+      display: none; }
+  .control--list .btn + .btn {
+    margin-top: 12px; }
+
+.control--list--sm .btn--select {
+  min-height: 60px; }
+  .control--list--sm .btn--select .form-control--select {
+    height: 60px; }
+
+.control--grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap; }
+  .control--grid .btn {
+    width: 50%;
+    flex: 1 1 50%;
+    border-radius: 0; }
+    .control--grid .btn:hover, .control--grid .btn:active, .control--grid .btn.active {
+      z-index: 1; }
+    .control--grid .btn:first-child {
+      border-radius: 4px 0 0 0; }
+    .control--grid .btn:nth-child(2) {
+      border-radius: 0 4px 0 0; }
+    .control--grid .btn:nth-last-child(-n+2) {
+      border-radius: 0 0 0 4px; }
+    .control--grid .btn:last-child {
+      border-radius: 0 0 4px 0; }
+  .control--grid .btn {
+    margin: 0 -2px -2px 0; }
 
 .h1 {
   font-size: 30px;

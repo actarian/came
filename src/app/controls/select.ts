@@ -1,10 +1,10 @@
 import Dom from '../utils/dom';
-import { MtmControlType } from './consts';
+import { MtmControlType } from './constants';
 import { MtmControl } from './control';
 
 export class MtmSelect extends MtmControl {
 
-	constructor(options: string | MtmControl) {
+	constructor(options: MtmControl) {
 		super(options);
 		this.type = MtmControlType.Select;
 	}
@@ -14,7 +14,7 @@ export class MtmSelect extends MtmControl {
 		<div class="title">${this.name}</div>${
 			this.description ? `<div class="subtitle">${this.description}</div>` : ``
 			}
-		<div class="btn-control btn-list ${this.className}">
+		<div class="control control--list ${this.className}">
 			<div class="btn btn--select">
 				<select class="form-control form-control--select"></select>
 				<span class="label"></span>
@@ -46,6 +46,7 @@ export class MtmSelect extends MtmControl {
 		if (select) {
 			const id: number = parseInt(select.value);
 			const item = this.values.find(x => x.id === id);
+			this.currentItem = item;
 			if (item) {
 				const label = this.element.querySelector('.label');
 				label.innerHTML = item.name;

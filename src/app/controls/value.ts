@@ -4,7 +4,11 @@ export class MtmValue {
 	name: string;
 	price?: number = 0;
 	count?: number = 1;
+	order?: number = 0;
+	value?: number = 0;
 	active?: boolean = false;
+	disabled?: boolean = false;
+	data?: any;
 
 	getPrice?(): string {
 		return this.price ? `<span class="price">+ € ${this.price.toFixed(2)}</span>` : ``;
