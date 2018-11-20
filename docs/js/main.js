@@ -1060,7 +1060,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"info\">info</button>\n\t</div>");
+        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
       }
     }]);
 
@@ -1839,7 +1839,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "addRecapScrollListener",
       value: function addRecapScrollListener() {
-        var inner = this.element.querySelector('.section--recap > .inner');
+        var inner = this.element.querySelector('.section--recap--fixed > .inner');
         var lastScrollTop = dom_1.default.scrollTop();
 
         var onScroll = function onScroll() {

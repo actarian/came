@@ -6,7 +6,7 @@
 	align-items: center;
 	flex-direction: row;
 
-	.btn {
+	&>.btn {
 		width: 50%;
 		flex: 1 1 50%;
 		border-radius: 0;
@@ -33,7 +33,7 @@
 }
 
 .control--group--sm {
-	.btn {
+	&>.btn {
 		min-height: 60px;
 	}
 }
@@ -44,7 +44,7 @@
 	align-items: center;
 	flex-direction: column;
 
-	.btn {
+	&>.btn {
 		width: 100%;
 		flex: 1 1 100%;
 
@@ -76,10 +76,11 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 
-	.btn {
+	&>.btn {
 		width: 50%;
 		flex: 1 1 50%;
 		border-radius: 0;
+		margin: 0 -2px -2px 0;
 
 		&:hover,
 		&:active,
@@ -103,9 +104,5 @@
 		&:last-child {
 			border-radius: 0 0 4px 0;
 		}
-	}
-
-	.btn {
-		margin: 0 -2px -2px 0;
 	}
 }

@@ -296,7 +296,7 @@ export default class MtmConfigurator {
 	}
 
 	addRecapScrollListener() {
-		const inner = this.element.querySelector('.section--recap > .inner') as HTMLElement;
+		const inner = this.element.querySelector('.section--recap--fixed > .inner') as HTMLElement;
 		var lastScrollTop = Dom.scrollTop();
 		const onScroll = () => {
 			var scrollTop = Dom.scrollTop();
