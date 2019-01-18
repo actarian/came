@@ -11,8 +11,10 @@ export class MtmControl {
 	values?: MtmValue[] = [];
 	cache?: any = {};
 	count?: number = 0;
+	index?: number = 0;
 	className?: string = '';
 	nullable?: boolean = false;
+	lazy?: boolean = false;
 	element?: HTMLElement = null;
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
@@ -47,6 +49,19 @@ export class MtmControl {
 		// }
 	}
 
+	get selected(): any {
+		const selected = this.currentItem;
+		if (this.currentItem) {
+			return this.currentItem;
+		} else {
+			return {
+				id: -1,
+				name: '-',
+				price: 0,
+			}
+		}
+	}
+
 	getTemplate?(): string {
 		return `<div class="option">
 		<div class="title">${this.name}</div>${
@@ -78,7 +93,7 @@ export class MtmControl {
 		return fragment;
 	}
 
-	onClick?(button: HTMLButtonElement) {
+	onClick?(button: HTMLButtonElement, prevent: boolean = false) {
 		/*
 		const group = this.element.querySelector('.control');
 		const buttons = Array.prototype.slice.call(group.childNodes);
@@ -88,28 +103,28 @@ export class MtmControl {
 		}
 		*/
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
-		buttons.forEach((x: Element) => Dom.removeClass(x, 'active'));
-		Dom.addClass(button, 'active');
+		buttons.forEach((x: Element) => x.classList.remove('active'));
+		button.classList.add('active');
 		this.values.forEach(x => x.active = false);
 		const id = parseInt(button.getAttribute('data-id'));
 		const item: MtmValue = this.values.find(x => x.id === id);
 		item.active = true;
 		this.currentItem = item;
-		if (typeof this.didChange === 'function') {
+		if (!prevent && typeof this.didChange === 'function') {
 			this.didChange(item, this);
 		}
 		// console.log('MtmControl.onClick', 'button', button, 'item', item);
 	}
 
-	onSelect?(value: MtmValue) {
+	onSelect?(value: MtmValue, prevent: boolean = false) {
 		this.values.forEach(x => x.active = false);
 		this.currentItem = value;
 		if (value) {
 			value.active = true;
 			if (this.element) {
 				const group = this.element.querySelector('.control');
-				const button = group.querySelector(`[data-id]="${value.id}"`) as HTMLButtonElement;
-				this.onClick(button);
+				const button = group.querySelector(`[data-id="${value.id}"]`) as HTMLButtonElement;
+				this.onClick(button, prevent);
 			}
 		}
 	}
@@ -121,47 +136,71 @@ export class MtmControl {
 			this.values.forEach((x, i) => {
 				const button = group.childNodes[i] as Element;
 				if (x.disabled) {
-					Dom.addClass(button, 'disabled');
+					button.classList.add('disabled');
 				} else {
-					Dom.removeClass(button, 'disabled');
+					button.classList.remove('disabled');
 				}
+
 			});
 		}
 	}
 
-	addValue?(name: string): number {
-		name = name.trim() !== '' ? name : 'No';
+	addValue?(name: string, price: number): number {
+		name = name && name.toString().trim() !== '' ? name.toString() : 'No';
+		if (name === 'No' &&
+			(this.key === MtmControlEnum.AudioVideo || this.key === MtmControlEnum.System)) {
+			return -1;
+		}
 		let item = this.cache[name];
 		if (item == undefined) {
-			item = new MtmValue({ id: ++this.count, name });
+			/*
+			if (name === 'No') {
+				console.log(this.key, name);
+			}
+			*/
+			item = new MtmValue({ id: ++this.count, name, price, value: parseInt(name) });
 			this.values.push(item);
+			/*
+			if (this.key === 'buttons') {
+				console.log(item, this.values[0]);
+			}
+			*/
 		} else {
 			item.count++;
+			item.price = Math.min(price, item.price);
 		}
 		this.cache[name] = item;
 		return item.id;
 	}
 
-	sort?() {
+	sort?(index: number) {
+		this.index = index;
+		if (this.values.length > 0) {
+			this.values.sort((a, b) => a.price - b.price);
+			const minimumPrice = this.values[0].price;
+			if (minimumPrice) {
+				this.values.forEach(x => x.price = x.price - minimumPrice);
+			} else {
+				this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+			}
+			// this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+		}
 		const nullValue = this.values.find(x => x.name === 'No');
 		if (nullValue) {
 			this.values.splice(this.values.indexOf(nullValue), 1);
+			if (this.nullable) {
+				this.values.unshift(nullValue);
+				/*
+				this.values.unshift(new MtmValue({
+					id: nullValue ? nullValue.id : 0,
+					name: 'No',
+				}));
+				*/
+			}
 		}
-		this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-		// this.values.sort((a, b) => (a.count > b.count) ? 1 : ((b.count > a.count) ? -1 : 0));
-		if (this.nullable) {
-			this.values.unshift(nullValue);
-			/*
-			this.values.unshift(new MtmValue({
-				id: nullValue ? nullValue.id : 0,
-				name: 'No',
-			}));
-			*/
-		}
-		this.values.forEach((x, i) => x.price = 4.99 * i);
+		// this.values.forEach((x, i) => x.price = 4.99 * i);
 		if (this.values.length) {
 			this.values[0].active = true;
-			this.currentItem = this.values[0];
 		}
 	}
 

@@ -8,82 +8,92 @@ export enum MtmControlType {
 	Grid = 4,
 }
 
+
+// code,singleModuleFrame,finish,moduleSize,mount,system,AV,keypad,proximity,infoModule,hearingModule,digitalDisplay,additionalModules,buttons,divided,mounting,
+// flushRainshield,frame,electronicsModule1,frontPiece1,electronicsModule2,frontPiece2,electronicsModule3,frontPiece3,electronicsModule4,frontPiece4,ci,description
+
 export enum MtmControlEnum {
-	Code = 'Code',
-	SingleModuleFrame = 'Single Module Frame',
-	Finish = 'Finish',
-	ModuleSize = 'Module Size',
-	Mount = 'Mount',
-	System = 'System',
-	AudioVideo = 'A/V',
-	Keypad = 'Keypad',
-	Proximity = 'Proximity',
-	InfoModule = 'Info Module',
-	HearingModule = 'Hearing Module',
-	DigitalDisplay = 'Digital Display',
-	AdditionalModules = 'moduli aggiuntivi',
-	Buttons = 'Buttons',
-	Divided = 'Divided',
-	Mounting = 'Mounting',
-	FlushRainshield = 'Flush Rainshield',
-	Frame = 'Frame',
-	Module1 = 'Electronics Module 1',
-	Front1 = 'Front Piece 1',
-	Module2 = 'Electronics Module 2',
-	Front2 = 'Front Piece 2',
-	Module3 = 'Electronics Module 3',
-	Front3 = 'Front Piece 3',
-	Module4 = 'Electronics Module 4',
-	Front4 = 'Front Piece 4',
-	Identifier = 'CI',
-	Description = 'Description',
-	Price = 'Price',
+	Code = 'code',
+	SingleModuleFrame = 'singleModuleFrame',
+	Finish = 'finish',
+	ModuleSize = 'moduleSize',
+	Mount = 'mount',
+	System = 'system',
+	AudioVideo = 'AV',
+	Keypad = 'keypad',
+	Proximity = 'proximity',
+	InfoModule = 'infoModule',
+	HearingModule = 'hearingModule',
+	DigitalDisplay = 'digitalDisplay',
+	AdditionalModules = 'additionalModules',
+	Buttons = 'buttons',
+	Divided = 'divided',
+	Mounting = 'mounting',
+	FlushRainshield = 'flushRainshield',
+	Frame = 'frame',
+	Module1 = 'electronicsModule1',
+	Front1 = 'frontPiece1',
+	Module2 = 'electronicsModule2',
+	Front2 = 'frontPiece2',
+	Module3 = 'electronicsModule3',
+	Front3 = 'frontPiece3',
+	Module4 = 'electronicsModule4',
+	Front4 = 'frontPiece4',
+	Identifier = 'ci',
+	Description = 'description',
+	Price = 'price',
 	// customs
-	KnownTecnology = 'KnownTecnology',
-	ConstrainedDimension = 'ConstrainedDimension',
-	ApartmentNumber = 'ApartmentNumber',
-	CallButtons = 'CallButtons',
+	Digi = 'digi',
+	ButtonType = 'buttonType',
+	KnownTecnology = 'knownTecnology',
+	ConstrainedDimension = 'constrainedDimension',
+	ApartmentNumber = 'apartmentNumber',
+	CallButtons = 'callButtons',
 	// default
-	Default = 'None',
+	Default = 'none',
 }
 // Code,Single Module Frame,Finish,Module Size,Mount,System,A/V,Keypad,Proximity,Info Module,Hearing Module,Digital Display,moduli aggiuntivi,Buttons,Divided,Mounting,Flush Rainshield,Frame,Electronics Module 1,Front Piece 1,Electronics Module 2,Front Piece 2,Electronics Module 3,Front Piece 3,Electronics Module 4,Front Piece 4,CI,
 
 export const MtmControls: any[] = [{
 	key: MtmControlEnum.Code, name: 'Codice'
 }, {
-	key: MtmControlEnum.SingleModuleFrame
+	key: MtmControlEnum.Digi, name: 'Digi', lazy: true,
 }, {
-	key: MtmControlEnum.Finish, name: 'Finitura', type: MtmControlType.Group
+	key: MtmControlEnum.ButtonType, name: 'ButtonType', lazy: true,
+}, {
+	key: MtmControlEnum.SingleModuleFrame, disabled: true,
+}, {
+	key: MtmControlEnum.Finish, name: 'Finitura', type: MtmControlType.Group, lazy: true,
 }, {
 	key: MtmControlEnum.ModuleSize, name: 'Numero di moduli', description: 'Quanto spazio ti serve? Consulta la guida.', type: MtmControlType.Group
 }, {
-	key: MtmControlEnum.Mount, name: 'Installazione', type: MtmControlType.List
+	key: MtmControlEnum.Mount, name: 'Installazione', type: MtmControlType.List, lazy: true,
 }, {
 	key: MtmControlEnum.System, name: 'Sistema', description: 'Scopri le tecnologie e funzionalità dei sistemi Came.', type: MtmControlType.Grid
 }, {
 	key: MtmControlEnum.AudioVideo, name: 'Caratteristiche Audio / Video', type: MtmControlType.Group
 }, {
-	key: MtmControlEnum.Keypad, name: 'Tastiera per il controllo accessi', description: 'Tastiera numerica per la sicurezza', type: MtmControlType.List, nullable: true
+	key: MtmControlEnum.Keypad, name: 'Tastiera per il controllo accessi', description: 'Tastiera numerica per la sicurezza', type: MtmControlType.List, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.Proximity, name: 'Modulo di prossimità', description: 'Accesso automatico tramite scansione RFID', type: MtmControlType.Group, nullable: true
+	key: MtmControlEnum.Proximity, name: 'Modulo di prossimità', description: 'Accesso automatico tramite scansione RFID', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.InfoModule, name: 'Modulo informazioni', description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato', type: MtmControlType.Group, nullable: true
+	key: MtmControlEnum.InfoModule, name: 'Modulo informazioni', description: 'Vuoi fornire indicazioni? Usa il modulo retroilluminato', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.HearingModule, name: 'Modulo di sintesi vocale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?', type: MtmControlType.Group, nullable: true
+	key: MtmControlEnum.HearingModule, name: 'Modulo di sintesi vocale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.DigitalDisplay, name: 'Display Digitale',
+	key: MtmControlEnum.DigitalDisplay, name: 'Display Digitale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.AdditionalModules
+	key: MtmControlEnum.AdditionalModules, disabled: true,
 }, {
-	key: MtmControlEnum.Buttons, name: 'Pulsanti di chiamata', type: MtmControlType.List,
+	key: MtmControlEnum.Buttons, lazy: true, nullable: true,
 }, {
-	key: MtmControlEnum.Divided
+	key: MtmControlEnum.Divided, lazy: true, nullable: true,
 }, {
-	key: MtmControlEnum.Mounting
+	key: MtmControlEnum.Mounting, lazy: true,
 }, {
-	key: MtmControlEnum.FlushRainshield
+	key: MtmControlEnum.FlushRainshield, lazy: true,
 }, {
-	key: MtmControlEnum.Frame
+	key: MtmControlEnum.Frame, lazy: true,
 }, {
 	key: MtmControlEnum.Module1
 }, {
@@ -101,9 +111,9 @@ export const MtmControls: any[] = [{
 }, {
 	key: MtmControlEnum.Front4
 }, {
-	key: MtmControlEnum.Identifier
+	key: MtmControlEnum.Identifier, disabled: true,
 }, {
-	key: MtmControlEnum.Description
+	key: MtmControlEnum.Description, disabled: true,
 }, {
 	key: MtmControlEnum.Price
 }, // customs
@@ -124,11 +134,17 @@ export const MtmControls: any[] = [{
 {
 	key: MtmControlEnum.ApartmentNumber, name: 'Quanti appartamenti o punti interni devi gestire?', type: MtmControlType.Select,
 	values: new Array(MtmMaxApartments).fill(0).map((x: number, i: number) => {
-		return { id: i + 1, name: (i + 1).toFixed(0) };
+		return { id: i + 1, name: (i + 1).toFixed(0), value: (i + 1) };
 	}), className: 'control--list--sm',
 }, {
 	key: MtmControlEnum.CallButtons, name: 'Pulsanti di chiamata', type: MtmControlType.List,
-	values: [],
+	values: [
+		{ id: 1, name: 'Pulsante singolo' },
+		{ id: 2, name: 'Pulsante doppio' },
+		{ id: 3, name: 'Digital keypad' },
+		{ id: 4, name: 'Digital keypad + DIGI1' },
+		{ id: 5, name: 'Digital keypad + DIGI2' },
+	], className: 'control--list--sm',
 }, // default
 {
 	key: MtmControlEnum.Default, name: 'name', description: 'description', type: MtmControlType.Group

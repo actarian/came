@@ -10,6 +10,9 @@ export default class MtmConfigurator {
 	options: MtmControl[];
 	cols: MtmControl[] = [];
 	rows: number[][] = [];
+	filteredRows: any[] = [];
+	row: number[] = null;
+	currentKey: MtmControlEnum = MtmControlEnum.ApartmentNumber;
 
 	constructor(selector: string) {
 		this.element = document.querySelector(selector) as HTMLElement;
@@ -25,8 +28,10 @@ export default class MtmConfigurator {
 				MtmDataService.newControlByKey(MtmControlEnum.CallButtons),
 				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.optionWithKey(MtmControlEnum.Keypad),
-				MtmDataService.optionWithKey(MtmControlEnum.InfoModule),
 				MtmDataService.optionWithKey(MtmControlEnum.Proximity),
+				MtmDataService.optionWithKey(MtmControlEnum.DigitalDisplay),
+				MtmDataService.optionWithKey(MtmControlEnum.InfoModule),
+				MtmDataService.optionWithKey(MtmControlEnum.HearingModule),
 				MtmDataService.optionWithKey(MtmControlEnum.Finish),
 				MtmDataService.optionWithKey(MtmControlEnum.Mount),
 				MtmDataService.optionWithKey(MtmControlEnum.System),
@@ -38,138 +43,100 @@ export default class MtmConfigurator {
 					case MtmControlEnum.KnownTecnology:
 					case MtmControlEnum.ConstrainedDimension:
 						this.doReorder();
+						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.ApartmentNumber:
-						this.updateCallButtons();
+						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.CallButtons:
-						this.didSelectCallButton();
-						this.onSearch();
+						this.onSearch(this.didSelectCallButton());
 						break;
 					default:
-						this.onSearch();
+						this.onSearch(control.key);
 				}
 			});
 			this.options = options;
-			this.initCallButtons();
 			this.render();
-			this.updateCallButtons();
-			this.didSelectCallButton();
-			this.onSearch();
+			this.onSearch(this.didSelectCallButton());
+			this.element.querySelector('.media>.picture').addEventListener('click', () => {
+				this.toggleResults();
+			});
 		}, (error: any) => {
 			console.log('error', error);
 
 		});
 	}
 
-	initCallButtons() {
-		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-		const digi1 = buttons.values.filter(x => x.name === 'DIGI1');
-		const digi2 = buttons.values.filter(x => x.name === 'DIGI2');
-		const numericButtons = buttons.values.filter(x => parseInt(x.name).toString() === x.name);
-		const digitalDisplay = MtmDataService.optionWithKey(MtmControlEnum.DigitalDisplay);
-		const digitalDisplayButton = digitalDisplay.values.find(x => x.name === 'Digital Display');
-		// console.log(buttons.values); // 26
-		// Modulo 1 Pulsante
-		const values: MtmValue[] = [];
-		let i = 0;
-		values.push(new MtmValue({
-			id: ++i,
-			name: `DIGI1`,
-			value: 1,
-			order: 10 - 2,
-			data: { buttons: digi1 }
-		}));
-		values.push(new MtmValue({
-			id: ++i,
-			name: `DIGI2`,
-			value: 2,
-			order: 20 - 1,
-			data: { buttons: digi2 }
-		}));
-		numericButtons.forEach(x => {
-			const value = parseInt(x.name);
-			values.push(new MtmValue({
-				id: ++i,
-				name: `Modulo ${value > 1 ? value + ' pulsanti' : '1 pulsante'}`,
-				value: value,
-				order: value * 10,
-				data: { buttons: x }
-			}));
-			values.push(new MtmValue({
-				id: ++i,
-				name: `Modulo DIGI1 + ${value > 1 ? value + ' pulsanti' : '1 pulsante'}`,
-				value: value + 1,
-				order: (value + 1) * 10 - 2,
-				data: { buttons: x } // + digi1
-			}));
-			values.push(new MtmValue({
-				id: ++i,
-				name: `Modulo DIGI2 + ${value > 1 ? value + ' pulsanti' : '1 pulsante'}`,
-				value: value + 2,
-				order: (value + 2) * 10 - 1,
-				data: { buttons: x } // + digi2
-			}));
-		})
-		values.push(new MtmValue({
-			id: ++i,
-			name: `Digital Display`,
-			value: 1000,
-			order: 10000,
-			data: { digitalDisplay: digitalDisplayButton }
-		}))
-		values.sort((a, b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+	didSelectCallButton(): MtmControlEnum {
+		let key: MtmControlEnum;
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		callButtons.values = values;
-		callButtons.values.forEach((x, i) => x.price = 4.99 * i);
-		if (callButtons.values.length) {
-			callButtons.values[0].active = true;
-			callButtons.currentItem = callButtons.values[0];
-		}
-	}
-
-	updateCallButtons() {
-		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
-		const apartmentNumberValue = apartmentNumber.currentItem.id;
-		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		callButtons.values.forEach(x => {
-			switch (x.name) {
-				case 'Digital Display':
-					x.disabled = false;
+		if (callButtons.selected) {
+			const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
+			const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+			const keypad = MtmDataService.optionWithKey(MtmControlEnum.Keypad);
+			const keypadValue = keypad.values.find(x => x.name === 'Digital Keypad');
+			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+			let apartmentNumberValue = apartmentNumber.selected.value;
+			if (callButtons.selected.id === 2) {
+				apartmentNumberValue = Math.ceil(apartmentNumberValue / 2) * 2;
+			}
+			const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
+			if (!firstValue && callButtons.selected.id < 3) {
+				callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
+			}
+			// console.log('firstValue', firstValue);
+			switch (callButtons.selected.id) {
+				case 1:
+					// pulsante singolo
+					buttons.onSelect(firstValue);
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					keypad.onSelect(null);
+					digi.onSelect(null);
+					key = MtmControlEnum.Buttons;
 					break;
-				default:
-					x.disabled = x.value !== apartmentNumberValue;
+				case 2:
+					// pulsante doppio
+					buttons.onSelect(firstValue);
+					divided.onSelect(divided.values.find(x => x.id === 2));
+					keypad.onSelect(null);
+					digi.onSelect(null);
+					key = MtmControlEnum.Divided;
+					break;
+				case 3:
+					// digital keypad
+					buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					keypad.onSelect(keypadValue);
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
+					key = MtmControlEnum.Keypad;
+					break;
+				case 4:
+					// digital keypad + DIGI 1
+					buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					keypad.onSelect(keypadValue);
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
+					key = MtmControlEnum.Digi;
+					break;
+				case 5:
+					// digital keypad + DIGI 2
+					buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 2));
+					keypad.onSelect(keypadValue);
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
+					key = MtmControlEnum.Digi;
 					break;
 			}
-		});
-		// console.log(callButtons.values.filter(x => !x.disabled).map(x => x.name));
-		callButtons.updateState();
-		// const callButtonsCurrentItem = callButtons.currentItem;
-		// console.log('updateCallButtons', apartmentNumberValue, callButtonsCurrentItem.name);
-	}
-
-	didSelectCallButton() {
-		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-		const digitalDisplay = MtmDataService.optionWithKey(MtmControlEnum.DigitalDisplay);
-		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		// console.log('didSelectCallButton.currentItem =>', callButtons.currentItem);
-		if (callButtons.currentItem && callButtons.currentItem.data) {
-			buttons.onSelect(callButtons.currentItem.data.buttons);
-			digitalDisplay.onSelect(callButtons.currentItem.data.digitalDisplay);
+			console.log(
+				'apartmentNumber', apartmentNumberValue,
+				'buttons', buttons.selected.id,
+				'divided', divided.selected.id,
+				'keypad', keypad.selected.id,
+				'digi', digi.selected.id
+			);
 		}
-		/*
-		buttons.values.forEach(x => x.active = false);
-		digitalDisplay.values.forEach(x => x.active = false);
-		if (callButtons.currentItem.name === 'Digital Display') {
-			digitalDisplay.currentItem = digitalDisplay.values.find(x => x.id === callButtons.currentItem.id);
-			digitalDisplay.currentItem.active = true;
-			buttons.currentItem = null;
-		} else {
-			buttons.currentItem = buttons.values.find(x => x.id === callButtons.currentItem.id);
-			buttons.currentItem.active = true;
-			digitalDisplay.currentItem = null;
-		}
-		*/
+		return key;
 	}
 
 	doReorder() {
@@ -190,16 +157,20 @@ export default class MtmConfigurator {
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
 		const audioVideo = this.options.find(x => x.key === MtmControlEnum.AudioVideo);
 		const keypad = this.options.find(x => x.key === MtmControlEnum.Keypad);
-		const infoModule = this.options.find(x => x.key === MtmControlEnum.InfoModule);
 		const proximity = this.options.find(x => x.key === MtmControlEnum.Proximity);
+		const digitalDisplay = this.options.find(x => x.key === MtmControlEnum.DigitalDisplay);
+		const infoModule = this.options.find(x => x.key === MtmControlEnum.InfoModule);
+		const hearingModule = this.options.find(x => x.key === MtmControlEnum.HearingModule);
 		const finish = this.options.find(x => x.key === MtmControlEnum.Finish);
 		const mount = this.options.find(x => x.key === MtmControlEnum.Mount);
 		controls.push(apartmentNumber.element);
 		controls.push(callButtons.element);
 		controls.push(audioVideo.element);
 		controls.push(keypad.element);
-		controls.push(infoModule.element);
 		controls.push(proximity.element);
+		controls.push(digitalDisplay.element);
+		controls.push(infoModule.element);
+		controls.push(hearingModule.element);
 		controls.push(finish.element);
 		controls.push(mount.element);
 		if (knownTecnology.currentItem.id === 1) {
@@ -220,58 +191,200 @@ export default class MtmConfigurator {
 		// console.log('doReorder');
 	}
 
-	onSearch() {
-		// FILTERS
-		const filters = this.options.map(x => {
+	getRows(key?: MtmControlEnum) {
+		this.currentKey = key;
+		const knownTecnology = this.options.find(x => x.key === MtmControlEnum.KnownTecnology);
+		const constrainedDimension = this.options.find(x => x.key === MtmControlEnum.ConstrainedDimension);
+		const controls = this.options.map(x => {
 			const index = this.cols.indexOf(x);
-			if (index !== -1) {
-				const control = x;
-				const selectedValue = x.values.find(v => v.active);
-				const value = selectedValue ? selectedValue.id : -1;
-				const name = selectedValue ? selectedValue.name : '-';
-				const price = selectedValue ? selectedValue.price : 0;
-				return { index, value, name, price, control };
+			if (index !== -1 && x.key !== key) {
+				switch (x.key) {
+					case MtmControlEnum.System:
+						x.lazy = knownTecnology.selected.id !== 2;
+						break;
+					case MtmControlEnum.ModuleSize:
+						x.lazy = constrainedDimension.selected.id !== 2;
+						break;
+				}
+				return x;
 			} else {
 				return { index };
 			}
-		}).filter(x => x.index !== -1 && x.value !== -1);
-		console.log(filters.map(x => x.control.name + ' ' + x.name + ' ' + x.value).join('\n'));
-		// TOTALPRICE ?
-		const totalPrice = filters.reduce((p, x) => {
-			// console.log(p, x.price);
-			return p + x.price;
-		}, 0);
-		// FILTER RESULTS
-		const results = this.rows.filter(x => {
-			let has = true;
-			filters.forEach(f => has = has && x[f.index] === f.value);
-			return has;
-		}).map(r => {
-			const result: any = {};
-			this.cols.forEach((c, i) => {
-				if (r[i]) {
-					const value = c.values.find(v => v.id === r[i]);
-					result[c.key] = value ? value.name : '-';
-				} else {
-					result[c.key] = null;
-				}
-			});
-			return result;
-		});
-		if (results.length > 0) {
-			const result = results[0];
-			this.element.querySelector('.result-price').innerHTML = `€ ${totalPrice.toFixed(2)}`;
-			this.element.querySelector('.result-code').innerHTML = result.code;
-			// this.element.querySelectorAll('.result-code').forEach(x => x.innerHTML = result.code);
-			this.element.querySelector('.result-description').innerHTML = result.Description;
-			if (results.length === 1) {
-				console.log('MtmConfigurato.onSearch', result);
-			} else {
-				console.log('onSearch.error', results);
-			}
-		} else {
-			console.log('onSearch.error', results);
+		}).filter(x => x.index !== -1).map(x => x as MtmControl).filter(x => x.selected && x.selected.id !== -1);
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		if (buttons.selected.id !== -1) {
+			// console.log(buttons.index);
+			// console.log('onSearch', buttons.selected.id);
+			controls.unshift(buttons);
 		}
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		if (divided.selected.id !== -1) {
+			// console.log('onSearch', divided.selected.id);
+			controls.unshift(divided);
+		}
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+		if (digi.selected.id !== -1) {
+			// console.log('onSearch', digi.selected.id);
+			controls.unshift(digi);
+		}
+		if (key) {
+			// force clicked item
+			controls.unshift(MtmDataService.optionWithKey(key));
+		}
+		let filteredRows = this.rows.filter(x => {
+			return controls.reduce((has, c) => {
+				if (c.lazy && c.key !== key) {
+					return has;
+				} else {
+					return has && x[c.index] === c.selected.id;
+				}
+			}, true);
+		});
+		const lazyControls = controls.filter(c => c.lazy);
+		// console.log(controls.filter(c => c.lazy).map(x => x.key + ':' + x.selected.id));
+		lazyControls.forEach(c => {
+			const strictRows = filteredRows.filter(x => x[c.index] === c.selected.id);
+			/*
+			if (c.key === MtmControlEnum.Buttons) {
+				filteredRows.forEach(x => {
+					console.log(c.key, c.selected.id, x[c.index]);
+				});
+			}
+			*/
+			if (strictRows.length) {
+				filteredRows = strictRows;
+			}
+		});
+		return filteredRows;
+	}
+
+	onSearch(key?: MtmControlEnum) {
+		const filteredRows = this.getRows(key);
+		// console.log(filteredRows.length);
+		if (filteredRows.length > 0) {
+			const row = filteredRows[0];
+			this.setRow(row);
+		}
+		Dom.log('results', filteredRows.length);
+		this.filteredRows = filteredRows;
+	}
+
+	toggleResults() {
+		const filteredRows = this.filteredRows;
+		if (filteredRows.length > 1) {
+			const index = (filteredRows.indexOf(this.row) + 1) % filteredRows.length;
+			this.setRow(filteredRows[index]);
+		}
+	}
+
+	calcOptions(row: number[]) {
+		const prices = MtmDataService.optionWithKey(MtmControlEnum.Price);
+		const controls = [
+			// MtmControlEnum.CallButtons,
+			MtmControlEnum.AudioVideo,
+			MtmControlEnum.Proximity,
+			MtmControlEnum.DigitalDisplay,
+			MtmControlEnum.InfoModule,
+			MtmControlEnum.HearingModule,
+			MtmControlEnum.Finish,
+			MtmControlEnum.Mounting,
+			MtmControlEnum.System,
+			MtmControlEnum.ModuleSize,
+		].map(key => MtmDataService.optionWithKey(key));
+		const currentControl = MtmDataService.optionWithKey(this.currentKey);
+		if (controls.indexOf(currentControl) > 0) {
+			controls.splice(controls.indexOf(currentControl), 1);
+			controls.unshift(currentControl);
+		}
+		controls.forEach(control => {
+			const query = row.slice();
+			let minimumPrice = Number.POSITIVE_INFINITY, count = 0;
+			control.values.forEach(v => {
+				query[control.index] = v.id;
+				let rows = this.rows.filter(r => {
+					return controls.reduce((has, c, i) => {
+						if (c === control) {
+							return has && r[c.index] === query[c.index];
+						} else if (c.lazy && c.key !== this.currentKey) {
+							return has;
+						} else {
+							return has && r[c.index] === query[c.index];
+						}
+					}, true);
+				});
+				controls.filter(c => c.lazy).forEach(c => {
+					const strictRows = rows.filter(x => x[c.index] === query[c.index]);
+					if (true || strictRows.length) {
+						rows = strictRows;
+					}
+				});
+				if (rows.length > 0) {
+					const rowPrice = prices.values.find(v => v.id === rows[0][prices.index]).value;
+					v.price = rowPrice;
+					v.disabled = false;
+					count++;
+				} else {
+					v.price = 0;
+					v.disabled = true;
+				}
+				minimumPrice = Math.min(v.price, minimumPrice);
+			});
+			control.values.forEach(v => {
+				const rowPrice = v.price;
+				if (count > 1) {
+					v.price -= minimumPrice;
+				} else {
+					v.price = 0;
+				}
+				v.updatePrice(control.element);
+				// console.log(control.key, v.name, rowPrice, v.price, v.disabled ? 'disabled' : '');
+			});
+			control.updateState();
+		});
+	}
+
+	setRow(row: number[]) {
+		this.row = row;
+		const result: any = {};
+		this.cols.forEach((c, i) => {
+			if (row[i]) {
+				const value = c.values.find(v => v.id === row[i]);
+				if (value) {
+					result[c.key] = value.name;
+					c.onSelect(value, true);
+				} else {
+					result[c.key] = '-';
+				}
+			} else {
+				result[c.key] = null;
+			}
+		});
+		const price = parseFloat(result.price);
+		this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = `€ ${price.toFixed(2)}`);
+		this.element.querySelector('.result-code').innerHTML = result.code;
+		const keys = [MtmControlEnum.Module1, MtmControlEnum.Module2, MtmControlEnum.Module3, MtmControlEnum.Module4]
+		const descriptions: string[] = [];
+		keys.forEach(x => {
+			const value: string = result[x];
+			if (value !== '-') {
+				descriptions.push(MtmDataService.parts.find(x => x.id === parseInt(value)).shortDescription);
+			}
+		});
+		this.element.querySelector('.result-description').innerHTML = descriptions.join(', ');
+		this.element.querySelector('.result-finish').innerHTML = result.finish;
+		this.element.querySelector('.result-system').innerHTML = result.system;
+		this.element.querySelector('.result-mount').innerHTML = result.mount;
+		const picture = this.element.querySelector('.media>.picture');
+		picture.classList.add('loading');
+		const image = new Image();
+		image.onload = () => {
+			picture.classList.remove('loading');
+			picture.querySelectorAll('img').forEach(x => x.parentNode.removeChild(x));
+			picture.appendChild(image);
+		}
+		image.src = 'https://came.yetnot.it/came_configurator/build_kit_image/' + result.code.replace(/\//g, '|');
+		this.calcOptions(row);
+		Dom.log('setRow', result);
 	}
 
 	render() {
@@ -281,14 +394,15 @@ export default class MtmConfigurator {
 	}
 
 	addMediaScrollListener() {
+		const sidebar = this.element.querySelector('.sidebar') as HTMLElement;
 		const media = this.element.querySelector('.media') as HTMLElement;
-		const picture = media.querySelector('.picture') as HTMLElement;
+		// const picture = media.querySelector('.picture') as HTMLElement;
 		const onScroll = () => {
-			const rect: ClientRect | DOMRect = media.getBoundingClientRect();
+			const rect: ClientRect | DOMRect = sidebar.getBoundingClientRect();
 			if (rect.top < 60) {
-				Dom.addClass(picture, 'fixed');
+				media.classList.add('fixed');
 			} else {
-				Dom.removeClass(picture, 'fixed');
+				media.classList.remove('fixed');
 			}
 		};
 		onScroll();
@@ -301,9 +415,9 @@ export default class MtmConfigurator {
 		const onScroll = () => {
 			var scrollTop = Dom.scrollTop();
 			if (scrollTop > lastScrollTop) {
-				Dom.addClass(inner, 'fixed');
+				inner.classList.add('fixed');
 			} else {
-				Dom.removeClass(inner, 'fixed');
+				inner.classList.remove('fixed');
 			}
 			lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 		};

@@ -2,30 +2,18 @@
 
 export default class Dom {
 
+	static log(...args: any[]) {
+		// const s = args.join(', ');
+		const items = ['%c%s', 'background: #1976d2; color: #fff; border-radius: 3px; padding: 4px 8px; margin-bottom: 4px;'].concat(args) as [any?, ...any[]];
+		console.log.apply(this, items);
+	}
+
 	static fragmentFirstElement(fragment: DocumentFragment): HTMLElement {
 		return Array.prototype.slice.call(fragment.children).find((x: Node) => x.nodeType === Node.ELEMENT_NODE);
 	}
 
 	static fragmentFromHTML(html: string): DocumentFragment {
 		return document.createRange().createContextualFragment(html);
-	}
-
-	static hasClass(element: Element, name: string): boolean {
-		return element && new RegExp(`(?:^|\\s+)${name}(?:\\s+|$)`).test(element.className);
-	}
-
-	static addClass(element: Element, name: string): Dom {
-		if (element && !Dom.hasClass(element, name)) {
-			element.className = element.className ? (`${element.className} ${name}`) : name;
-		}
-		return Dom;
-	}
-
-	static removeClass(element: Element, name: string): Dom {
-		if (element && Dom.hasClass(element, name)) {
-			element.className = element.className.split(name).join(``).replace(/\s\s+/g, ` `); // .replace(new RegExp('(?:^|\\s+)' + name + '(?:\\s+|$)', 'g'), '');
-		}
-		return Dom;
 	}
 
 	static scrollTop(): number {

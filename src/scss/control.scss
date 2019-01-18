@@ -34,7 +34,7 @@
 
 .control--group--sm {
 	&>.btn {
-		min-height: 60px;
+		min-height: 42px;
 	}
 }
 
@@ -49,7 +49,7 @@
 		flex: 1 1 100%;
 
 		&.disabled {
-			display: none;
+			// display: none;
 		}
 	}
 
@@ -61,10 +61,10 @@
 
 .control--list--sm {
 	.btn--select {
-		min-height: 60px;
+		min-height: 42px;
 
 		.form-control--select {
-			height: 60px;
+			height: 42px;
 		}
 	}
 }

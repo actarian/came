@@ -11,7 +11,14 @@ export class MtmValue {
 	data?: any;
 
 	getPrice?(): string {
-		return this.price ? `<span class="price">+ € ${this.price.toFixed(2)}</span>` : ``;
+		return this.price > 0 ? `<span class="price">+ € ${this.price.toFixed(2)}</span>` : `<span class="price"></span>`;
+	}
+
+	updatePrice?(element: HTMLElement): void {
+		if (element) {
+			const priceElement = element.querySelector(`[data-id="${this.id}"] .price`);
+			priceElement.innerHTML = this.price > 0 ? `+ € ${this.price.toFixed(2)}` : ``;
+		}
 	}
 
 	getKey?(): string {

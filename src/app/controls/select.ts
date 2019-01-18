@@ -47,6 +47,7 @@ export class MtmSelect extends MtmControl {
 			const id: number = parseInt(select.value);
 			const item = this.values.find(x => x.id === id);
 			this.currentItem = item;
+			console.log(select.value, id, item);
 			if (item) {
 				const label = this.element.querySelector('.label');
 				label.innerHTML = item.name;
