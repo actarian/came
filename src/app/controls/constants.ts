@@ -81,7 +81,7 @@ export const MtmControls: any[] = [{
 }, {
 	key: MtmControlEnum.HearingModule, name: 'Modulo di sintesi vocale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
-	key: MtmControlEnum.DigitalDisplay, name: 'Display Digitale', description: 'Disponi di apparecchio acustico con interfaccia magnetica?', type: MtmControlType.Group, lazy: true, nullable: true
+	key: MtmControlEnum.DigitalDisplay, name: 'Display Digitale', description: 'Consente la visualizzazione di una rubrica fino a 7200 nomi e permette la chiamata diretta agli interni attraverso il tasto centrale', type: MtmControlType.Group, lazy: true, nullable: true
 }, {
 	key: MtmControlEnum.AdditionalModules, disabled: true,
 }, {
@@ -141,9 +141,9 @@ export const MtmControls: any[] = [{
 	values: [
 		{ id: 1, name: 'Pulsante singolo' },
 		{ id: 2, name: 'Pulsante doppio' },
-		{ id: 3, name: 'Digital keypad' },
-		{ id: 4, name: 'Digital keypad + DIGI1' },
-		{ id: 5, name: 'Digital keypad + DIGI2' },
+		{ id: 3, name: 'Digitale' },
+		{ id: 4, name: 'Digitale + 1' },
+		{ id: 5, name: 'Digitale + 2' },
 	], className: 'control--list--sm',
 }, // default
 {

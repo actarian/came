@@ -73,8 +73,6 @@ export default class MtmConfigurator {
 		if (callButtons.selected) {
 			const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
 			const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-			const keypad = MtmDataService.optionWithKey(MtmControlEnum.Keypad);
-			const keypadValue = keypad.values.find(x => x.name === 'Digital Keypad');
 			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
 			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
 			let apartmentNumberValue = apartmentNumber.selected.value;
@@ -91,7 +89,6 @@ export default class MtmConfigurator {
 					// pulsante singolo
 					buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 1));
-					keypad.onSelect(null);
 					digi.onSelect(null);
 					key = MtmControlEnum.Buttons;
 					break;
@@ -99,7 +96,6 @@ export default class MtmConfigurator {
 					// pulsante doppio
 					buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 2));
-					keypad.onSelect(null);
 					digi.onSelect(null);
 					key = MtmControlEnum.Divided;
 					break;
@@ -107,7 +103,6 @@ export default class MtmConfigurator {
 					// digital keypad
 					buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
-					keypad.onSelect(keypadValue);
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
 					key = MtmControlEnum.Keypad;
 					break;
@@ -115,7 +110,6 @@ export default class MtmConfigurator {
 					// digital keypad + DIGI 1
 					buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
-					keypad.onSelect(keypadValue);
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
 					key = MtmControlEnum.Digi;
 					break;
@@ -123,7 +117,6 @@ export default class MtmConfigurator {
 					// digital keypad + DIGI 2
 					buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 2));
-					keypad.onSelect(keypadValue);
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
 					key = MtmControlEnum.Digi;
 					break;
@@ -132,7 +125,6 @@ export default class MtmConfigurator {
 				'apartmentNumber', apartmentNumberValue,
 				'buttons', buttons.selected.id,
 				'divided', divided.selected.id,
-				'keypad', keypad.selected.id,
 				'digi', digi.selected.id
 			);
 		}
