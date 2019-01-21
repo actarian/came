@@ -1492,7 +1492,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getKey",
       value: function getKey() {
-        return this.name.replace(/ /g, "");
+        return this.name.replace(/ /g, "").toLowerCase();
       }
     }]);
 

@@ -22,7 +22,7 @@ export class MtmValue {
 	}
 
 	getKey?(): string {
-		return this.name.replace(/ /g, ``);
+		return this.name.replace(/ /g, ``).toLowerCase();
 	}
 
 	constructor(options?: MtmValue) {
