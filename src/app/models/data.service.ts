@@ -88,6 +88,7 @@ export class MtmResult {
 
 export default class MtmDataService {
 
+	static controls: any;
 	static kits: MtmKit[] = [];
 	static parts: MtmPart[] = [];
 	static cols: MtmControl[] = [];
@@ -100,10 +101,8 @@ export default class MtmDataService {
 			const value = MtmControlEnum[key] as string;
 			MtmDataService.map[value] = key;
 		});
-		MtmControls.filter((x: any) => !x.disabled).forEach(x => {
-			MtmDataService.controlsMap[x.key] = x;
-		});
-		// MtmDataService.controlsMap[value] = MtmControls.find(x => x.type === value);
+
+		// MtmDataService.controlsMap[value] = MtmDataService.controls.find(x => x.type === value);
 		// console.log('MtmControlEnum', MtmControlEnum);
 		// console.log('controlsMap', MtmDataService.controlsMap);
 		return MtmDataService.fetchJson(callback, error);
@@ -114,7 +113,7 @@ export default class MtmDataService {
 		const bp: any = {};
 		return Promise.all(
 			// ['https://came.yetnot.it/came_configurator/export/kits_list', 'https://came.yetnot.it/came_configurator/export/parts'].map((x, index) => fetch(x)
-			['data/kits.json', 'data/parts.json'].map((x, index) => fetch(x)
+			['data/kits.json', 'data/parts.json', 'data/localizations.json'].map((x, index) => fetch(x)
 				.then((response) => response.json())
 				.then((data) => {
 					if (index === 0) {
@@ -163,6 +162,11 @@ export default class MtmDataService {
 							x.price = parseFloat(x.price);
 							delete x.nid;
 							return x;
+						});
+					} else if (index === 2) {
+						MtmDataService.controls = MtmControls.withLocale(data);
+						MtmDataService.controls.filter((x: any) => !x.disabled).forEach((x: any) => {
+							MtmDataService.controlsMap[x.key] = x;
 						});
 					}
 					return data;
@@ -242,15 +246,6 @@ export default class MtmDataService {
 					x.price = price;
 					return x;
 				});
-				/*
-				console.log({
-					electronicModules: Object.keys(electronicModules),
-					frontPieces: Object.keys(frontPieces),
-					frames: Object.keys(frames),
-					mountings: Object.keys(mountings),
-					rainshields: Object.keys(rainshields),
-				});
-				*/
 				Object.keys(keysPool).forEach((key: string) => {
 					keysPool[key].sort();
 				});
@@ -259,11 +254,11 @@ export default class MtmDataService {
 					return a.price - b.price;
 				});
 				// console.log(JSON.stringify(kits));
-				const values = MtmControls.filter((x: any) => !x.disabled).map((x: any) => x.key);
-				const cols = values.map((x: string) => MtmDataService.newControlByKey(x));
+				const values = MtmDataService.controls.filter((x: any) => !x.disabled).map((x: any) => x.key);
+				const cols: MtmControl[] = values.map((x: string) => MtmDataService.newControlByKey(x));
 				const colsPool: any = {};
-				cols.forEach(x => colsPool[x.key] = x);
-				const rows = kits.map((x: any) => values.filter(key => colsPool[key]).map(key => {
+				cols.forEach((x: MtmControl) => colsPool[x.key] = x);
+				const rows = kits.map((x: any) => values.filter((key: string) => colsPool[key]).map((key: string) => {
 					const col = colsPool[key];
 					return col.addValue(x[key], x.price);
 				}));
