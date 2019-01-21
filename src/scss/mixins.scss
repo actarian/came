@@ -1,0 +1,15 @@
+@mixin aspect($w: 4, $h: 3) {
+	display: grid;
+
+	&:before,
+	&>* {
+		grid-area: 1 / 1 / 2 / 2;
+	}
+
+	&:before {
+		content: '';
+		display: block;
+		padding-top: $h / $w * 100%; // calc(#{$h} / #{$w} * 100%);
+	}
+
+}

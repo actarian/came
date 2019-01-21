@@ -2252,56 +2252,90 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           parts.forEach(function (x) {
             partsPool[x.id] = x;
           });
+          var partsKeys = ['electronicsModule1', 'electronicsModule2', 'electronicsModule3', 'electronicsModule4', 'frontPiece1', 'frontPiece2', 'frontPiece3', 'frontPiece4', 'frame', 'mounting', 'flushRainshield'];
+          var keysPool = {};
           var kits = all[0].map(function (x) {
             var price = 0;
+            partsKeys.forEach(function (key) {
+              if (x.hasOwnProperty(key)) {
+                var part = partsPool[x[key]];
 
+                if (part) {
+                  price += part.price;
+                  var name = key.replace(/\d/, '');
+                  part.type = name;
+                  var codes = keysPool[name] = keysPool[name] || [];
+
+                  if (codes.indexOf(part.code) === -1) {
+                    codes.push(part.code);
+                  }
+                }
+              }
+            });
+            /*
             if (x.electronicsModule1) {
-              price += partsPool[x.electronicsModule1].price;
+                price += partsPool[x.electronicsModule1].price;
+                electronicModules[x.electronicsModule1] = partsPool[x.electronicsModule1].code;
             }
-
             if (x.electronicsModule2) {
-              price += partsPool[x.electronicsModule2].price;
+                price += partsPool[x.electronicsModule2].price;
+                electronicModules[x.electronicsModule2] = partsPool[x.electronicsModule2].code;
             }
-
             if (x.electronicsModule3) {
-              price += partsPool[x.electronicsModule3].price;
+                price += partsPool[x.electronicsModule3].price;
+                electronicModules[x.electronicsModule3] = partsPool[x.electronicsModule3].code;
             }
-
             if (x.electronicsModule4) {
-              price += partsPool[x.electronicsModule4].price;
+                price += partsPool[x.electronicsModule4].price;
+                electronicModules[x.electronicsModule4] = partsPool[x.electronicsModule4].code;
             }
-
             if (x.frontPiece1) {
-              price += partsPool[x.frontPiece1].price;
+                price += partsPool[x.frontPiece1].price;
+                frontPieces[x.frontPiece1] = partsPool[x.frontPiece1].code;
             }
-
             if (x.frontPiece2) {
-              price += partsPool[x.frontPiece2].price;
+                price += partsPool[x.frontPiece2].price;
+                frontPieces[x.frontPiece2] = partsPool[x.frontPiece2].code;
             }
-
             if (x.frontPiece3) {
-              price += partsPool[x.frontPiece3].price;
+                price += partsPool[x.frontPiece3].price;
+                frontPieces[x.frontPiece3] = partsPool[x.frontPiece3].code;
             }
-
             if (x.frontPiece4) {
-              price += partsPool[x.frontPiece4].price;
+                price += partsPool[x.frontPiece4].price;
+                frontPieces[x.frontPiece4] = partsPool[x.frontPiece4].code;
             }
-
             if (x.frame) {
-              price += partsPool[x.frame].price;
+                price += partsPool[x.frame].price;
+                frames[x.frame] = partsPool[x.frame].code;
             }
-
             if (x.mounting) {
-              price += partsPool[x.mounting].price;
+                price += partsPool[x.mounting].price;
+                mountings[x.mounting] = partsPool[x.mounting].code;
             }
-
             if (x.flushRainshield) {
-              price += partsPool[x.flushRainshield].price;
+                price += partsPool[x.flushRainshield].price;
+                rainshields[x.flushRainshield] = partsPool[x.flushRainshield].code;
             }
+            */
 
             x.price = price;
             return x;
           });
+          /*
+          console.log({
+              electronicModules: Object.keys(electronicModules),
+              frontPieces: Object.keys(frontPieces),
+              frames: Object.keys(frames),
+              mountings: Object.keys(mountings),
+              rainshields: Object.keys(rainshields),
+          });
+          */
+
+          Object.keys(keysPool).forEach(function (key) {
+            keysPool[key].sort();
+          });
+          console.log(JSON.stringify(keysPool));
           kits.sort(function (a, b) {
             return a.price - b.price;
           }); // console.log(JSON.stringify(kits));

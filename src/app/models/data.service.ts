@@ -14,6 +14,7 @@ export class MtmPart {
 	name: string;
 	price: number;
 	shortDescription: string;
+	type: string;
 }
 
 export class MtmKit {
@@ -172,44 +173,88 @@ export default class MtmDataService {
 				parts.forEach((x: MtmPart) => {
 					partsPool[x.id] = x;
 				});
-				const kits = all[0].map((x: MtmKit) => {
+				const partsKeys = ['electronicsModule1', 'electronicsModule2', 'electronicsModule3', 'electronicsModule4',
+					'frontPiece1', 'frontPiece2', 'frontPiece3', 'frontPiece4',
+					'frame', 'mounting', 'flushRainshield'];
+				const keysPool: any = {};
+				const kits = all[0].map((x: any) => {
 					let price = 0;
+					partsKeys.forEach((key: string) => {
+						if (x.hasOwnProperty(key)) {
+							const part: MtmPart = partsPool[x[key]];
+							if (part) {
+								price += part.price;
+								const name: string = key.replace(/\d/, '');
+								part.type = name;
+								const codes = keysPool[name] = keysPool[name] || [];
+								if (codes.indexOf(part.code) === -1) {
+									codes.push(part.code);
+								}
+							}
+						}
+					});
+					/*
 					if (x.electronicsModule1) {
 						price += partsPool[x.electronicsModule1].price;
+						electronicModules[x.electronicsModule1] = partsPool[x.electronicsModule1].code;
 					}
 					if (x.electronicsModule2) {
 						price += partsPool[x.electronicsModule2].price;
+						electronicModules[x.electronicsModule2] = partsPool[x.electronicsModule2].code;
 					}
 					if (x.electronicsModule3) {
 						price += partsPool[x.electronicsModule3].price;
+						electronicModules[x.electronicsModule3] = partsPool[x.electronicsModule3].code;
 					}
 					if (x.electronicsModule4) {
 						price += partsPool[x.electronicsModule4].price;
+						electronicModules[x.electronicsModule4] = partsPool[x.electronicsModule4].code;
 					}
 					if (x.frontPiece1) {
 						price += partsPool[x.frontPiece1].price;
+						frontPieces[x.frontPiece1] = partsPool[x.frontPiece1].code;
 					}
 					if (x.frontPiece2) {
 						price += partsPool[x.frontPiece2].price;
+						frontPieces[x.frontPiece2] = partsPool[x.frontPiece2].code;
 					}
 					if (x.frontPiece3) {
 						price += partsPool[x.frontPiece3].price;
+						frontPieces[x.frontPiece3] = partsPool[x.frontPiece3].code;
 					}
 					if (x.frontPiece4) {
 						price += partsPool[x.frontPiece4].price;
+						frontPieces[x.frontPiece4] = partsPool[x.frontPiece4].code;
 					}
 					if (x.frame) {
 						price += partsPool[x.frame].price;
+						frames[x.frame] = partsPool[x.frame].code;
 					}
 					if (x.mounting) {
 						price += partsPool[x.mounting].price;
+						mountings[x.mounting] = partsPool[x.mounting].code;
 					}
 					if (x.flushRainshield) {
 						price += partsPool[x.flushRainshield].price;
+						rainshields[x.flushRainshield] = partsPool[x.flushRainshield].code;
 					}
+					*/
 					x.price = price;
 					return x;
 				});
+				/*
+				console.log({
+					electronicModules: Object.keys(electronicModules),
+					frontPieces: Object.keys(frontPieces),
+					frames: Object.keys(frames),
+					mountings: Object.keys(mountings),
+					rainshields: Object.keys(rainshields),
+				});
+				*/
+				Object.keys(keysPool).forEach((key: string) => {
+					keysPool[key].sort();
+				});
+				console.log(JSON.stringify(keysPool));
 				kits.sort((a: MtmKit, b: MtmKit) => {
 					return a.price - b.price;
 				});

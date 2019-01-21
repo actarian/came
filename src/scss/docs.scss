@@ -1,3 +1,4 @@
+@import 'mixins';
 @import 'vars';
 @import 'buttons';
 @import 'control';
@@ -98,26 +99,22 @@ strong {
 }
 
 .media {
+	padding-top: 30px;
 	user-select: none;
 
 	.picture {
+		@include aspect(10, 6);
+
 		position: relative;
-		padding-bottom: 75%;
+		align-items: center;
+		padding: 30px;
 		background: #f3f3f3;
 		user-select: none;
-		/*
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		*/
 
 		img {
 			display: block;
-			position: absolute;
-			top: 50%;
-			left: 50%;
 			width: 23%;
-			transform: translateX(-50%) translateY(-50%);
+			margin: 0 auto;
 		}
 
 		&.loading {
