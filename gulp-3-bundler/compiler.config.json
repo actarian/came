@@ -1,7 +1,0 @@
-﻿[{
-	"inputFile": "src/scss/docs.scss",
-	"outputFile": "docs/css/docs.css"
-}, {
-	"inputFile": "src/app/main.ts",
-	"outputFile": "docs/js/main.js"
-}]

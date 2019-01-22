@@ -1,5 +1,5 @@
 import Dom from '../utils/dom';
-import { MtmControlEnum, MtmControlType } from './constants';
+import { MtmControlEnum, MtmControlType, USE_CALCULATED_PRICE } from './constants';
 import { MtmValue } from './value';
 
 export class MtmControl {
@@ -198,7 +198,9 @@ export class MtmControl {
 				*/
 			}
 		}
-		// this.values.forEach((x, i) => x.price = 4.99 * i);
+		if (!USE_CALCULATED_PRICE) {
+			this.values.forEach((x, i) => x.price = 0);
+		}
 		if (this.values.length) {
 			this.values[0].active = true;
 		}

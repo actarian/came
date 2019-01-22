@@ -1,7 +1,7 @@
-import { MtmControlEnum } from "./controls/constants";
+import { MtmControlEnum, USE_CALCULATED_PRICE } from "./controls/constants";
 import { MtmControl } from "./controls/control";
 import { MtmValue } from "./controls/value";
-import MtmDataService from "./models/data.service";
+import MtmDataService from "./data.service";
 import Dom from "./utils/dom";
 
 export default class MtmConfigurator {
@@ -61,6 +61,7 @@ export default class MtmConfigurator {
 			this.element.querySelector('.media>.picture').addEventListener('click', () => {
 				this.toggleResults();
 			});
+
 		}, (error: any) => {
 			console.log('error', error);
 
@@ -121,12 +122,14 @@ export default class MtmConfigurator {
 					key = MtmControlEnum.Digi;
 					break;
 			}
+			/*
 			console.log(
 				'apartmentNumber', apartmentNumberValue,
 				'buttons', buttons.selected.id,
 				'divided', divided.selected.id,
 				'digi', digi.selected.id
 			);
+			*/
 		}
 		return key;
 	}
@@ -274,6 +277,7 @@ export default class MtmConfigurator {
 		const controls = [
 			// MtmControlEnum.CallButtons,
 			MtmControlEnum.AudioVideo,
+			MtmControlEnum.Keypad,
 			MtmControlEnum.Proximity,
 			MtmControlEnum.DigitalDisplay,
 			MtmControlEnum.InfoModule,
@@ -310,27 +314,48 @@ export default class MtmConfigurator {
 						rows = strictRows;
 					}
 				});
-				if (rows.length > 0) {
-					const rowPrice = prices.values.find(v => v.id === rows[0][prices.index]).value;
-					v.price = rowPrice;
-					v.disabled = false;
-					count++;
+				if (USE_CALCULATED_PRICE) {
+					if (rows.length > 0) {
+						const rowPrice = prices.values.find(v => v.id === rows[0][prices.index]).value;
+						v.price = rowPrice;
+						v.disabled = false;
+						count++;
+					} else {
+						v.price = 0;
+						v.disabled = true;
+					}
+					minimumPrice = Math.min(v.price, minimumPrice);
 				} else {
-					v.price = 0;
-					v.disabled = true;
+					if (rows.length > 0) {
+						v.price = 0;
+						if (MtmDataService.partsKeys.indexOf(control.key) !== -1) {
+							const part = MtmDataService.partsPool[v.value];
+							if (part) {
+								v.price = part.price;
+							}
+							console.log(control.key, v.price, v, part);
+						}
+						v.disabled = false;
+						count++;
+					} else {
+						v.price = 0;
+						v.disabled = true;
+					}
+					v.updatePrice(control.element);
 				}
-				minimumPrice = Math.min(v.price, minimumPrice);
 			});
-			control.values.forEach(v => {
-				const rowPrice = v.price;
-				if (count > 1) {
-					v.price -= minimumPrice;
-				} else {
-					v.price = 0;
-				}
-				v.updatePrice(control.element);
-				// console.log(control.key, v.name, rowPrice, v.price, v.disabled ? 'disabled' : '');
-			});
+			if (USE_CALCULATED_PRICE) {
+				control.values.forEach(v => {
+					const rowPrice = v.price;
+					if (count > 1) {
+						v.price -= minimumPrice;
+					} else {
+						v.price = 0;
+					}
+					v.updatePrice(control.element);
+					// console.log(control.key, v.name, rowPrice, v.price, v.disabled ? 'disabled' : '');
+				});
+			}
 			control.updateState();
 		});
 	}

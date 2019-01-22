@@ -1,5 +1,7 @@
 
-const MtmMaxApartments = 48;
+
+export const USE_CALCULATED_PRICE = true;
+export const MAX_APARTMENTS = 48;
 
 export enum MtmControlType {
 	Select = 1,
@@ -135,7 +137,7 @@ export class MtmControls {
 		},
 		{
 			key: MtmControlEnum.ApartmentNumber, name: locale.apartmentNumberName, type: MtmControlType.Select,
-			values: new Array(MtmMaxApartments).fill(0).map((x: number, i: number) => {
+			values: new Array(MAX_APARTMENTS).fill(0).map((x: number, i: number) => {
 				return { id: i + 1, name: (i + 1).toFixed(0), value: (i + 1) };
 			}), className: 'control--list--sm',
 		}, {
