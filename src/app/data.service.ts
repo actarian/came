@@ -6,6 +6,24 @@ import { MtmGroup } from './controls/group';
 import { MtmList } from './controls/list';
 import { MtmSelect } from './controls/select';
 
+declare global {
+	interface Window {
+		paths: any;
+	}
+}
+
+export class MtmPaths {
+	kits: string = 'data/kits.json';
+	parts: string = 'data/parts.json';
+	localizations: string = 'data/localizations.json';
+
+	constructor() {
+		if (window.hasOwnProperty('paths')) {
+			Object.assign(this, <Window>window.paths);
+		}
+	}
+}
+
 export class MtmPart {
 	code: string;
 	id: number;
@@ -114,9 +132,10 @@ export default class MtmDataService {
 
 	static fetchJson(callback?: Function, error?: Function) {
 		// const bp: any = {};
+		const paths = new MtmPaths();
 		return Promise.all(
 			// ['https://came.yetnot.it/came_configurator/export/kits_list', 'https://came.yetnot.it/came_configurator/export/parts'].map((x, index) => fetch(x)
-			['data/kits.json', 'data/parts.json', 'data/localizations.json'].map((x, index) => fetch(x)
+			[paths.kits, paths.parts, paths.localizations].map((x, index) => fetch(x)
 				.then((response) => response.json())
 				.then((data) => {
 					if (index === 0) {

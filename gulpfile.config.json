@@ -2,34 +2,30 @@
 	"targets": {
 		"browser": {
 			"compile": [{
-				"inputFile": "src/scss/docs.scss",
-				"outputFile": "docs/css/docs.css"
-}, {
-				"inputFile": "src/app/main.ts",
-				"outputFile": "docs/js/main.js"
+				"input": "src/scss/docs.scss",
+				"output": "docs/css/docs.css",
+				"minify": true
+			}, {
+				"input": "src/app/main.ts",
+				"output": "docs/js/main.js",
+				"minify": true
 			}],
 			"bundle": [{
-				"inputFiles": [
+				"input": [
 					"node_modules/gsap/src/uncompressed/easing/EasePack.js",
 					"node_modules/gsap/src/uncompressed/TweenLite.js",
 					"node_modules/gsap/src/uncompressed/TweenMax.js"
 				],
-				"outputFileName": "docs/js/vendors.js",
-				"minify": {
-					"enabled": true
-				}
-			}, {
-				"inputFiles": [
-					"docs/css/docs.css"
-				],
-				"outputFileName": "docs/css/docs.css",
-				"minify": {
-					"enabled": true
-				}
+				"outputName": "docs/js/vendors.js",
+				"minify": true
 			}]
 		}
 	},
 	"options": {
-		"tfs": false
+		"tfs": false,
+		"server": {
+			"src": "./docs",
+			"port": 9999
+		}
 	}
 }

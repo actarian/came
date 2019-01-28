@@ -1569,6 +1569,20 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   var select_1 = require("./controls/select");
 
+  var MtmPaths = function MtmPaths() {
+    _classCallCheck(this, MtmPaths);
+
+    this.kits = 'data/kits.json';
+    this.parts = 'data/parts.json';
+    this.localizations = 'data/localizations.json';
+
+    if (window.hasOwnProperty('paths')) {
+      Object.assign(this, window.paths);
+    }
+  };
+
+  exports.MtmPaths = MtmPaths;
+
   var MtmPart = function MtmPart() {
     _classCallCheck(this, MtmPart);
   };
@@ -1613,8 +1627,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         var _this = this;
 
         // const bp: any = {};
+        var paths = new MtmPaths();
         return Promise.all( // ['https://came.yetnot.it/came_configurator/export/kits_list', 'https://came.yetnot.it/came_configurator/export/parts'].map((x, index) => fetch(x)
-        ['data/kits.json', 'data/parts.json', 'data/localizations.json'].map(function (x, index) {
+        [paths.kits, paths.parts, paths.localizations].map(function (x, index) {
           return fetch(x).then(function (response) {
             return response.json();
           }).then(function (data) {

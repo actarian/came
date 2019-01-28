@@ -333,7 +333,15 @@
 	<!-- CONFIGURATOR JS -->
 	<script src="js/vendors.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-	<script src="js/main.js"></script>
+	<script>
+		window.paths = {
+			kits: 'data/kits.json',
+			parts: 'data/parts.json',
+			localizations: 'data/localizations.json',
+		}
+
+	</script>
+	<script src="js/main.min.js"></script>
 </body>
 
 </html>
