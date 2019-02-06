@@ -391,7 +391,7 @@ export default class MtmConfigurator {
 		this.element.querySelector('.result-finish').innerHTML = result.finish;
 		this.element.querySelector('.result-system').innerHTML = result.system;
 		this.element.querySelector('.result-mount').innerHTML = result.mount;
-		this.element.querySelector('.result-cta').setAttribute('href', `https://came.yetnot.it/it/${result.code.replace(/\//g, '|')}`);
+		this.element.querySelector('.result-cta').setAttribute('href', `/came_configurator/view_kit/${result.code.replace(/\//g, '|')}`);
 		const picture = this.element.querySelector('.media>.picture');
 		picture.classList.add('loading');
 		const image = new Image();

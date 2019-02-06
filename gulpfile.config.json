@@ -16,7 +16,7 @@
 					"node_modules/gsap/src/uncompressed/TweenLite.js",
 					"node_modules/gsap/src/uncompressed/TweenMax.js"
 				],
-				"outputName": "docs/js/vendors.js",
+				"output": "docs/js/vendors.js",
 				"minify": true
 			}]
 		}

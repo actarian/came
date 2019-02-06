@@ -181,7 +181,7 @@ export default class MtmDataService {
 							return x;
 						}).filter((x: MtmKit) => x.buttons);
 					} else if (index === 1) {
-						data = data.rows.map((x: any) => {
+						data = data.map((x: any) => {
 							x.id = parseInt(x.nid);
 							x.price = parseFloat(x.price);
 							delete x.nid;
