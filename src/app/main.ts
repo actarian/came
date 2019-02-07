@@ -1,7 +1,7 @@
 import { MtmControlEnum, USE_CALCULATED_PRICE } from "./controls/constants";
 import { MtmControl } from "./controls/control";
 import { MtmValue } from "./controls/value";
-import MtmDataService from "./data.service";
+import MtmDataService, { MtmPaths } from "./data.service";
 import Dom from "./utils/dom";
 
 export default class MtmConfigurator {
@@ -387,11 +387,13 @@ export default class MtmConfigurator {
 				descriptions.push(MtmDataService.parts.find(x => x.id === parseInt(value)).shortDescription);
 			}
 		});
+		const paths = new MtmPaths();
 		this.element.querySelector('.result-description').innerHTML = descriptions.join(', ');
 		this.element.querySelector('.result-finish').innerHTML = result.finish;
 		this.element.querySelector('.result-system').innerHTML = result.system;
 		this.element.querySelector('.result-mount').innerHTML = result.mount;
-		this.element.querySelector('.result-cta').setAttribute('href', `/came_configurator/view_kit/${result.code.replace(/\//g, '|')}`);
+		const code = result.code.replace(/\//g, '|');
+		this.element.querySelector('.result-cta').setAttribute('href', `${paths.configurator}/view_kit/${code}`);
 		const picture = this.element.querySelector('.media>.picture');
 		picture.classList.add('loading');
 		const image = new Image();
@@ -400,7 +402,7 @@ export default class MtmConfigurator {
 			picture.querySelectorAll('img').forEach(x => x.parentNode.removeChild(x));
 			picture.appendChild(image);
 		}
-		image.src = 'https://came.yetnot.it/came_configurator/build_kit_image/' + result.code.replace(/\//g, '|');
+		image.src = `${paths.configurator}/build_kit_image/${code}`;
 		this.calcOptions(row);
 		Dom.log('setRow', result);
 	}

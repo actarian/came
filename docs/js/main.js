@@ -1575,9 +1575,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     this.kits = 'data/kits.json';
     this.parts = 'data/parts.json';
     this.localizations = 'data/localizations.json';
+    this.configurator = 'https://came.yetnot.it/came_configurator';
 
     if (window.hasOwnProperty('paths')) {
       Object.assign(this, window.paths);
+
+      if (this.kits.indexOf(':/') !== -1) {
+        this.configurator = this.kits.split('/came_configurator')[0] + '/came_configurator';
+      }
     }
   };
 
@@ -1628,8 +1633,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
         // const bp: any = {};
         var paths = new MtmPaths();
-        return Promise.all( // ['https://came.yetnot.it/came_configurator/export/kits_list', 'https://came.yetnot.it/came_configurator/export/parts'].map((x, index) => fetch(x)
-        [paths.kits, paths.parts, paths.localizations].map(function (x, index) {
+        return Promise.all([paths.kits, paths.parts, paths.localizations].map(function (x, index) {
           return fetch(x).then(function (response) {
             return response.json();
           }).then(function (data) {
@@ -1967,6 +1971,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
 var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -1989,7 +2003,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
   var constants_1 = require("./controls/constants");
 
-  var data_service_1 = __importDefault(require("./data.service"));
+  var data_service_1 = __importStar(require("./data.service"));
 
   var dom_1 = __importDefault(require("./utils/dom"));
 
@@ -2509,11 +2523,13 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             }).shortDescription);
           }
         });
+        var paths = new data_service_1.MtmPaths();
         this.element.querySelector('.result-description').innerHTML = descriptions.join(', ');
         this.element.querySelector('.result-finish').innerHTML = result.finish;
         this.element.querySelector('.result-system').innerHTML = result.system;
         this.element.querySelector('.result-mount').innerHTML = result.mount;
-        this.element.querySelector('.result-cta').setAttribute('href', "/came_configurator/view_kit/".concat(result.code.replace(/\//g, '|')));
+        var code = result.code.replace(/\//g, '|');
+        this.element.querySelector('.result-cta').setAttribute('href', "".concat(paths.configurator, "/view_kit/").concat(code));
         var picture = this.element.querySelector('.media>.picture');
         picture.classList.add('loading');
         var image = new Image();
@@ -2526,7 +2542,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           picture.appendChild(image);
         };
 
-        image.src = 'https://came.yetnot.it/came_configurator/build_kit_image/' + result.code.replace(/\//g, '|');
+        image.src = "".concat(paths.configurator, "/build_kit_image/").concat(code);
         this.calcOptions(row);
         dom_1.default.log('setRow', result);
       }
