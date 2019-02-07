@@ -13,6 +13,7 @@ declare global {
 }
 
 export class MtmPaths {
+	assets: string = '';
 	kits: string = 'data/kits.json';
 	parts: string = 'data/parts.json';
 	localizations: string = 'data/localizations.json';

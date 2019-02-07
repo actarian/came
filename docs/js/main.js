@@ -1151,7 +1151,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./constants", "./control"], factory);
+    define(["require", "exports", "../data.service", "./constants", "./control"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -1159,6 +1159,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+
+  var data_service_1 = require("../data.service");
 
   var constants_1 = require("./constants");
 
@@ -1176,6 +1178,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(MtmGrid).call(this, options));
       _this.type = constants_1.MtmControlType.Grid;
+      _this.paths = new data_service_1.MtmPaths();
       return _this;
     }
 
@@ -1187,7 +1190,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
+        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"").concat(this.paths.assets, "img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
       }
     }]);
 
@@ -1197,7 +1200,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   exports.MtmGrid = MtmGrid;
 });
 
-},{"./constants":2,"./control":3}],5:[function(require,module,exports){
+},{"../data.service":9,"./constants":2,"./control":3}],5:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1572,6 +1575,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   var MtmPaths = function MtmPaths() {
     _classCallCheck(this, MtmPaths);
 
+    this.assets = '';
     this.kits = 'data/kits.json';
     this.parts = 'data/parts.json';
     this.localizations = 'data/localizations.json';

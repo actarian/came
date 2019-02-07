@@ -1,12 +1,16 @@
+import { MtmPaths } from '../data.service';
 import { MtmControlType } from './constants';
 import { MtmControl } from './control';
 import { MtmValue } from './value';
 
 export class MtmGrid extends MtmControl {
 
+	paths: MtmPaths;
+
 	constructor(options: MtmControl) {
 		super(options);
 		this.type = MtmControlType.Grid;
+		this.paths = new MtmPaths();
 	}
 
 	getTemplate?(): string {
@@ -20,7 +24,7 @@ export class MtmGrid extends MtmControl {
 
 	getChildTemplate?(item: MtmValue): string {
 		return `<div class="btn btn--system ${item.active ? `active` : ``}" data-id="${item.id}">
-		<img class="icon" src="img/mtm-configurator/${item.getKey()}.jpg" title="${item.name}" />${item.getPrice()}
+		<img class="icon" src="${this.paths.assets}img/mtm-configurator/${item.getKey()}.jpg" title="${item.name}" />${item.getPrice()}
 		<button type="button" class="btn btn--info">i</button>
 	</div>`;
 	}
