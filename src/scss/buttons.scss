@@ -62,13 +62,16 @@ a {
 	justify-content: center;
 	align-items: center;
 	min-height: 90px;
-	border: 2px solid #e5e5e5;
 	border-radius: 4px;
 	background: white;
 
-	&:hover,
+	&,
 	&:active,
-	&:focus,
+	&:focus {
+		border: 2px solid #e5e5e5;
+	}
+
+	&:hover,
 	*:not(:hover) &.active {
 		border: 2px solid #00b0ec;
 	}
@@ -90,11 +93,13 @@ a {
 	min-height: 90px;
 	border-radius: 4px;
 
-	border: 2px solid #e5e5e5;
+	&,
+	&:active,
+	&:focus {
+		border: 2px solid #e5e5e5;
+	}
 
 	&:hover,
-	&:active,
-	&:focus,
 	*:not(:hover) &.active {
 		border: 2px solid #00b0ec;
 	}
@@ -119,8 +124,6 @@ a {
 	justify-content: center;
 	align-items: center;
 	min-height: 90px;
-	// border: 2px solid #e5e5e5;
-	border: 2px solid #00b0ec;
 
 	.form-control--select {
 		position: absolute;
@@ -129,9 +132,13 @@ a {
 		opacity: 0;
 	}
 
-	&:hover,
+	&,
 	&:active,
-	&:focus,
+	&:focus {
+		border: 2px solid #e5e5e5;
+	}
+
+	&:hover,
 	*:not(:hover) &.active {
 		border: 2px solid #00b0ec;
 	}

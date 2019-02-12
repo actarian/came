@@ -11,8 +11,8 @@ export enum MtmControlType {
 }
 
 export enum MtmSortType {
-	Value = 0,
-	Name = 1,
+	String = 0,
+	Numeric = 1,
 }
 
 // code,singleModuleFrame,finish,moduleSize,mount,system,AV,keypad,proximity,infoModule,hearingModule,digitalDisplay,additionalModules,buttons,divided,mounting,
@@ -62,7 +62,10 @@ export enum MtmControlEnum {
 
 export class MtmControls {
 
+	static selectNone = { id: -1, name: 'Select', value: -1 };
+
 	static withLocale(locale: { [key: string]: string; }): any[] {
+		MtmControls.selectNone.name = locale.selectNone || 'Select';
 		return [{
 			key: MtmControlEnum.Code, name: 'Code'
 		}, {
@@ -94,7 +97,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.AdditionalModules, disabled: true,
 		}, {
-			key: MtmControlEnum.Buttons, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Name, lazy: true, nullable: true, className: 'control--list--sm',
+			key: MtmControlEnum.Buttons, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Numeric, lazy: true, nullable: true, className: 'control--list--sm',
 		}, {
 			key: MtmControlEnum.Divided, lazy: true, nullable: true,
 		}, {
@@ -143,7 +146,7 @@ export class MtmControls {
 		{
 			key: MtmControlEnum.ApartmentNumber, name: locale.apartmentNumberName, type: MtmControlType.Select,
 			values: new Array(MAX_APARTMENTS).fill(0).map((x: number, i: number) => {
-				return { id: i + 1, name: (i + 1).toFixed(0), value: (i + 1) };
+				return { id: i + 1, name: (i + 1).toFixed(0), value: i + 1 };
 			}), className: 'control--list--sm',
 		}, {
 			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List, lazy: true,

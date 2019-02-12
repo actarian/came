@@ -1,5 +1,5 @@
 import Dom from '../utils/dom';
-import { MtmControlType } from './constants';
+import { MtmControls, MtmControlType } from './constants';
 import { MtmControl } from './control';
 import { MtmValue } from './value';
 
@@ -8,6 +8,9 @@ export class MtmSelect extends MtmControl {
 	constructor(options: MtmControl) {
 		super(options);
 		this.type = MtmControlType.Select;
+		if (this.nullable) {
+			this.values.unshift(MtmControls.selectNone);
+		}
 	}
 
 	getTemplate?(): string {
@@ -50,7 +53,7 @@ export class MtmSelect extends MtmControl {
 			const select = this.element.querySelector('select');
 			this.values.forEach((x, i) => {
 				const option = select.childNodes[i] as Element;
-				if (x.disabled) {
+				if (x.disabled && x.id !== -1) {
 					option.setAttribute('disabled', 'disabled');
 				} else {
 					option.removeAttribute('disabled');

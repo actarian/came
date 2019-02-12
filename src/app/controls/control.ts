@@ -16,7 +16,7 @@ export class MtmControl {
 	className?: string = '';
 	nullable?: boolean = false;
 	lazy?: boolean = false;
-	sortType?: MtmSortType = MtmSortType.Value;
+	sortType?: MtmSortType = MtmSortType.String;
 	element?: HTMLElement = null;
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
@@ -43,10 +43,12 @@ export class MtmControl {
 				this.cache[x.name] = x;
 				this.count++;
 			});
+			/*
 			if (this.values.length) {
 				this.values[0].active = true;
 				this.currentItem = this.values[0];
 			}
+			*/
 		}
 		// }
 	}
@@ -107,19 +109,25 @@ export class MtmControl {
 			this.onSelected(this.values[index].id);
 		}
 		*/
+		console.log('onClick');
 		if (!button) {
 			return;
 		}
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
 		buttons.forEach((x: Element) => x.classList.remove('active'));
-		button.classList.add('active');
 		this.values.forEach(x => x.active = false);
 		const id = parseInt(button.getAttribute('data-id'));
 		const item: MtmValue = this.values.find(x => x.id === id);
-		item.active = true;
-		this.currentItem = item;
+		if (this.currentItem === item) {
+			item.active = false;
+			this.currentItem = null;
+		} else {
+			button.classList.add('active');
+			item.active = true;
+			this.currentItem = item;
+		}
 		if (!prevent && typeof this.didChange === 'function') {
-			this.didChange(item, this);
+			this.didChange(this.currentItem, this);
 		}
 		// console.log('MtmControl.onClick', 'button', button, 'item', item);
 	}
@@ -185,15 +193,16 @@ export class MtmControl {
 		const paths = new MtmPaths();
 		this.index = index;
 		if (this.values.length > 0) {
-			this.values.sort((a, b) => a.price - b.price);
-			const minimumPrice = this.values[0].price;
-			if (minimumPrice) {
-				this.values.forEach(x => x.price = x.price - minimumPrice);
-				if (this.sortType === MtmSortType.Name) {
-					this.values.sort((a, b) => parseInt(a.name) - parseInt(b.name));
-				}
+			if (this.sortType === MtmSortType.Numeric) {
+				this.values.sort((a, b) => a.value - b.value);
 			} else {
-				this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+				this.values.sort((a, b) => a.price - b.price);
+				const minimumPrice = this.values[0].price;
+				if (minimumPrice) {
+					this.values.forEach(x => x.price = x.price - minimumPrice);
+				} else {
+					this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+				}
 			}
 			// this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 		}
@@ -213,9 +222,11 @@ export class MtmControl {
 		if (paths.showPrices !== '1') {
 			this.values.forEach((x, i) => x.price = 0);
 		}
+		/*
 		if (this.values.length) {
 			this.values[0].active = true;
 		}
+		*/
 	}
 
 }

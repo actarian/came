@@ -35,8 +35,8 @@ export default class MtmConfigurator {
 			let options = [
 				MtmDataService.newControlByKey(MtmControlEnum.KnownTecnology),
 				MtmDataService.newControlByKey(MtmControlEnum.ConstrainedDimension),
-				MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
-				// MtmDataService.optionWithKey(MtmControlEnum.Buttons),
+				// MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
+				MtmDataService.optionWithKey(MtmControlEnum.Buttons),
 				MtmDataService.newControlByKey(MtmControlEnum.CallButtons),
 				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.optionWithKey(MtmControlEnum.Keypad),
@@ -58,7 +58,6 @@ export default class MtmConfigurator {
 						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.ApartmentNumber:
-					case MtmControlEnum.Buttons:
 						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.CallButtons:
@@ -84,11 +83,12 @@ export default class MtmConfigurator {
 	didSelectCallButton(): MtmControlEnum {
 		let key: MtmControlEnum;
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		if (callButtons.selected) {
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+		if (callButtons.selected.id !== -1) {
+			/*
 			const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
-			const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
-			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
 			let apartmentNumberValue = apartmentNumber.selected.value;
 			if (callButtons.selected.id === 2) {
 				apartmentNumberValue = Math.ceil(apartmentNumberValue / 2) * 2;
@@ -97,39 +97,40 @@ export default class MtmConfigurator {
 			if (!firstValue && callButtons.selected.id < 3) {
 				callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
 			}
+			*/
 			// console.log('firstValue', firstValue);
 			switch (callButtons.selected.id) {
 				case 1:
 					// pulsante singolo
-					buttons.onSelect(firstValue);
+					// buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 1));
-					digi.onSelect(null);
+					digi.currentItem = null;
 					key = MtmControlEnum.Divided;
 					break;
 				case 2:
 					// pulsante doppio
-					buttons.onSelect(firstValue);
+					// buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 2));
-					digi.onSelect(null);
+					digi.currentItem = null;
 					key = MtmControlEnum.Divided;
 					break;
 				case 3:
 					// digital keypad
-					buttons.onSelect(null);
+					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
 					key = MtmControlEnum.Keypad;
 					break;
 				case 4:
 					// digital keypad + DIGI 1
-					buttons.onSelect(null);
+					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
 					key = MtmControlEnum.Digi;
 					break;
 				case 5:
 					// digital keypad + DIGI 2
-					buttons.onSelect(null);
+					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 2));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
 					key = MtmControlEnum.Digi;
@@ -143,6 +144,10 @@ export default class MtmConfigurator {
 				'digi', digi.selected.id
 			);
 			*/
+		} else {
+			buttons.currentItem = null;
+			divided.currentItem = null;
+			digi.currentItem = null;
 		}
 		return key;
 	}
@@ -226,15 +231,15 @@ export default class MtmConfigurator {
 		const constrainedDimension = this.options.find(x => x.key === MtmControlEnum.ConstrainedDimension);
 		const moduleSize = this.options.find(x => x.key === MtmControlEnum.ModuleSize);
 		controls.push(knownTecnology.element);
-		if (knownTecnology.currentItem.id === 2) {
+		if (knownTecnology.selected.id === 2) {
 			controls.push(system.element);
 		}
 		controls.push(constrainedDimension.element);
-		if (constrainedDimension.currentItem.id === 2) {
+		if (constrainedDimension.selected.id === 2) {
 			controls.push(moduleSize.element);
 		}
 		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
-		// const buttons = this.options.find(x => x.key === MtmControlEnum.Buttons);
+		const buttons = this.options.find(x => x.key === MtmControlEnum.Buttons);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
 		const audioVideo = this.options.find(x => x.key === MtmControlEnum.AudioVideo);
 		const keypad = this.options.find(x => x.key === MtmControlEnum.Keypad);
@@ -244,8 +249,12 @@ export default class MtmConfigurator {
 		const hearingModule = this.options.find(x => x.key === MtmControlEnum.HearingModule);
 		const finish = this.options.find(x => x.key === MtmControlEnum.Finish);
 		const mount = this.options.find(x => x.key === MtmControlEnum.Mount);
-		controls.push(apartmentNumber.element);
-		// controls.push(buttons.element);
+		if (apartmentNumber.element) {
+			controls.push(apartmentNumber.element);
+		}
+		if (buttons.element) {
+			controls.push(buttons.element);
+		}
 		controls.push(callButtons.element);
 		controls.push(audioVideo.element);
 		controls.push(keypad.element);
@@ -255,10 +264,10 @@ export default class MtmConfigurator {
 		controls.push(hearingModule.element);
 		controls.push(finish.element);
 		controls.push(mount.element);
-		if (knownTecnology.currentItem.id === 1) {
+		if (knownTecnology.selected.id === 1) {
 			controls.push(system.element);
 		}
-		if (constrainedDimension.currentItem.id === 1) {
+		if (constrainedDimension.selected.id === 1) {
 			controls.push(moduleSize.element);
 		}
 		// const controls = this.options.map(x => x.element);
@@ -273,7 +282,7 @@ export default class MtmConfigurator {
 		// console.log('doReorder');
 	}
 
-	getRows(key?: MtmControlEnum, value?: MtmValue) {
+	getRows__(key?: MtmControlEnum, value?: MtmValue) {
 		this.currentKey = key;
 		const knownTecnology = this.options.find(x => x.key === MtmControlEnum.KnownTecnology);
 		const constrainedDimension = this.options.find(x => x.key === MtmControlEnum.ConstrainedDimension);
@@ -342,6 +351,111 @@ export default class MtmConfigurator {
 		return filteredRows;
 	}
 
+	getRows(key?: MtmControlEnum, value?: MtmValue) {
+		this.currentKey = key;
+		const controls = this.options.map(x => {
+			const index = this.cols.indexOf(x);
+			if (index !== -1) {
+				return x;
+			} else {
+				return { index };
+			}
+		}).filter(x => x.index !== -1).map(x => x as MtmControl);
+		let selected = controls.filter(x => x.selected && x.selected.id !== -1);
+		let unselected = controls.filter(x => !(x.selected && x.selected.id !== -1));
+		unselected.forEach(x => {
+			x.values.forEach(v => v.disabled = true);
+		});
+		/*
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		if (buttons.selected && buttons.selected.id !== -1) {
+			selected.unshift(buttons);
+		} else {
+			buttons.values.forEach(v => {
+				v.disabled = false;
+			});
+			buttons.updateState();
+		}
+		*/
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		if (divided.selected && divided.selected.id !== -1) {
+			selected.unshift(divided);
+		} else {
+			divided.values.forEach(v => {
+				v.disabled = false;
+			});
+			divided.updateState();
+		}
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+		if (digi.selected && digi.selected.id !== -1) {
+			selected.unshift(digi);
+		} else {
+			digi.values.forEach(v => {
+				v.disabled = false;
+			});
+			digi.updateState();
+		}
+		let filteredRows = this.rows.filter(x => {
+			return selected.reduce((has, c) => {
+				if (c.key === key) {
+					return has && x[c.index] === (value ? value.id : c.selected.id);
+				} else {
+					return has && x[c.index] === c.selected.id;
+				}
+			}, true);
+		});
+		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
+		callButtons.values.forEach(x => x.disabled = true);
+		filteredRows.forEach(r => {
+			unselected.forEach(control => {
+				control.values.forEach(v => {
+					if (v.id === r[control.index]) {
+						v.disabled = false;
+					}
+				});
+				control.updateState();
+			});
+			const dividedId = r[divided.index];
+			const digiId = r[digi.index];
+			// console.log(dividedId, digiId);
+			callButtons.values.forEach(v => {
+				let name = '';
+				switch (v.id) {
+					case 1:
+						// pulsante singolo
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === 1);
+						name = 'pulsante singolo';
+						break;
+					case 2:
+						// pulsante doppio
+						v.disabled = v.disabled && !(dividedId === 2 && digiId === 1);
+						name = 'pulsante doppio';
+						break;
+					case 3:
+						// digital keypad
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI').id);
+						name = 'digital keypad';
+						break;
+					case 4:
+						// digital keypad + DIGI 1
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI1').id);
+						name = 'digital keypad + DIGI 1';
+						break;
+					case 5:
+						// digital keypad + DIGI 2
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 2 && digiId === digi.values.find(x => x.name === 'DIGI2D').id);
+						name = 'digital keypad + DIGI 2';
+						break;
+				}
+			});
+			callButtons.updateState();
+		});
+		return filteredRows;
+	}
+
 	onSearch(key?: MtmControlEnum) {
 		const filteredRows = this.getRows(key);
 		// console.log(filteredRows.length);
@@ -361,7 +475,7 @@ export default class MtmConfigurator {
 		}
 	}
 
-	calcOptions(row: number[]) {
+	calcOptions__(row: number[]) {
 		const prices = MtmDataService.optionWithKey(MtmControlEnum.Price);
 		const controls = [
 			// MtmControlEnum.CallButtons,
@@ -529,6 +643,10 @@ export default class MtmConfigurator {
 		// callButtons.onSelect(callButtons.values.find(x => x.id == 1), true);
 	}
 
+	calcOptions(row: number[]) {
+
+	}
+
 	setRow(row: number[]) {
 		this.row = row;
 		const result: any = {};
@@ -537,7 +655,7 @@ export default class MtmConfigurator {
 				const value = c.values.find(v => v.id === row[i]);
 				if (value) {
 					result[c.key] = value.name;
-					c.onSelect(value, true);
+					// c.onSelect(value, true);
 				} else {
 					result[c.key] = '-';
 				}

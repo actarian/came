@@ -12,9 +12,7 @@
 		border-radius: 0;
 
 		&:hover,
-		&:active,
-		&.active,
-			{
+		&.active {
 			z-index: 1;
 		}
 
@@ -83,9 +81,7 @@
 		margin: 0 -2px -2px 0;
 
 		&:hover,
-		&:active,
-		&.active,
-			{
+		&.active {
 			z-index: 1;
 		}
 
