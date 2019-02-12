@@ -1,22 +1,33 @@
-import { MtmControlEnum, USE_CALCULATED_PRICE } from "./controls/constants";
+import { MtmControlEnum } from "./controls/constants";
 import { MtmControl } from "./controls/control";
 import { MtmValue } from "./controls/value";
 import MtmDataService, { MtmPaths } from "./data.service";
 import Dom from "./utils/dom";
+import Rect from "./utils/rect";
 
 export default class MtmConfigurator {
 
 	element: HTMLElement;
+	stickys: HTMLElement[];
+	stickyContents: HTMLElement[];
 	options: MtmControl[];
 	cols: MtmControl[] = [];
 	rows: number[][] = [];
 	filteredRows: any[] = [];
 	row: number[] = null;
-	currentKey: MtmControlEnum = MtmControlEnum.ApartmentNumber;
+	currentKey: MtmControlEnum = MtmControlEnum.Buttons;
+	playing: boolean = false;
 
 	constructor(selector: string) {
 		this.element = document.querySelector(selector) as HTMLElement;
-		this.addMediaScrollListener();
+		const paths = new MtmPaths();
+		if (paths.showPrices !== '1') {
+			this.element.classList.add('noprice');
+		}
+		const stickys = [].slice.call(this.element.querySelectorAll('[sticky]'));
+		this.stickys = stickys;
+		this.stickyContents = stickys.map(x => x.querySelector('[sticky-content]'));
+		// this.addMediaScrollListener();
 		this.addRecapScrollListener();
 		MtmDataService.fetch((cols: MtmControl[], rows: number[][]) => {
 			this.cols = cols;
@@ -25,6 +36,7 @@ export default class MtmConfigurator {
 				MtmDataService.newControlByKey(MtmControlEnum.KnownTecnology),
 				MtmDataService.newControlByKey(MtmControlEnum.ConstrainedDimension),
 				MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
+				// MtmDataService.optionWithKey(MtmControlEnum.Buttons),
 				MtmDataService.newControlByKey(MtmControlEnum.CallButtons),
 				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.optionWithKey(MtmControlEnum.Keypad),
@@ -46,6 +58,7 @@ export default class MtmConfigurator {
 						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.ApartmentNumber:
+					case MtmControlEnum.Buttons:
 						this.onSearch(this.didSelectCallButton());
 						break;
 					case MtmControlEnum.CallButtons:
@@ -91,7 +104,7 @@ export default class MtmConfigurator {
 					buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.onSelect(null);
-					key = MtmControlEnum.Buttons;
+					key = MtmControlEnum.Divided;
 					break;
 				case 2:
 					// pulsante doppio
@@ -134,6 +147,78 @@ export default class MtmConfigurator {
 		return key;
 	}
 
+	didSelectCallButton__(): MtmControlEnum {
+		let key: MtmControlEnum;
+		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
+		if (callButtons.selected) {
+			const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+			let buttonsValue = buttons.selected.value;
+			if (callButtons.selected.id === 2) {
+				buttonsValue = Math.ceil(buttonsValue / 2) * 2;
+			}
+			// const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
+			/*
+			if (!buttonsValue && callButtons.selected.id < 3) {
+				callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
+			}
+			*/
+			// console.log('buttonsValue', buttonsValue, callButtons.selected.id);
+			switch (callButtons.selected.id) {
+				case 1:
+					// pulsante singolo
+					// buttons.onSelect(buttonsValue);
+					if (buttonsValue > 13) {
+						buttons.onSelect(buttons.values.find(x => x.id == 1), true);
+					}
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					digi.onSelect(null);
+					key = MtmControlEnum.Divided;
+					break;
+				case 2:
+					// pulsante doppio
+					// buttons.onSelect(buttonsValue);
+					if (buttonsValue > 26) {
+						buttons.onSelect(buttons.values.find(x => x.id == 2), true);
+					}
+					divided.onSelect(divided.values.find(x => x.id === 2));
+					digi.onSelect(null);
+					key = MtmControlEnum.Divided;
+					break;
+				case 3:
+					// digital keypad
+					// buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
+					key = MtmControlEnum.Keypad;
+					break;
+				case 4:
+					// digital keypad + DIGI 1
+					// buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 1));
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
+					key = MtmControlEnum.Digi;
+					break;
+				case 5:
+					// digital keypad + DIGI 2
+					// buttons.onSelect(null);
+					divided.onSelect(divided.values.find(x => x.id === 2));
+					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
+					key = MtmControlEnum.Digi;
+					break;
+			}
+			/*
+			console.log(
+				'buttons', buttonsValue,
+				'divided', divided.selected.id,
+				'digi', digi.selected.id
+			);
+			*/
+		}
+		return key;
+	}
+
 	doReorder() {
 		const controls = [];
 		const knownTecnology = this.options.find(x => x.key === MtmControlEnum.KnownTecnology);
@@ -149,6 +234,7 @@ export default class MtmConfigurator {
 			controls.push(moduleSize.element);
 		}
 		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
+		// const buttons = this.options.find(x => x.key === MtmControlEnum.Buttons);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
 		const audioVideo = this.options.find(x => x.key === MtmControlEnum.AudioVideo);
 		const keypad = this.options.find(x => x.key === MtmControlEnum.Keypad);
@@ -159,6 +245,7 @@ export default class MtmConfigurator {
 		const finish = this.options.find(x => x.key === MtmControlEnum.Finish);
 		const mount = this.options.find(x => x.key === MtmControlEnum.Mount);
 		controls.push(apartmentNumber.element);
+		// controls.push(buttons.element);
 		controls.push(callButtons.element);
 		controls.push(audioVideo.element);
 		controls.push(keypad.element);
@@ -186,7 +273,7 @@ export default class MtmConfigurator {
 		// console.log('doReorder');
 	}
 
-	getRows(key?: MtmControlEnum) {
+	getRows(key?: MtmControlEnum, value?: MtmValue) {
 		this.currentKey = key;
 		const knownTecnology = this.options.find(x => x.key === MtmControlEnum.KnownTecnology);
 		const constrainedDimension = this.options.find(x => x.key === MtmControlEnum.ConstrainedDimension);
@@ -228,7 +315,9 @@ export default class MtmConfigurator {
 		}
 		let filteredRows = this.rows.filter(x => {
 			return controls.reduce((has, c) => {
-				if (c.lazy && c.key !== key) {
+				if (c.key === key) {
+					return has && x[c.index] === (value ? value.id : c.selected.id);
+				} else if (c.lazy) {
 					return has;
 				} else {
 					return has && x[c.index] === c.selected.id;
@@ -276,6 +365,7 @@ export default class MtmConfigurator {
 		const prices = MtmDataService.optionWithKey(MtmControlEnum.Price);
 		const controls = [
 			// MtmControlEnum.CallButtons,
+			MtmControlEnum.Buttons,
 			MtmControlEnum.AudioVideo,
 			MtmControlEnum.Keypad,
 			MtmControlEnum.Proximity,
@@ -287,11 +377,29 @@ export default class MtmConfigurator {
 			MtmControlEnum.System,
 			MtmControlEnum.ModuleSize,
 		].map(key => MtmDataService.optionWithKey(key));
+		/*
+		controls.forEach(control => {
+			control.values.forEach(x => {
+				if (x.id !== control.selected.id) {
+					const rows = this.getRows(control.key, x);
+					console.log(control.key, x.name, rows.length);
+					if (rows.length) {
+						x.disabled = false;
+					} else {
+						x.disabled = true;
+					}
+				}
+			});
+			control.updateState();
+		});
+		return;
+		*/
 		const currentControl = MtmDataService.optionWithKey(this.currentKey);
 		if (controls.indexOf(currentControl) > 0) {
 			controls.splice(controls.indexOf(currentControl), 1);
 			controls.unshift(currentControl);
 		}
+		const paths = new MtmPaths();
 		controls.forEach(control => {
 			const query = row.slice();
 			let minimumPrice = Number.POSITIVE_INFINITY, count = 0;
@@ -314,7 +422,7 @@ export default class MtmConfigurator {
 						rows = strictRows;
 					}
 				});
-				if (USE_CALCULATED_PRICE) {
+				if (paths.showPrices == '1') {
 					if (rows.length > 0) {
 						const rowPrice = prices.values.find(v => v.id === rows[0][prices.index]).value;
 						v.price = rowPrice;
@@ -326,25 +434,24 @@ export default class MtmConfigurator {
 					}
 					minimumPrice = Math.min(v.price, minimumPrice);
 				} else {
+					v.price = 0;
 					if (rows.length > 0) {
-						v.price = 0;
 						if (MtmDataService.partsKeys.indexOf(control.key) !== -1) {
 							const part = MtmDataService.partsPool[v.value];
 							if (part) {
 								v.price = part.price;
 							}
-							console.log(control.key, v.price, v, part);
+							// console.log(control.key, v.price, v, part);
 						}
 						v.disabled = false;
 						count++;
 					} else {
-						v.price = 0;
 						v.disabled = true;
 					}
 					v.updatePrice(control.element);
 				}
 			});
-			if (USE_CALCULATED_PRICE) {
+			if (paths.showPrices == '1') {
 				control.values.forEach(v => {
 					const rowPrice = v.price;
 					if (count > 1) {
@@ -358,6 +465,68 @@ export default class MtmConfigurator {
 			}
 			control.updateState();
 		});
+		/*
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
+		// const callButtons = MtmDataService.optionWithKey(MtmControlEnum.CallButtons);
+		controls.push(divided);
+		controls.push(digi);
+		callButtons.values.forEach(v => {
+			const query = row.slice();
+			let name = '';
+			switch (v.id) {
+				case 1:
+					// pulsante singolo
+					query[divided.index] = 1;
+					query[digi.index] = 1;
+					name = 'pulsante singolo';
+					break;
+				case 2:
+					// pulsante doppio
+					query[divided.index] = 2;
+					query[digi.index] = 1;
+					name = 'pulsante doppio';
+					break;
+				case 3:
+					// digital keypad
+					query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+					query[divided.index] = 1;
+					query[digi.index] = digi.values.find(x => x.name === 'DIGI').id;
+					name = 'digital keypad';
+					break;
+				case 4:
+					// digital keypad + DIGI 1
+					query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+					query[divided.index] = 1;
+					query[digi.index] = digi.values.find(x => x.name === 'DIGI1').id;
+					name = 'digital keypad + DIGI 1';
+					break;
+				case 5:
+					// digital keypad + DIGI 2
+					query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+					query[divided.index] = 2;
+					query[digi.index] = digi.values.find(x => x.name === 'DIGI2D').id;
+					name = 'digital keypad + DIGI 2';
+					break;
+			}
+			let rows = this.rows.filter(r => {
+				return controls.reduce((has, c, i) => {
+					return has && r[c.index] === query[c.index];
+				}, true);
+			});
+			if (rows.length > 0) {
+				v.disabled = false;
+			} else {
+				v.disabled = true;
+			}
+			// console.log(name, rows.length, v);
+		});
+		callButtons.updateState();
+		*/
+		// console.log('callButtons', callButtons, 'divided', divided, 'digi', digi);
+		// callButtons.onSelect(callButtons.values.find(x => x.id == 1), true);
 	}
 
 	setRow(row: number[]) {
@@ -377,7 +546,12 @@ export default class MtmConfigurator {
 			}
 		});
 		const price = parseFloat(result.price);
-		this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = `€ ${price.toFixed(2)}`);
+		const paths = new MtmPaths();
+		if (paths.showPrices == '1') {
+			this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = `€ ${price.toFixed(2)}`);
+		} else {
+			this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = ``);
+		}
 		this.element.querySelector('.result-code').innerHTML = result.code;
 		const keys = [MtmControlEnum.Module1, MtmControlEnum.Module2, MtmControlEnum.Module3, MtmControlEnum.Module4]
 		const descriptions: string[] = [];
@@ -387,7 +561,6 @@ export default class MtmConfigurator {
 				descriptions.push(MtmDataService.parts.find(x => x.id === parseInt(value)).shortDescription);
 			}
 		});
-		const paths = new MtmPaths();
 		this.element.querySelector('.result-description').innerHTML = descriptions.join(', ');
 		this.element.querySelector('.result-finish').innerHTML = result.finish;
 		this.element.querySelector('.result-system').innerHTML = result.system;
@@ -410,6 +583,7 @@ export default class MtmConfigurator {
 	render() {
 		const outlet = this.element.querySelector('.options-outlet') as HTMLElement;
 		this.options.map(x => x.render()).forEach(x => outlet.appendChild(x));
+		this.options.forEach(x => x.element = this.element.querySelector(`.option--${x.key}`));
 		// console.log('render.outlet', outlet);
 	}
 
@@ -445,6 +619,40 @@ export default class MtmConfigurator {
 		window.addEventListener('scroll', onScroll, false);
 	}
 
+	animate() {
+		this.stickys.forEach((node, i) => {
+			const content = this.stickyContents[i];
+			let top = parseInt(node.getAttribute('sticky')) || 0;
+			let rect = Rect.fromNode(node);
+			const maxtop = node.offsetHeight - content.offsetHeight;
+			if (window.innerWidth >= 768) {
+				top = Math.max(0, Math.min(maxtop, top - rect.top));
+				content.setAttribute('style', `transform: translateY(${top}px);`);
+			} else {
+				content.setAttribute('style', `transform: none;`);
+			}
+		});
+	}
+
+	loop() {
+		this.animate();
+		if (this.playing) {
+			window.requestAnimationFrame(() => {
+				this.loop();
+			});
+		}
+	}
+
+	play() {
+		this.playing = true;
+		this.loop();
+	}
+
+	pause() {
+		this.playing = false;
+	}
+
 }
 
 const configurator = new MtmConfigurator(`.configurator`);
+configurator.play();

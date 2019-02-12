@@ -1,0 +1,107 @@
+<script>
+  window.paths = {
+    kits: '{{ site_root }}/came_configurator/export/kits_list',
+    parts: '{{ site_root }}/came_configurator/export/parts',
+    localizations: '{{ localizations }}',
+    assets: '{{ site_root }}/modules/custom/came_configurator/app/',
+	showPrices: '{{ show_prices }}'
+  };
+</script>
+
+<main class="configurator">
+  <!-- SUB HEADER -->
+  <section class="section section--subheader">
+    <div class="container">
+      <div class="h1">{{ 'Modular entry panels MTM and MTM VR' | t }}</div>
+    </div>
+  </section>
+  <section class="section section--configurator">
+    <div class="container">
+      <!-- MEDIA PICTURE -->
+      <div class="content" sticky="60">
+		<div class="media" sticky-content>
+          <div class="picture">
+            <img />
+          </div>
+          <div class="description">
+            <div><strong class="result-code"></strong></div>
+            <div><span class="result-description"></span></div>
+            <table>
+              <tr>
+                <td>{{ 'Finishing' | t }}</td>
+                <td class="result-finish"></td>
+              </tr>
+              <tr>
+                <td>{{ 'System' | t }}</td>
+                <td class="result-system"></td>
+              </tr>
+              <tr>
+                <td>{{ 'Mounting' | t }}</td>
+                <td class="result-mount"></td>
+              </tr>
+              <tr>
+                <td>{{ 'Price' | t }}</td>
+                <td class="result-price"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- OPTIONS -->
+      <div class="sidebar">
+        <div class="h2"> {{ 'Configure your entry panel' | t }}</div>
+        <!-- QUESTIONS -->
+        <div class="sidebar__item options-outlet"></div>
+        <!-- QUESTIONS -->
+        <div class="sidebar__item">
+          <div class="h2">{{ 'Complete the intercom system with the receiver you prefer' | t }}</div>
+          <div>
+            <button type="button" class="btn btn--cta"><span>{{ 'Look at the receivers' | t }}</span></button>
+          </div>
+          <img class="picture" src="{{ app_root }}/img/mtm-configurator/monitor.jpg" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- RECAP -->
+  <section class="section section--recap hidden-md-up">
+    <div class="inner">
+      <div class="container">
+        <div class="block">
+          <div class="info-group">
+            <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
+            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="#">{{ 'Contact us' | t}}</a></div>
+          </div>
+        </div>
+        <div class="block">
+          <div class="info-group">
+            <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
+            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="#">{{ 'Faq' | t }}</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section--recap section--recap--fixed">
+    <div class="inner">
+      <div class="container">
+        <div class="block hidden-sm-down">
+          <div class="info-group">
+            <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
+            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="#">{{ 'Contact us' | t}}</a></div>
+          </div>
+        </div>
+        <div class="block hidden-sm-down">
+          <div class="info-group">
+            <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
+            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="#">{{ 'Faq' | t }}</a></div>
+          </div>
+        </div>
+        <div class="block block--hilight">
+          <div class="result-price"></div>
+          <a href="#" target="_blank" class="btn btn--cta result-cta">{{ 'Find an installer' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

@@ -24,7 +24,7 @@ strong {
 }
 
 .configurator {
-	margin-bottom: 1000px;
+	margin-bottom: 0;
 }
 
 .container {
@@ -107,7 +107,7 @@ strong {
 	user-select: none;
 
 	.picture {
-		@include aspect(10, 6);
+		// @include aspect(10, 6);
 
 		position: relative;
 		align-items: center;
@@ -150,6 +150,7 @@ strong {
 
 	@media screen and (min-width: 769px) {
 		&.fixed {
+			// position: sticky;
 			position: fixed;
 			top: 60px;
 			left: 3.5rem;
@@ -220,6 +221,10 @@ strong {
 	.title+.subtitle {
 		margin-top: -20px;
 	}
+
+	&.disabled {
+		display: none;
+	}
 }
 
 .section--recap {
@@ -264,6 +269,16 @@ strong {
 			white-space: nowrap;
 			padding: 0 10px;
 			min-width: 130px;
+		}
+
+		.noprice & {
+			justify-content: center;
+			background: none;
+			border: none;
+
+			&>.result-price {
+				display: none;
+			}
 		}
 	}
 

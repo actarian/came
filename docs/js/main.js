@@ -564,7 +564,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     MtmControlType[MtmControlType["Group"] = 2] = "Group";
     MtmControlType[MtmControlType["List"] = 3] = "List";
     MtmControlType[MtmControlType["Grid"] = 4] = "Grid";
-  })(MtmControlType = exports.MtmControlType || (exports.MtmControlType = {})); // code,singleModuleFrame,finish,moduleSize,mount,system,AV,keypad,proximity,infoModule,hearingModule,digitalDisplay,additionalModules,buttons,divided,mounting,
+  })(MtmControlType = exports.MtmControlType || (exports.MtmControlType = {}));
+
+  var MtmSortType;
+
+  (function (MtmSortType) {
+    MtmSortType[MtmSortType["Value"] = 0] = "Value";
+    MtmSortType[MtmSortType["Name"] = 1] = "Name";
+  })(MtmSortType = exports.MtmSortType || (exports.MtmSortType = {})); // code,singleModuleFrame,finish,moduleSize,mount,system,AV,keypad,proximity,infoModule,hearingModule,digitalDisplay,additionalModules,buttons,divided,mounting,
   // flushRainshield,frame,electronicsModule1,frontPiece1,electronicsModule2,frontPiece2,electronicsModule3,frontPiece3,electronicsModule4,frontPiece4,ci,description
 
 
@@ -700,8 +707,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           disabled: true
         }, {
           key: MtmControlEnum.Buttons,
+          name: locale.apartmentNumberName,
+          type: MtmControlType.Select,
+          sortType: MtmSortType.Name,
           lazy: true,
-          nullable: true
+          nullable: true,
+          className: 'control--list--sm'
         }, {
           key: MtmControlEnum.Divided,
           lazy: true,
@@ -779,6 +790,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           key: MtmControlEnum.CallButtons,
           name: locale.callButtonsName,
           type: MtmControlType.List,
+          lazy: true,
           values: [{
             id: 1,
             name: locale.buttonSingleName
@@ -833,7 +845,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "../utils/dom", "./constants", "./value"], factory);
+    define(["require", "exports", "../data.service", "../utils/dom", "./constants", "./value"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -841,6 +853,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+
+  var data_service_1 = require("../data.service");
 
   var dom_1 = __importDefault(require("../utils/dom"));
 
@@ -868,6 +882,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.className = '';
       this.nullable = false;
       this.lazy = false;
+      this.sortType = constants_1.MtmSortType.Value;
       this.element = null;
       this.currentItem = null;
       this.didChange = null;
@@ -908,7 +923,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     _createClass(MtmControl, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control ").concat(this.className, "\"></div>\n\t</div>");
       }
     }, {
       key: "getChildTemplate",
@@ -919,7 +934,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       key: "getFragment",
       value: function getFragment() {
         var fragment = dom_1.default.fragmentFromHTML(this.getTemplate());
-        this.element = dom_1.default.fragmentFirstElement(fragment);
+        this.element = dom_1.default.fragmentFirstElement(fragment); // console.log(this.key, fragment.children);
+
         return fragment;
       }
     }, {
@@ -942,7 +958,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         });
         fragments.forEach(function (x) {
           return group.appendChild(x);
-        });
+        }); // this.element = group as HTMLElement;
+        // console.log(this.key, this.element);
+
         return fragment;
       }
     }, {
@@ -958,6 +976,10 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             this.onSelected(this.values[index].id);
         }
         */
+        if (!button) {
+          return;
+        }
+
         var buttons = Array.prototype.slice.call(button.parentNode.childNodes);
         buttons.forEach(function (x) {
           return x.classList.remove('active');
@@ -1000,7 +1022,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "updateState",
       value: function updateState() {
-        // console.log('MtmControl.updateState', this.element);
+        // console.log('MtmControl.updateState', this.key, this.element);
         if (this.element) {
           var group = this.element.querySelector('.control');
           this.values.forEach(function (x, i) {
@@ -1010,7 +1032,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               button.classList.add('disabled');
             } else {
               button.classList.remove('disabled');
-            }
+            } // console.log(x.disabled);
+
           });
         }
       }
@@ -1054,6 +1077,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "sort",
       value: function sort(index) {
+        var paths = new data_service_1.MtmPaths();
         this.index = index;
 
         if (this.values.length > 0) {
@@ -1066,6 +1090,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             this.values.forEach(function (x) {
               return x.price = x.price - minimumPrice;
             });
+
+            if (this.sortType === constants_1.MtmSortType.Name) {
+              this.values.sort(function (a, b) {
+                return parseInt(a.name) - parseInt(b.name);
+              });
+            }
           } else {
             this.values.sort(function (a, b) {
               return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -1092,7 +1122,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           }
         }
 
-        if (!constants_1.USE_CALCULATED_PRICE) {
+        if (paths.showPrices !== '1') {
           this.values.forEach(function (x, i) {
             return x.price = 0;
           });
@@ -1125,7 +1155,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
   exports.MtmControl = MtmControl;
 });
 
-},{"../utils/dom":11,"./constants":2,"./value":8}],4:[function(require,module,exports){
+},{"../data.service":9,"../utils/dom":11,"./constants":2,"./value":8}],4:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1185,7 +1215,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     _createClass(MtmGrid, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--grid ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--grid ").concat(this.className, "\"></div>\n\t</div>");
       }
     }, {
       key: "getChildTemplate",
@@ -1257,7 +1287,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     _createClass(MtmGroup, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--group ").concat(this.values.length === 4 ? "btn-group--4" : "", " ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--group ").concat(this.values.length === 4 ? "btn-group--4" : "", " ").concat(this.className, "\"></div>\n\t</div>");
       }
     }]);
 
@@ -1324,7 +1354,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     _createClass(MtmList, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\"></div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\"></div>\n\t</div>");
       }
     }]);
 
@@ -1399,7 +1429,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     _createClass(MtmSelect, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option\">\n\t\t<div class=\"title\">".concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
+      }
+    }, {
+      key: "getChildTemplate",
+      value: function getChildTemplate(item) {
+        return "<option class=\"".concat(item.active ? "active" : "", " ").concat(item.disabled ? "disabled" : "", "\" value=\"").concat(item.id, "\" data-id=\"").concat(item.id, "\">").concat(item.name, "</option>");
       }
     }, {
       key: "render",
@@ -1408,13 +1443,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
         var fragment = this.getFragment();
         var select = fragment.querySelector('.form-control--select');
-        this.values.map(function (x) {
-          var html = "\n\t\t<option value=\"".concat(x.id, "\">").concat(x.name, "</option>\n\t\t");
-          var fragment = dom_1.default.fragmentFromHTML(html);
-          return fragment;
-        }).forEach(function (x) {
+        var fragments = this.values.map(function (x) {
+          return dom_1.default.fragmentFromHTML(_this2.getChildTemplate(x));
+        });
+        var group = fragment.querySelector('.control');
+        fragments.forEach(function (x) {
           return select.appendChild(x);
         });
+        this.element = group;
         select.addEventListener('change', function (e) {
           return _this2.onChange(e);
         });
@@ -1430,6 +1466,23 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         return fragment;
       }
     }, {
+      key: "updateState",
+      value: function updateState() {
+        // console.log('MtmSelect.updateState', this.element);
+        if (this.element) {
+          var select = this.element.querySelector('select');
+          this.values.forEach(function (x, i) {
+            var option = select.childNodes[i];
+
+            if (x.disabled) {
+              option.setAttribute('disabled', 'disabled');
+            } else {
+              option.removeAttribute('disabled');
+            }
+          });
+        }
+      }
+    }, {
       key: "onUpdate",
       value: function onUpdate(select) {
         if (select) {
@@ -1439,7 +1492,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           });
           this.currentItem = item; // console.log(select.value, id, item);
 
-          if (item) {
+          if (item && this.element) {
             var label = this.element.querySelector('.label');
             label.innerHTML = item.name;
           }
@@ -1455,6 +1508,36 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       value: function onChange(e) {
         // console.log('MtmSelect.onChange', e.target);
         this.onUpdate(e.target);
+      }
+    }, {
+      key: "onSelect",
+      value: function onSelect(value) {
+        var prevent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        this.values.forEach(function (x) {
+          return x.active = false;
+        });
+        this.currentItem = value; // console.log('MtmSelect.onSelect', value);
+
+        if (value) {
+          value.active = true;
+
+          if (this.element) {
+            var label = this.element.querySelector('.label');
+            label.innerHTML = value.name;
+            var select = this.element.querySelector('select');
+            this.values.forEach(function (x, i) {
+              x.active = false;
+              var option = select.childNodes[i];
+
+              if (x.active) {
+                option.classList.add('active');
+              } else {
+                option.classList.remove('active');
+              }
+            });
+            select.value = value.id.toString();
+          }
+        }
       }
     }]);
 
@@ -1517,7 +1600,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       value: function updatePrice(element) {
         if (element) {
           var priceElement = element.querySelector("[data-id=\"".concat(this.id, "\"] .price"));
-          priceElement.innerHTML = this.price > 0 ? "+ \u20AC ".concat(this.price.toFixed(2)) : "";
+
+          if (priceElement) {
+            priceElement.innerHTML = this.price > 0 ? "+ \u20AC ".concat(this.price.toFixed(2)) : "";
+          }
         }
       }
     }, {
@@ -1580,6 +1666,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     this.parts = 'data/parts.json';
     this.localizations = 'data/localizations.json';
     this.configurator = 'https://came.yetnot.it/came_configurator';
+    this.showPrices = '1';
 
     if (window.hasOwnProperty('paths')) {
       Object.assign(this, window.paths);
@@ -1785,8 +1872,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           });
           Object.keys(keysPool).forEach(function (key) {
             keysPool[key].sort();
-          });
-          console.log(JSON.stringify(keysPool));
+          }); // console.log(JSON.stringify(keysPool));
+
           kits.sort(function (a, b) {
             return a.price - b.price;
           }); // console.log(JSON.stringify(kits));
@@ -1996,7 +2083,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     var v = factory(require, exports);
     if (v !== undefined) module.exports = v;
   } else if (typeof define === "function" && define.amd) {
-    define(["require", "exports", "./controls/constants", "./data.service", "./utils/dom"], factory);
+    define(["require", "exports", "./controls/constants", "./data.service", "./utils/dom", "./utils/rect"], factory);
   }
 })(function (require, exports) {
   "use strict";
@@ -2011,6 +2098,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
   var dom_1 = __importDefault(require("./utils/dom"));
 
+  var rect_1 = __importDefault(require("./utils/rect"));
+
   var MtmConfigurator =
   /*#__PURE__*/
   function () {
@@ -2023,14 +2112,27 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.rows = [];
       this.filteredRows = [];
       this.row = null;
-      this.currentKey = constants_1.MtmControlEnum.ApartmentNumber;
+      this.currentKey = constants_1.MtmControlEnum.Buttons;
+      this.playing = false;
       this.element = document.querySelector(selector);
-      this.addMediaScrollListener();
+      var paths = new data_service_1.MtmPaths();
+
+      if (paths.showPrices !== '1') {
+        this.element.classList.add('noprice');
+      }
+
+      var stickys = [].slice.call(this.element.querySelectorAll('[sticky]'));
+      this.stickys = stickys;
+      this.stickyContents = stickys.map(function (x) {
+        return x.querySelector('[sticky-content]');
+      }); // this.addMediaScrollListener();
+
       this.addRecapScrollListener();
       data_service_1.default.fetch(function (cols, rows) {
         _this.cols = cols;
         _this.rows = rows;
-        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
+        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), // MtmDataService.optionWithKey(MtmControlEnum.Buttons),
+        data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
             // console.log('MtmConfigurator.didChange', control.key, item);
@@ -2044,6 +2146,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
                 break;
 
               case constants_1.MtmControlEnum.ApartmentNumber:
+              case constants_1.MtmControlEnum.Buttons:
                 _this.onSearch(_this.didSelectCallButton());
 
                 break;
@@ -2113,7 +2216,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
                 return x.id === 1;
               }));
               digi.onSelect(null);
-              key = constants_1.MtmControlEnum.Buttons;
+              key = constants_1.MtmControlEnum.Divided;
               break;
 
             case 2:
@@ -2176,6 +2279,113 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         return key;
       }
     }, {
+      key: "didSelectCallButton__",
+      value: function didSelectCallButton__() {
+        var key;
+        var callButtons = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.CallButtons;
+        });
+
+        if (callButtons.selected) {
+          var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
+          var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
+          var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
+          var buttonsValue = buttons.selected.value;
+
+          if (callButtons.selected.id === 2) {
+            buttonsValue = Math.ceil(buttonsValue / 2) * 2;
+          } // const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
+
+          /*
+          if (!buttonsValue && callButtons.selected.id < 3) {
+              callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
+          }
+          */
+          // console.log('buttonsValue', buttonsValue, callButtons.selected.id);
+
+
+          switch (callButtons.selected.id) {
+            case 1:
+              // pulsante singolo
+              // buttons.onSelect(buttonsValue);
+              if (buttonsValue > 13) {
+                buttons.onSelect(buttons.values.find(function (x) {
+                  return x.id == 1;
+                }), true);
+              }
+
+              divided.onSelect(divided.values.find(function (x) {
+                return x.id === 1;
+              }));
+              digi.onSelect(null);
+              key = constants_1.MtmControlEnum.Divided;
+              break;
+
+            case 2:
+              // pulsante doppio
+              // buttons.onSelect(buttonsValue);
+              if (buttonsValue > 26) {
+                buttons.onSelect(buttons.values.find(function (x) {
+                  return x.id == 2;
+                }), true);
+              }
+
+              divided.onSelect(divided.values.find(function (x) {
+                return x.id === 2;
+              }));
+              digi.onSelect(null);
+              key = constants_1.MtmControlEnum.Divided;
+              break;
+
+            case 3:
+              // digital keypad
+              // buttons.onSelect(null);
+              divided.onSelect(divided.values.find(function (x) {
+                return x.id === 1;
+              }));
+              digi.onSelect(digi.values.find(function (x) {
+                return x.name === 'DIGI';
+              }));
+              key = constants_1.MtmControlEnum.Keypad;
+              break;
+
+            case 4:
+              // digital keypad + DIGI 1
+              // buttons.onSelect(null);
+              divided.onSelect(divided.values.find(function (x) {
+                return x.id === 1;
+              }));
+              digi.onSelect(digi.values.find(function (x) {
+                return x.name === 'DIGI1';
+              }));
+              key = constants_1.MtmControlEnum.Digi;
+              break;
+
+            case 5:
+              // digital keypad + DIGI 2
+              // buttons.onSelect(null);
+              divided.onSelect(divided.values.find(function (x) {
+                return x.id === 2;
+              }));
+              digi.onSelect(digi.values.find(function (x) {
+                return x.name === 'DIGI2D';
+              }));
+              key = constants_1.MtmControlEnum.Digi;
+              break;
+          }
+          /*
+          console.log(
+              'buttons', buttonsValue,
+              'divided', divided.selected.id,
+              'digi', digi.selected.id
+          );
+          */
+
+        }
+
+        return key;
+      }
+    }, {
       key: "doReorder",
       value: function doReorder() {
         var controls = [];
@@ -2205,7 +2415,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
         var apartmentNumber = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.ApartmentNumber;
-        });
+        }); // const buttons = this.options.find(x => x.key === MtmControlEnum.Buttons);
+
         var callButtons = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.CallButtons;
         });
@@ -2233,7 +2444,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var mount = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.Mount;
         });
-        controls.push(apartmentNumber.element);
+        controls.push(apartmentNumber.element); // controls.push(buttons.element);
+
         controls.push(callButtons.element);
         controls.push(audioVideo.element);
         controls.push(keypad.element);
@@ -2268,7 +2480,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       }
     }, {
       key: "getRows",
-      value: function getRows(key) {
+      value: function getRows(key, value) {
         var _this2 = this;
 
         this.currentKey = key;
@@ -2334,7 +2546,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
         var filteredRows = this.rows.filter(function (x) {
           return controls.reduce(function (has, c) {
-            if (c.lazy && c.key !== key) {
+            if (c.key === key) {
+              return has && x[c.index] === (value ? value.id : c.selected.id);
+            } else if (c.lazy) {
               return has;
             } else {
               return has && x[c.index] === c.selected.id;
@@ -2393,9 +2607,27 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
         var prices = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Price);
         var controls = [// MtmControlEnum.CallButtons,
-        constants_1.MtmControlEnum.AudioVideo, constants_1.MtmControlEnum.Keypad, constants_1.MtmControlEnum.Proximity, constants_1.MtmControlEnum.DigitalDisplay, constants_1.MtmControlEnum.InfoModule, constants_1.MtmControlEnum.HearingModule, constants_1.MtmControlEnum.Finish, constants_1.MtmControlEnum.Mounting, constants_1.MtmControlEnum.System, constants_1.MtmControlEnum.ModuleSize].map(function (key) {
+        constants_1.MtmControlEnum.Buttons, constants_1.MtmControlEnum.AudioVideo, constants_1.MtmControlEnum.Keypad, constants_1.MtmControlEnum.Proximity, constants_1.MtmControlEnum.DigitalDisplay, constants_1.MtmControlEnum.InfoModule, constants_1.MtmControlEnum.HearingModule, constants_1.MtmControlEnum.Finish, constants_1.MtmControlEnum.Mounting, constants_1.MtmControlEnum.System, constants_1.MtmControlEnum.ModuleSize].map(function (key) {
           return data_service_1.default.optionWithKey(key);
         });
+        /*
+        controls.forEach(control => {
+            control.values.forEach(x => {
+                if (x.id !== control.selected.id) {
+                    const rows = this.getRows(control.key, x);
+                    console.log(control.key, x.name, rows.length);
+                    if (rows.length) {
+                        x.disabled = false;
+                    } else {
+                        x.disabled = true;
+                    }
+                }
+            });
+            control.updateState();
+        });
+        return;
+        */
+
         var currentControl = data_service_1.default.optionWithKey(this.currentKey);
 
         if (controls.indexOf(currentControl) > 0) {
@@ -2403,6 +2635,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           controls.unshift(currentControl);
         }
 
+        var paths = new data_service_1.MtmPaths();
         controls.forEach(function (control) {
           var query = row.slice();
           var minimumPrice = Number.POSITIVE_INFINITY,
@@ -2434,7 +2667,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               }
             });
 
-            if (constants_1.USE_CALCULATED_PRICE) {
+            if (paths.showPrices == '1') {
               if (rows.length > 0) {
                 var rowPrice = prices.values.find(function (v) {
                   return v.id === rows[0][prices.index];
@@ -2449,23 +2682,21 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
               minimumPrice = Math.min(v.price, minimumPrice);
             } else {
-              if (rows.length > 0) {
-                v.price = 0;
+              v.price = 0;
 
+              if (rows.length > 0) {
                 if (data_service_1.default.partsKeys.indexOf(control.key) !== -1) {
                   var part = data_service_1.default.partsPool[v.value];
 
                   if (part) {
                     v.price = part.price;
-                  }
+                  } // console.log(control.key, v.price, v, part);
 
-                  console.log(control.key, v.price, v, part);
                 }
 
                 v.disabled = false;
                 count++;
               } else {
-                v.price = 0;
                 v.disabled = true;
               }
 
@@ -2473,7 +2704,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             }
           });
 
-          if (constants_1.USE_CALCULATED_PRICE) {
+          if (paths.showPrices == '1') {
             control.values.forEach(function (v) {
               var rowPrice = v.price;
 
@@ -2489,6 +2720,68 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
           control.updateState();
         });
+        /*
+        const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+        const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+        const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+        const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
+        // const callButtons = MtmDataService.optionWithKey(MtmControlEnum.CallButtons);
+        controls.push(divided);
+        controls.push(digi);
+        callButtons.values.forEach(v => {
+            const query = row.slice();
+            let name = '';
+            switch (v.id) {
+                case 1:
+                    // pulsante singolo
+                    query[divided.index] = 1;
+                    query[digi.index] = 1;
+                    name = 'pulsante singolo';
+                    break;
+                case 2:
+                    // pulsante doppio
+                    query[divided.index] = 2;
+                    query[digi.index] = 1;
+                    name = 'pulsante doppio';
+                    break;
+                case 3:
+                    // digital keypad
+                    query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                    query[divided.index] = 1;
+                    query[digi.index] = digi.values.find(x => x.name === 'DIGI').id;
+                    name = 'digital keypad';
+                    break;
+                case 4:
+                    // digital keypad + DIGI 1
+                    query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                    query[divided.index] = 1;
+                    query[digi.index] = digi.values.find(x => x.name === 'DIGI1').id;
+                    name = 'digital keypad + DIGI 1';
+                    break;
+                case 5:
+                    // digital keypad + DIGI 2
+                    query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                    query[divided.index] = 2;
+                    query[digi.index] = digi.values.find(x => x.name === 'DIGI2D').id;
+                    name = 'digital keypad + DIGI 2';
+                    break;
+            }
+            let rows = this.rows.filter(r => {
+                return controls.reduce((has, c, i) => {
+                    return has && r[c.index] === query[c.index];
+                }, true);
+            });
+            if (rows.length > 0) {
+                v.disabled = false;
+            } else {
+                v.disabled = true;
+            }
+            // console.log(name, rows.length, v);
+        });
+        callButtons.updateState();
+        */
+        // console.log('callButtons', callButtons, 'divided', divided, 'digi', digi);
+        // callButtons.onSelect(callButtons.values.find(x => x.id == 1), true);
       }
     }, {
       key: "setRow",
@@ -2512,9 +2805,18 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           }
         });
         var price = parseFloat(result.price);
-        this.element.querySelectorAll('.result-price').forEach(function (x) {
-          return x.innerHTML = "\u20AC ".concat(price.toFixed(2));
-        });
+        var paths = new data_service_1.MtmPaths();
+
+        if (paths.showPrices == '1') {
+          this.element.querySelectorAll('.result-price').forEach(function (x) {
+            return x.innerHTML = "\u20AC ".concat(price.toFixed(2));
+          });
+        } else {
+          this.element.querySelectorAll('.result-price').forEach(function (x) {
+            return x.innerHTML = "";
+          });
+        }
+
         this.element.querySelector('.result-code').innerHTML = result.code;
         var keys = [constants_1.MtmControlEnum.Module1, constants_1.MtmControlEnum.Module2, constants_1.MtmControlEnum.Module3, constants_1.MtmControlEnum.Module4];
         var descriptions = [];
@@ -2527,7 +2829,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             }).shortDescription);
           }
         });
-        var paths = new data_service_1.MtmPaths();
         this.element.querySelector('.result-description').innerHTML = descriptions.join(', ');
         this.element.querySelector('.result-finish').innerHTML = result.finish;
         this.element.querySelector('.result-system').innerHTML = result.system;
@@ -2553,11 +2854,16 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "render",
       value: function render() {
+        var _this4 = this;
+
         var outlet = this.element.querySelector('.options-outlet');
         this.options.map(function (x) {
           return x.render();
         }).forEach(function (x) {
           return outlet.appendChild(x);
+        });
+        this.options.forEach(function (x) {
+          return x.element = _this4.element.querySelector(".option--".concat(x.key));
         }); // console.log('render.outlet', outlet);
       }
     }, {
@@ -2600,6 +2906,49 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         onScroll();
         window.addEventListener('scroll', onScroll, false);
       }
+    }, {
+      key: "animate",
+      value: function animate() {
+        var _this5 = this;
+
+        this.stickys.forEach(function (node, i) {
+          var content = _this5.stickyContents[i];
+          var top = parseInt(node.getAttribute('sticky')) || 0;
+          var rect = rect_1.default.fromNode(node);
+          var maxtop = node.offsetHeight - content.offsetHeight;
+
+          if (window.innerWidth >= 768) {
+            top = Math.max(0, Math.min(maxtop, top - rect.top));
+            content.setAttribute('style', "transform: translateY(".concat(top, "px);"));
+          } else {
+            content.setAttribute('style', "transform: none;");
+          }
+        });
+      }
+    }, {
+      key: "loop",
+      value: function loop() {
+        var _this6 = this;
+
+        this.animate();
+
+        if (this.playing) {
+          window.requestAnimationFrame(function () {
+            _this6.loop();
+          });
+        }
+      }
+    }, {
+      key: "play",
+      value: function play() {
+        this.playing = true;
+        this.loop();
+      }
+    }, {
+      key: "pause",
+      value: function pause() {
+        this.playing = false;
+      }
     }]);
 
     return MtmConfigurator;
@@ -2607,9 +2956,10 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
   exports.default = MtmConfigurator;
   var configurator = new MtmConfigurator(".configurator");
+  configurator.play();
 });
 
-},{"./controls/constants":2,"./data.service":9,"./utils/dom":11}],11:[function(require,module,exports){
+},{"./controls/constants":2,"./data.service":9,"./utils/dom":11,"./utils/rect":12}],11:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2678,6 +3028,137 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   }();
 
   exports.default = Dom;
+});
+
+},{}],12:[function(require,module,exports){
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* jshint esversion: 6 */
+(function (factory) {
+  if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+    var v = factory(require, exports);
+    if (v !== undefined) module.exports = v;
+  } else if (typeof define === "function" && define.amd) {
+    define(["require", "exports"], factory);
+  }
+})(function (require, exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var Rect =
+  /*#__PURE__*/
+  function () {
+    function Rect(rect) {
+      _classCallCheck(this, Rect);
+
+      this.width = 0;
+      this.height = 0;
+      this.top = 0;
+      this.left = 0;
+      this.right = 0;
+      this.bottom = 0;
+      this.set(rect);
+    }
+
+    _createClass(Rect, [{
+      key: "set",
+      value: function set(rect) {
+        if (rect) {
+          Object.assign(this, rect);
+          this.right = this.left + this.width;
+          this.bottom = this.top + this.height;
+        }
+
+        this.center = {
+          top: this.top + this.height / 2,
+          left: this.left + this.width / 2
+        };
+        this.center.x = this.center.left;
+        this.center.y = this.center.top;
+      }
+    }, {
+      key: "contains",
+      value: function contains(left, top) {
+        return Rect.contains(this, left, top);
+      }
+    }, {
+      key: "intersect",
+      value: function intersect(rect) {
+        return Rect.intersectRect(this, rect);
+      }
+    }, {
+      key: "intersection",
+      value: function intersection(rect) {
+        var center = {
+          x: (this.center.x - rect.center.x) / (rect.width / 2),
+          y: (this.center.y - rect.center.y) / (rect.height / 2)
+        };
+
+        if (this.intersect(rect)) {
+          var dx = this.left > rect.left ? 0 : Math.abs(rect.left - this.left);
+          var dy = this.top > rect.top ? 0 : Math.abs(rect.top - this.top);
+          var x = dx ? 1 - dx / this.width : (rect.left + rect.width - this.left) / this.width;
+          var y = dy ? 1 - dy / this.height : (rect.top + rect.height - this.top) / this.height;
+          x = Math.min(1, x);
+          y = Math.min(1, y);
+          return {
+            x: x,
+            y: y,
+            center: center
+          };
+        } else {
+          return {
+            x: 0,
+            y: 0,
+            center: center
+          };
+        }
+      }
+    }], [{
+      key: "contains",
+      value: function contains(rect, left, top) {
+        return rect.top <= top && top <= rect.bottom && rect.left <= left && left <= rect.right;
+      }
+    }, {
+      key: "intersectRect",
+      value: function intersectRect(r1, r2) {
+        return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
+      }
+    }, {
+      key: "fromNode",
+      value: function fromNode(node) {
+        if (!node.getClientRects().length) {
+          return new Rect();
+        }
+
+        var rect = node.getBoundingClientRect(); // const defaultView = node.ownerDocument.defaultView;
+
+        return new Rect({
+          // top: rect.top + defaultView.pageYOffset,
+          // left: rect.left + defaultView.pageXOffset,
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height
+        });
+      }
+    }]);
+
+    return Rect;
+  }();
+
+  exports.default = Rect;
 });
 
 },{}]},{},[10]);

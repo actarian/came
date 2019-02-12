@@ -18,6 +18,7 @@ export class MtmPaths {
 	parts: string = 'data/parts.json';
 	localizations: string = 'data/localizations.json';
 	configurator: string = 'https://came.yetnot.it/came_configurator';
+	showPrices: string = '1';
 
 	constructor() {
 		if (window.hasOwnProperty('paths')) {
@@ -276,7 +277,7 @@ export default class MtmDataService {
 				Object.keys(keysPool).forEach((key: string) => {
 					keysPool[key].sort();
 				});
-				console.log(JSON.stringify(keysPool));
+				// console.log(JSON.stringify(keysPool));
 				kits.sort((a: MtmKit, b: MtmKit) => {
 					return a.price - b.price;
 				});

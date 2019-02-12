@@ -17,7 +17,9 @@ export class MtmValue {
 	updatePrice?(element: HTMLElement): void {
 		if (element) {
 			const priceElement = element.querySelector(`[data-id="${this.id}"] .price`);
-			priceElement.innerHTML = this.price > 0 ? `+ € ${this.price.toFixed(2)}` : ``;
+			if (priceElement) {
+				priceElement.innerHTML = this.price > 0 ? `+ € ${this.price.toFixed(2)}` : ``;
+			}
 		}
 	}
 

@@ -9,7 +9,7 @@ export class MtmGroup extends MtmControl {
 	}
 
 	getTemplate?(): string {
-		return `<div class="option">
+		return `<div class="option option--${this.key}">
 		<div class="title">${this.name}</div>${
 			this.description ? `<div class="subtitle">${this.description}</div>` : ``
 			}

@@ -10,6 +10,11 @@ export enum MtmControlType {
 	Grid = 4,
 }
 
+export enum MtmSortType {
+	Value = 0,
+	Name = 1,
+}
+
 // code,singleModuleFrame,finish,moduleSize,mount,system,AV,keypad,proximity,infoModule,hearingModule,digitalDisplay,additionalModules,buttons,divided,mounting,
 // flushRainshield,frame,electronicsModule1,frontPiece1,electronicsModule2,frontPiece2,electronicsModule3,frontPiece3,electronicsModule4,frontPiece4,ci,description
 
@@ -89,7 +94,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.AdditionalModules, disabled: true,
 		}, {
-			key: MtmControlEnum.Buttons, lazy: true, nullable: true,
+			key: MtmControlEnum.Buttons, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Name, lazy: true, nullable: true, className: 'control--list--sm',
 		}, {
 			key: MtmControlEnum.Divided, lazy: true, nullable: true,
 		}, {
@@ -141,7 +146,7 @@ export class MtmControls {
 				return { id: i + 1, name: (i + 1).toFixed(0), value: (i + 1) };
 			}), className: 'control--list--sm',
 		}, {
-			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List,
+			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List, lazy: true,
 			values: [
 				{ id: 1, name: locale.buttonSingleName },
 				{ id: 2, name: locale.buttonDoubleName },

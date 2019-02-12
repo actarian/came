@@ -1,6 +1,7 @@
 import Dom from '../utils/dom';
 import { MtmControlType } from './constants';
 import { MtmControl } from './control';
+import { MtmValue } from './value';
 
 export class MtmSelect extends MtmControl {
 
@@ -10,7 +11,7 @@ export class MtmSelect extends MtmControl {
 	}
 
 	getTemplate?(): string {
-		return `<div class="option">
+		return `<div class="option option--${this.key}">
 		<div class="title">${this.name}</div>${
 			this.description ? `<div class="subtitle">${this.description}</div>` : ``
 			}
@@ -23,16 +24,17 @@ export class MtmSelect extends MtmControl {
 	</div>`;
 	}
 
+	getChildTemplate?(item: MtmValue): string {
+		return `<option class="${item.active ? `active` : ``} ${item.disabled ? `disabled` : ``}" value="${item.id}" data-id="${item.id}">${item.name}</option>`;
+	}
+
 	render?(): DocumentFragment {
 		const fragment = this.getFragment();
 		const select = fragment.querySelector('.form-control--select') as HTMLSelectElement;
-		this.values.map(x => {
-			const html = `
-		<option value="${x.id}">${x.name}</option>
-		`;
-			const fragment = Dom.fragmentFromHTML(html);
-			return fragment;
-		}).forEach(x => select.appendChild(x));
+		const fragments = this.values.map(x => Dom.fragmentFromHTML(this.getChildTemplate(x)));
+		const group = fragment.querySelector('.control');
+		fragments.forEach(x => select.appendChild(x));
+		this.element = group as HTMLElement;
 		select.addEventListener('change', (e) => this.onChange(e));
 		const value = this.values.find(x => x.active);
 		if (value) {
@@ -42,13 +44,28 @@ export class MtmSelect extends MtmControl {
 		return fragment;
 	}
 
+	updateState?() {
+		// console.log('MtmSelect.updateState', this.element);
+		if (this.element) {
+			const select = this.element.querySelector('select');
+			this.values.forEach((x, i) => {
+				const option = select.childNodes[i] as Element;
+				if (x.disabled) {
+					option.setAttribute('disabled', 'disabled');
+				} else {
+					option.removeAttribute('disabled');
+				}
+			});
+		}
+	}
+
 	onUpdate(select: HTMLSelectElement): void {
 		if (select) {
 			const id: number = parseInt(select.value);
 			const item = this.values.find(x => x.id === id);
 			this.currentItem = item;
 			// console.log(select.value, id, item);
-			if (item) {
+			if (item && this.element) {
 				const label = this.element.querySelector('.label');
 				label.innerHTML = item.name;
 			}
@@ -62,6 +79,30 @@ export class MtmSelect extends MtmControl {
 	onChange?(e: Event): void {
 		// console.log('MtmSelect.onChange', e.target);
 		this.onUpdate(e.target as HTMLSelectElement);
+	}
+
+	onSelect?(value: MtmValue, prevent: boolean = false) {
+		this.values.forEach(x => x.active = false);
+		this.currentItem = value;
+		// console.log('MtmSelect.onSelect', value);
+		if (value) {
+			value.active = true;
+			if (this.element) {
+				const label = this.element.querySelector('.label');
+				label.innerHTML = value.name;
+				const select = this.element.querySelector('select') as HTMLSelectElement;
+				this.values.forEach((x, i) => {
+					x.active = false;
+					const option = select.childNodes[i] as Element;
+					if (x.active) {
+						option.classList.add('active');
+					} else {
+						option.classList.remove('active');
+					}
+				});
+				select.value = value.id.toString();
+			}
+		}
 	}
 
 }

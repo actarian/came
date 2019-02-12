@@ -76,7 +76,7 @@ a {
 	&.disabled {
 		display: inline-flex;
 		opacity: 1;
-		pointer-events: all;
+		pointer-events: none;
 		background: #f8f8f8;
 		color: #bbb;
 	}
@@ -146,6 +146,7 @@ a {
 
 .btn--info {
 	display: flex;
+	display: none; // !!!
 	justify-content: center;
 	align-items: center;
 	width: 26px;

@@ -1,5 +1,6 @@
+import { MtmPaths } from '../data.service';
 import Dom from '../utils/dom';
-import { MtmControlEnum, MtmControlType, USE_CALCULATED_PRICE } from './constants';
+import { MtmControlEnum, MtmControlType, MtmSortType } from './constants';
 import { MtmValue } from './value';
 
 export class MtmControl {
@@ -15,6 +16,7 @@ export class MtmControl {
 	className?: string = '';
 	nullable?: boolean = false;
 	lazy?: boolean = false;
+	sortType?: MtmSortType = MtmSortType.Value;
 	element?: HTMLElement = null;
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
@@ -63,7 +65,7 @@ export class MtmControl {
 	}
 
 	getTemplate?(): string {
-		return `<div class="option">
+		return `<div class="option option--${this.key}">
 		<div class="title">${this.name}</div>${
 			this.description ? `<div class="subtitle">${this.description}</div>` : ``
 			}
@@ -80,6 +82,7 @@ export class MtmControl {
 	getFragment?(): DocumentFragment {
 		const fragment = Dom.fragmentFromHTML(this.getTemplate());
 		this.element = Dom.fragmentFirstElement(fragment);
+		// console.log(this.key, fragment.children);
 		return fragment;
 	}
 
@@ -90,6 +93,8 @@ export class MtmControl {
 		const buttons = fragments.map(x => Dom.fragmentFirstElement(x) as HTMLButtonElement);
 		buttons.forEach(x => x.addEventListener('click', (e) => this.onClick(x)));
 		fragments.forEach(x => group.appendChild(x));
+		// this.element = group as HTMLElement;
+		// console.log(this.key, this.element);
 		return fragment;
 	}
 
@@ -102,6 +107,9 @@ export class MtmControl {
 			this.onSelected(this.values[index].id);
 		}
 		*/
+		if (!button) {
+			return;
+		}
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
 		buttons.forEach((x: Element) => x.classList.remove('active'));
 		button.classList.add('active');
@@ -130,7 +138,7 @@ export class MtmControl {
 	}
 
 	updateState?() {
-		// console.log('MtmControl.updateState', this.element);
+		// console.log('MtmControl.updateState', this.key, this.element);
 		if (this.element) {
 			const group = this.element.querySelector('.control');
 			this.values.forEach((x, i) => {
@@ -140,7 +148,7 @@ export class MtmControl {
 				} else {
 					button.classList.remove('disabled');
 				}
-
+				// console.log(x.disabled);
 			});
 		}
 	}
@@ -174,12 +182,16 @@ export class MtmControl {
 	}
 
 	sort?(index: number) {
+		const paths = new MtmPaths();
 		this.index = index;
 		if (this.values.length > 0) {
 			this.values.sort((a, b) => a.price - b.price);
 			const minimumPrice = this.values[0].price;
 			if (minimumPrice) {
 				this.values.forEach(x => x.price = x.price - minimumPrice);
+				if (this.sortType === MtmSortType.Name) {
+					this.values.sort((a, b) => parseInt(a.name) - parseInt(b.name));
+				}
 			} else {
 				this.values.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 			}
@@ -198,7 +210,7 @@ export class MtmControl {
 				*/
 			}
 		}
-		if (!USE_CALCULATED_PRICE) {
+		if (paths.showPrices !== '1') {
 			this.values.forEach((x, i) => x.price = 0);
 		}
 		if (this.values.length) {
