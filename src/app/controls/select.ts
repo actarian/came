@@ -28,7 +28,7 @@ export class MtmSelect extends MtmControl {
 	}
 
 	getChildTemplate?(item: MtmValue): string {
-		return `<option class="${item.active ? `active` : ``} ${item.disabled ? `disabled` : ``}" value="${item.id}" data-id="${item.id}">${item.name}</option>`;
+		return `<option class="${item.selected ? `selected` : ``} ${item.disabled ? `disabled` : ``} ${item.active ? `active` : ``}" value="${item.id}" data-id="${item.id}">${item.name}</option>`;
 	}
 
 	render?(): DocumentFragment {
@@ -39,7 +39,7 @@ export class MtmSelect extends MtmControl {
 		fragments.forEach(x => select.appendChild(x));
 		this.element = group as HTMLElement;
 		select.addEventListener('change', (e) => this.onChange(e));
-		const value = this.values.find(x => x.active);
+		const value = this.values.find(x => x.selected);
 		if (value) {
 			select.value = value.id.toFixed();
 		}
@@ -85,22 +85,22 @@ export class MtmSelect extends MtmControl {
 	}
 
 	onSelect?(value: MtmValue, prevent: boolean = false) {
-		this.values.forEach(x => x.active = false);
+		this.values.forEach(x => x.selected = false);
 		this.currentItem = value;
 		// console.log('MtmSelect.onSelect', value);
 		if (value) {
-			value.active = true;
+			value.selected = true;
 			if (this.element) {
 				const label = this.element.querySelector('.label');
 				label.innerHTML = value.name;
 				const select = this.element.querySelector('select') as HTMLSelectElement;
 				this.values.forEach((x, i) => {
-					x.active = false;
+					x.selected = false;
 					const option = select.childNodes[i] as Element;
-					if (x.active) {
-						option.classList.add('active');
+					if (x.selected) {
+						option.classList.add('selected');
 					} else {
-						option.classList.remove('active');
+						option.classList.remove('selected');
 					}
 				});
 				select.value = value.id.toString();

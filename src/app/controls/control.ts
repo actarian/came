@@ -45,7 +45,7 @@ export class MtmControl {
 			});
 			/*
 			if (this.values.length) {
-				this.values[0].active = true;
+				this.values[0].selected = true;
 				this.currentItem = this.values[0];
 			}
 			*/
@@ -76,7 +76,7 @@ export class MtmControl {
 	}
 
 	getChildTemplate?(item: MtmValue): string {
-		return `<button type="button" class="btn btn--option ${item.active ? `active` : ``}" data-id="${item.id}">
+		return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
 		<span class="label">${item.name}</span>${item.getPrice()}
 	</button>`;
 	}
@@ -101,29 +101,20 @@ export class MtmControl {
 	}
 
 	onClick?(button: HTMLButtonElement, prevent: boolean = false) {
-		/*
-		const group = this.element.querySelector('.control');
-		const buttons = Array.prototype.slice.call(group.childNodes);
-		const index = buttons.indexOf(button);
-		if (index !== -1) {
-			this.onSelected(this.values[index].id);
-		}
-		*/
-		console.log('onClick');
 		if (!button) {
 			return;
 		}
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
-		buttons.forEach((x: Element) => x.classList.remove('active'));
-		this.values.forEach(x => x.active = false);
+		buttons.forEach((x: Element) => x.classList.remove('selected'));
+		this.values.forEach(x => x.selected = false);
 		const id = parseInt(button.getAttribute('data-id'));
 		const item: MtmValue = this.values.find(x => x.id === id);
 		if (this.currentItem === item) {
-			item.active = false;
+			item.selected = false;
 			this.currentItem = null;
 		} else {
-			button.classList.add('active');
-			item.active = true;
+			button.classList.add('selected');
+			item.selected = true;
 			this.currentItem = item;
 		}
 		if (!prevent && typeof this.didChange === 'function') {
@@ -133,10 +124,10 @@ export class MtmControl {
 	}
 
 	onSelect?(value: MtmValue, prevent: boolean = false) {
-		this.values.forEach(x => x.active = false);
+		this.values.forEach(x => x.selected = false);
 		this.currentItem = value;
 		if (value) {
-			value.active = true;
+			value.selected = true;
 			if (this.element) {
 				const group = this.element.querySelector('.control');
 				const button = group.querySelector(`[data-id="${value.id}"]`) as HTMLButtonElement;
@@ -224,7 +215,7 @@ export class MtmControl {
 		}
 		/*
 		if (this.values.length) {
-			this.values[0].active = true;
+			this.values[0].selected = true;
 		}
 		*/
 	}

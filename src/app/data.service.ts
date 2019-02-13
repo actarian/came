@@ -17,7 +17,7 @@ export class MtmPaths {
 	kits: string = 'data/kits.json';
 	parts: string = 'data/parts.json';
 	localizations: string = 'data/localizations.json';
-	configurator: string = 'https://came.yetnot.it/came_configurator';
+	configurator: string = 'http://websolute.came.com/came_configurator';
 	showPrices: string = '1';
 
 	constructor() {

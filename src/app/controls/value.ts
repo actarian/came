@@ -6,6 +6,7 @@ export class MtmValue {
 	count?: number = 1;
 	order?: number = 0;
 	value?: number = 0;
+	selected?: boolean = false;
 	active?: boolean = false;
 	disabled?: boolean = false;
 	data?: any;

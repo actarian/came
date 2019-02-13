@@ -249,10 +249,10 @@ export default class MtmConfigurator {
 		const hearingModule = this.options.find(x => x.key === MtmControlEnum.HearingModule);
 		const finish = this.options.find(x => x.key === MtmControlEnum.Finish);
 		const mount = this.options.find(x => x.key === MtmControlEnum.Mount);
-		if (apartmentNumber.element) {
+		if (apartmentNumber && apartmentNumber.element) {
 			controls.push(apartmentNumber.element);
 		}
-		if (buttons.element) {
+		if (buttons && buttons.element) {
 			controls.push(buttons.element);
 		}
 		controls.push(callButtons.element);

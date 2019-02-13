@@ -55,7 +55,8 @@ a {
   .btn--option, .btn--option:active, .btn--option:focus {
     border: 2px solid #e5e5e5; }
   .btn--option:hover,
-  *:not(:hover) .btn--option.active {
+  *:not(:hover) .btn--option.active,
+  *:not(:hover) .btn--option.selected {
     border: 2px solid #00b0ec; }
   .btn--option.disabled {
     display: -webkit-inline-box;
@@ -85,7 +86,8 @@ a {
   .btn--system, .btn--system:active, .btn--system:focus {
     border: 2px solid #e5e5e5; }
   .btn--system:hover,
-  *:not(:hover) .btn--system.active {
+  *:not(:hover) .btn--system.active,
+  *:not(:hover) .btn--system.selected {
     border: 2px solid #00b0ec; }
   .btn--system .icon {
     width: 80px;
@@ -98,6 +100,10 @@ a {
       -webkit-box-flex: 0;
           -ms-flex: 0 0 50px;
               flex: 0 0 50px; } }
+  .noprice .btn--system {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
 
 .btn--select {
   position: relative;
@@ -123,7 +129,8 @@ a {
   .btn--select, .btn--select:active, .btn--select:focus {
     border: 2px solid #e5e5e5; }
   .btn--select:hover,
-  *:not(:hover) .btn--select.active {
+  *:not(:hover) .btn--select.active,
+  *:not(:hover) .btn--select.selected {
     border: 2px solid #00b0ec; }
   .btn--select option {
     font-size: 16px;
@@ -186,7 +193,7 @@ a {
         -ms-flex: 1 1 50%;
             flex: 1 1 50%;
     border-radius: 0; }
-    .control--group > .btn:hover, .control--group > .btn.active {
+    .control--group > .btn:hover, .control--group > .btn.active, .control--group > .btn.selected {
       z-index: 1; }
     .control--group > .btn:first-child {
       border-radius: 4px 0 0 4px; }
@@ -248,7 +255,7 @@ a {
             flex: 1 1 50%;
     border-radius: 0;
     margin: 0 -2px -2px 0; }
-    .control--grid > .btn:hover, .control--grid > .btn.active {
+    .control--grid > .btn:hover, .control--grid > .btn.active, .control--grid > .btn.selected {
       z-index: 1; }
     .control--grid > .btn:first-child {
       border-radius: 4px 0 0 0; }

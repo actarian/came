@@ -919,7 +919,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         });
         /*
         if (this.values.length) {
-            this.values[0].active = true;
+            this.values[0].selected = true;
             this.currentItem = this.values[0];
         }
         */
@@ -935,7 +935,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<button type=\"button\" class=\"btn btn--option ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<span class=\"label\">").concat(item.name, "</span>").concat(item.getPrice(), "\n\t</button>");
+        return "<button type=\"button\" class=\"btn btn--option ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<span class=\"label\">").concat(item.name, "</span>").concat(item.getPrice(), "\n\t</button>");
       }
     }, {
       key: "getFragment",
@@ -975,26 +975,16 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       value: function onClick(button) {
         var prevent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-        /*
-        const group = this.element.querySelector('.control');
-        const buttons = Array.prototype.slice.call(group.childNodes);
-        const index = buttons.indexOf(button);
-        if (index !== -1) {
-            this.onSelected(this.values[index].id);
-        }
-        */
-        console.log('onClick');
-
         if (!button) {
           return;
         }
 
         var buttons = Array.prototype.slice.call(button.parentNode.childNodes);
         buttons.forEach(function (x) {
-          return x.classList.remove('active');
+          return x.classList.remove('selected');
         });
         this.values.forEach(function (x) {
-          return x.active = false;
+          return x.selected = false;
         });
         var id = parseInt(button.getAttribute('data-id'));
         var item = this.values.find(function (x) {
@@ -1002,11 +992,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         });
 
         if (this.currentItem === item) {
-          item.active = false;
+          item.selected = false;
           this.currentItem = null;
         } else {
-          button.classList.add('active');
-          item.active = true;
+          button.classList.add('selected');
+          item.selected = true;
           this.currentItem = item;
         }
 
@@ -1020,12 +1010,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       value: function onSelect(value) {
         var prevent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
         this.values.forEach(function (x) {
-          return x.active = false;
+          return x.selected = false;
         });
         this.currentItem = value;
 
         if (value) {
-          value.active = true;
+          value.selected = true;
 
           if (this.element) {
             var group = this.element.querySelector('.control');
@@ -1144,7 +1134,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         }
         /*
         if (this.values.length) {
-            this.values[0].active = true;
+            this.values[0].selected = true;
         }
         */
 
@@ -1237,7 +1227,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<div class=\"btn btn--system ".concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"").concat(this.paths.assets, "img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
+        return "<div class=\"btn btn--system ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"").concat(this.paths.assets, "img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
       }
     }]);
 
@@ -1456,7 +1446,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<option class=\"".concat(item.active ? "active" : "", " ").concat(item.disabled ? "disabled" : "", "\" value=\"").concat(item.id, "\" data-id=\"").concat(item.id, "\">").concat(item.name, "</option>");
+        return "<option class=\"".concat(item.selected ? "selected" : "", " ").concat(item.disabled ? "disabled" : "", " ").concat(item.active ? "active" : "", "\" value=\"").concat(item.id, "\" data-id=\"").concat(item.id, "\">").concat(item.name, "</option>");
       }
     }, {
       key: "render",
@@ -1477,7 +1467,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           return _this2.onChange(e);
         });
         var value = this.values.find(function (x) {
-          return x.active;
+          return x.selected;
         });
 
         if (value) {
@@ -1536,25 +1526,25 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       value: function onSelect(value) {
         var prevent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
         this.values.forEach(function (x) {
-          return x.active = false;
+          return x.selected = false;
         });
         this.currentItem = value; // console.log('MtmSelect.onSelect', value);
 
         if (value) {
-          value.active = true;
+          value.selected = true;
 
           if (this.element) {
             var label = this.element.querySelector('.label');
             label.innerHTML = value.name;
             var select = this.element.querySelector('select');
             this.values.forEach(function (x, i) {
-              x.active = false;
+              x.selected = false;
               var option = select.childNodes[i];
 
-              if (x.active) {
-                option.classList.add('active');
+              if (x.selected) {
+                option.classList.add('selected');
               } else {
-                option.classList.remove('active');
+                option.classList.remove('selected');
               }
             });
             select.value = value.id.toString();
@@ -1604,6 +1594,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       this.count = 1;
       this.order = 0;
       this.value = 0;
+      this.selected = false;
       this.active = false;
       this.disabled = false;
 
@@ -1687,7 +1678,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     this.kits = 'data/kits.json';
     this.parts = 'data/parts.json';
     this.localizations = 'data/localizations.json';
-    this.configurator = 'https://came.yetnot.it/came_configurator';
+    this.configurator = 'http://websolute.came.com/came_configurator';
     this.showPrices = '1';
 
     if (window.hasOwnProperty('paths')) {
@@ -2464,11 +2455,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           return x.key === constants_1.MtmControlEnum.Mount;
         });
 
-        if (apartmentNumber.element) {
+        if (apartmentNumber && apartmentNumber.element) {
           controls.push(apartmentNumber.element);
         }
 
-        if (buttons.element) {
+        if (buttons && buttons.element) {
           controls.push(buttons.element);
         }
 

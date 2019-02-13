@@ -72,7 +72,8 @@ a {
 	}
 
 	&:hover,
-	*:not(:hover) &.active {
+	*:not(:hover) &.active,
+	*:not(:hover) &.selected {
 		border: 2px solid #00b0ec;
 	}
 
@@ -100,7 +101,8 @@ a {
 	}
 
 	&:hover,
-	*:not(:hover) &.active {
+	*:not(:hover) &.active,
+	*:not(:hover) &.selected {
 		border: 2px solid #00b0ec;
 	}
 
@@ -115,6 +117,11 @@ a {
 			flex: 0 0 50px;
 		}
 	}
+
+	.noprice & {
+		justify-content: center;
+	}
+
 }
 
 .btn--select {
@@ -139,7 +146,8 @@ a {
 	}
 
 	&:hover,
-	*:not(:hover) &.active {
+	*:not(:hover) &.active,
+	*:not(:hover) &.selected {
 		border: 2px solid #00b0ec;
 	}
 
