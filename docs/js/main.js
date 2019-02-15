@@ -784,12 +784,20 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           nullable: true,
           lazy: true,
           className: 'control--list--sm',
-          values: new Array(exports.MAX_APARTMENTS).fill(0).map(function (x, i) {
-            return {
-              id: i + 1,
-              name: (i + 1).toFixed(0),
-              value: i + 1
-            };
+          values: new Array(27).fill(0).map(function (x, i) {
+            if (i === 26) {
+              return {
+                id: 48,
+                name: '> 26',
+                value: 48
+              };
+            } else {
+              return {
+                id: i + 1,
+                name: (i + 1).toFixed(0),
+                value: i + 1
+              };
+            }
           })
         }, {
           key: MtmControlEnum.CallButtons,

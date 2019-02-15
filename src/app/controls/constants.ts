@@ -145,8 +145,12 @@ export class MtmControls {
 		},
 		{
 			key: MtmControlEnum.ApartmentNumber, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Numeric, nullable: true, lazy: true, className: 'control--list--sm',
-			values: new Array(MAX_APARTMENTS).fill(0).map((x: number, i: number) => {
-				return { id: i + 1, name: (i + 1).toFixed(0), value: i + 1 };
+			values: new Array(27).fill(0).map((x: number, i: number) => {
+				if (i === 26) {
+					return { id: 48, name: '> 26', value: 48 };
+				} else {
+					return { id: i + 1, name: (i + 1).toFixed(0), value: i + 1 };
+				}
 			})
 		}, {
 			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List, lazy: true, className: 'control--list--sm',
