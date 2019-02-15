@@ -26,6 +26,21 @@ a {
       font-size: 14px; }
     .btn .price {
       font-size: 14px; } }
+  .btn.selected:after {
+    content: "\E009";
+    font-family: "icons";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: none;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    font-size: 10px;
+    color: #777; }
 
 .btn--cta {
   background: #00b0ec;
@@ -49,9 +64,11 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  min-height: 90px;
   border-radius: 4px;
-  background: white; }
+  background: white;
+  min-height: 80px; }
+  .noprice .btn--option {
+    min-height: 60px; }
   .btn--option, .btn--option:active, .btn--option:focus {
     border: 2px solid #e5e5e5; }
   .btn--option:hover,
@@ -81,19 +98,34 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  min-height: 90px;
-  border-radius: 4px; }
+  border-radius: 4px;
+  min-height: 80px; }
+  .noprice .btn--system {
+    min-height: 60px; }
   .btn--system, .btn--system:active, .btn--system:focus {
     border: 2px solid #e5e5e5; }
   .btn--system:hover,
   *:not(:hover) .btn--system.active,
   *:not(:hover) .btn--system.selected {
     border: 2px solid #00b0ec; }
+  .btn--system.disabled {
+    pointer-events: none;
+    background: #f8f8f8;
+    color: #bbb; }
+    .btn--system.disabled .icon {
+      mix-blend-mode: multiply; }
   .btn--system .icon {
     width: 80px;
     -webkit-box-flex: 0;
         -ms-flex: 0 0 80px;
             flex: 0 0 80px; }
+  .noprice .btn--system .icon {
+    width: 60px;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 60px;
+            flex: 0 0 60px; }
+  .btn--system .price {
+    margin-right: 10px; }
   @media screen and (max-width: 767px) {
     .btn--system .icon {
       width: 50px;
@@ -120,12 +152,16 @@ a {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  min-height: 90px; }
+  min-height: 80px; }
   .btn--select .form-control--select {
     position: absolute;
     width: 100%;
-    height: 90px;
-    opacity: 0; }
+    opacity: 0;
+    height: 80px; }
+  .noprice .btn--select {
+    min-height: 60px; }
+    .noprice .btn--select .form-control--select {
+      height: 60px; }
   .btn--select, .btn--select:active, .btn--select:focus {
     border: 2px solid #e5e5e5; }
   .btn--select:hover,
@@ -202,9 +238,13 @@ a {
   .control--group .btn + .btn {
     margin-left: -2px; }
 
-.control--group--sm > .btn {
-  min-height: 42px; }
-
+/*
+.control--group--sm {
+	& > .btn {
+		min-height: 80px;
+	}
+}
+*/
 .control--list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -227,11 +267,17 @@ a {
   .control--list .btn + .btn {
     margin-top: 12px; }
 
-.control--list--sm .btn--select {
-  min-height: 42px; }
-  .control--list--sm .btn--select .form-control--select {
-    height: 42px; }
+/*
+.control--list--sm {
+	.btn--select {
+		min-height: 80px;
 
+		.form-control--select {
+			height: 80px;
+		}
+	}
+}
+*/
 .control--grid {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -294,6 +340,9 @@ body {
 strong {
   font-weight: 900; }
 
+.main-footer {
+  display: none !important; }
+
 .configurator {
   margin-bottom: 0; }
 
@@ -314,8 +363,8 @@ strong {
 
 .section--subheader {
   background: #064f74;
-  min-height: 180px;
-  padding: 70px 0; }
+  min-height: 100px;
+  padding: 30px 0; }
 
 .section--configurator .container {
   display: -webkit-box;

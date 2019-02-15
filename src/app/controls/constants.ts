@@ -75,7 +75,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.SingleModuleFrame, disabled: true,
 		}, {
-			key: MtmControlEnum.Finish, name: locale.finishName, type: MtmControlType.Group, lazy: true,
+			key: MtmControlEnum.Finish, name: locale.finishName, type: MtmControlType.Group, defaultId: 2, lazy: true,
 		}, {
 			key: MtmControlEnum.ModuleSize, name: locale.moduleSizeName, description: locale.moduleSizeDescription, type: MtmControlType.Group
 		}, {
@@ -97,7 +97,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.AdditionalModules, disabled: true,
 		}, {
-			key: MtmControlEnum.Buttons, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Numeric, lazy: true, nullable: true, className: 'control--list--sm',
+			key: MtmControlEnum.Buttons, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Numeric, nullable: true, lazy: true, className: 'control--list--sm',
 		}, {
 			key: MtmControlEnum.Divided, lazy: true, nullable: true,
 		}, {
@@ -130,33 +130,33 @@ export class MtmControls {
 			key: MtmControlEnum.Price
 		}, // customs
 		{
-			key: MtmControlEnum.KnownTecnology, name: locale.knownTecnologyName, type: MtmControlType.Group,
+			key: MtmControlEnum.KnownTecnology, name: locale.knownTecnologyName, type: MtmControlType.Group, className: 'control--group--sm',
 			values: [
 				{ id: 1, name: locale.buttonNoName },
 				{ id: 2, name: locale.buttonYesName },
-			], className: 'control--group--sm',
+			]
 		},
 		{
-			key: MtmControlEnum.ConstrainedDimension, name: locale.constrainedDimensionName, type: MtmControlType.Group,
+			key: MtmControlEnum.ConstrainedDimension, name: locale.constrainedDimensionName, type: MtmControlType.Group, className: 'control--group--sm',
 			values: [
 				{ id: 1, name: locale.buttonNoName },
 				{ id: 2, name: locale.buttonYesName },
-			], className: 'control--group--sm'
+			]
 		},
 		{
-			key: MtmControlEnum.ApartmentNumber, name: locale.apartmentNumberName, type: MtmControlType.Select,
+			key: MtmControlEnum.ApartmentNumber, name: locale.apartmentNumberName, type: MtmControlType.Select, sortType: MtmSortType.Numeric, nullable: true, lazy: true, className: 'control--list--sm',
 			values: new Array(MAX_APARTMENTS).fill(0).map((x: number, i: number) => {
 				return { id: i + 1, name: (i + 1).toFixed(0), value: i + 1 };
-			}), className: 'control--list--sm',
+			})
 		}, {
-			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List, lazy: true,
+			key: MtmControlEnum.CallButtons, name: locale.callButtonsName, type: MtmControlType.List, lazy: true, className: 'control--list--sm',
 			values: [
 				{ id: 1, name: locale.buttonSingleName },
 				{ id: 2, name: locale.buttonDoubleName },
 				{ id: 3, name: locale.buttonDigitalName },
 				{ id: 4, name: locale.buttonDigitalDigi1Name },
 				{ id: 5, name: locale.buttonDigitalDigi2Name },
-			], className: 'control--list--sm',
+			]
 		}, // default
 		{
 			key: MtmControlEnum.Default, name: 'name', description: 'description', type: MtmControlType.Group

@@ -20,6 +20,7 @@ export class MtmControl {
 	element?: HTMLElement = null;
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
+	defaultId?: number;
 
 	constructor(options: MtmControl) {
 		/*
@@ -213,11 +214,19 @@ export class MtmControl {
 		if (paths.showPrices !== '1') {
 			this.values.forEach((x, i) => x.price = 0);
 		}
-		/*
-		if (this.values.length) {
-			this.values[0].selected = true;
+		if (this.key === MtmControlEnum.Finish) {
+			console.log(this.values.map(x => x.name));
 		}
-		*/
+		if (this.values.length && this.defaultId) {
+			// this.values[0].selected = true;
+			const defaultValue = this.values.find(x => x.id === this.defaultId);
+			if (defaultValue) {
+				defaultValue.selected = true;
+				this.currentItem = defaultValue;
+				this.values.splice(this.values.indexOf(defaultValue), 1);
+				this.values.unshift(defaultValue);
+			}
+		}
 	}
 
 }

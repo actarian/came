@@ -28,15 +28,16 @@ export default class MtmConfigurator {
 		this.stickys = stickys;
 		this.stickyContents = stickys.map(x => x.querySelector('[sticky-content]'));
 		// this.addMediaScrollListener();
-		this.addRecapScrollListener();
+		// this.addRecapScrollListener();
+		this.addRecapScrollFixed();
 		MtmDataService.fetch((cols: MtmControl[], rows: number[][]) => {
 			this.cols = cols;
 			this.rows = rows;
 			let options = [
 				MtmDataService.newControlByKey(MtmControlEnum.KnownTecnology),
 				MtmDataService.newControlByKey(MtmControlEnum.ConstrainedDimension),
-				// MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
-				MtmDataService.optionWithKey(MtmControlEnum.Buttons),
+				MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
+				// MtmDataService.optionWithKey(MtmControlEnum.Buttons),
 				MtmDataService.newControlByKey(MtmControlEnum.CallButtons),
 				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.optionWithKey(MtmControlEnum.Keypad),
@@ -57,9 +58,11 @@ export default class MtmConfigurator {
 						this.doReorder();
 						this.onSearch(this.didSelectCallButton());
 						break;
-					case MtmControlEnum.ApartmentNumber:
-						this.onSearch(this.didSelectCallButton());
-						break;
+					/*
+				case MtmControlEnum.ApartmentNumber:
+					this.onSearch(this.didSelectApartmentNumber());
+					break;
+					*/
 					case MtmControlEnum.CallButtons:
 						this.onSearch(this.didSelectCallButton());
 						break;
@@ -80,57 +83,145 @@ export default class MtmConfigurator {
 		});
 	}
 
+	getRows(key?: MtmControlEnum, value?: MtmValue) {
+		this.currentKey = key;
+		const controls = this.options.map(x => {
+			const index = this.cols.indexOf(x);
+			if (index !== -1) {
+				return x;
+			} else {
+				return { index };
+			}
+		}).filter(x => x.index !== -1).map(x => x as MtmControl);
+		let selected = controls.filter(x => x.selected && x.selected.id !== -1);
+		let unselected = controls.filter(x => !(x.selected && x.selected.id !== -1));
+		unselected.forEach(x => {
+			x.values.forEach(v => v.disabled = true);
+		});
+		/*
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		if (buttons.selected && buttons.selected.id !== -1) {
+			selected.unshift(buttons);
+		} else {
+			buttons.values.forEach(v => {
+				v.disabled = false;
+			});
+			buttons.updateState();
+		}
+		*/
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		if (divided.selected && divided.selected.id !== -1) {
+			selected.unshift(divided);
+		} else {
+			divided.values.forEach(v => {
+				v.disabled = false;
+			});
+			divided.updateState();
+		}
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+		if (digi.selected && digi.selected.id !== -1) {
+			selected.unshift(digi);
+		} else {
+			digi.values.forEach(v => {
+				v.disabled = false;
+			});
+			digi.updateState();
+		}
+		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
+		if (apartmentNumber.selected && apartmentNumber.selected.id !== -1) {
+			selected.unshift(apartmentNumber);
+		}
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		let filteredRows = this.rows.filter(x => {
+			return selected.reduce((has, c) => {
+				if (c.key === MtmControlEnum.ApartmentNumber) {
+					const buttonId = x[buttons.index];
+					const buttonValue = buttons.values.find(v => v.id === buttonId);
+					return has && apartmentNumber.selected.value <= buttonValue.value;
+				} else if (c.key === key) {
+					if (value) {
+						if (value.id === -1) {
+							return true;
+						} else {
+							return has && x[c.index] === value.id;
+						}
+					} else {
+						return has && x[c.index] === c.selected.id;
+					}
+				} else {
+					return has && x[c.index] === c.selected.id;
+				}
+			}, true);
+		});
+		filteredRows.forEach(r => {
+			unselected.forEach(c => {
+				c.values.forEach(v => {
+					if (v.id === r[c.index]) {
+						v.disabled = false;
+					}
+				});
+				c.updateState();
+			});
+		});
+		return filteredRows;
+	}
+
+	didSelectApartmentNumber(): MtmControlEnum {
+		let key: MtmControlEnum;
+		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
+		key = MtmControlEnum.ApartmentNumber;
+		return key;
+	}
+
+	setApartmentNumberState(filteredRows: number[][]) {
+		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+		// filteredRows = this.getRows(MtmControlEnum.Buttons, buttons.values.find(x => x.value === -1));
+		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
+		apartmentNumber.values.forEach(x => x.disabled = true);
+		filteredRows.forEach(r => {
+			const buttonId = r[buttons.index];
+			const button = buttons.values.find(b => b.id === buttonId);
+			apartmentNumber.values.forEach(v => {
+				v.disabled = v.disabled && !(button.value >= v.value);
+			});
+			apartmentNumber.updateState();
+		});
+	}
+
 	didSelectCallButton(): MtmControlEnum {
 		let key: MtmControlEnum;
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
 		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
 		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
 		if (callButtons.selected.id !== -1) {
-			/*
-			const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
-			let apartmentNumberValue = apartmentNumber.selected.value;
-			if (callButtons.selected.id === 2) {
-				apartmentNumberValue = Math.ceil(apartmentNumberValue / 2) * 2;
-			}
-			const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
-			if (!firstValue && callButtons.selected.id < 3) {
-				callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
-			}
-			*/
 			// console.log('firstValue', firstValue);
 			switch (callButtons.selected.id) {
 				case 1:
 					// pulsante singolo
-					// buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.currentItem = null;
 					key = MtmControlEnum.Divided;
 					break;
 				case 2:
 					// pulsante doppio
-					// buttons.onSelect(firstValue);
 					divided.onSelect(divided.values.find(x => x.id === 2));
 					digi.currentItem = null;
 					key = MtmControlEnum.Divided;
 					break;
 				case 3:
 					// digital keypad
-					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
 					key = MtmControlEnum.Keypad;
 					break;
 				case 4:
 					// digital keypad + DIGI 1
-					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 1));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
 					key = MtmControlEnum.Digi;
 					break;
 				case 5:
 					// digital keypad + DIGI 2
-					// buttons.onSelect(null);
 					divided.onSelect(divided.values.find(x => x.id === 2));
 					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
 					key = MtmControlEnum.Digi;
@@ -145,83 +236,56 @@ export default class MtmConfigurator {
 			);
 			*/
 		} else {
-			buttons.currentItem = null;
 			divided.currentItem = null;
 			digi.currentItem = null;
 		}
 		return key;
 	}
 
-	didSelectCallButton__(): MtmControlEnum {
-		let key: MtmControlEnum;
+	setCallButtonsState(filteredRows: number[][]) {
+		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		if (callButtons.selected) {
-			const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
-			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
-			let buttonsValue = buttons.selected.value;
-			if (callButtons.selected.id === 2) {
-				buttonsValue = Math.ceil(buttonsValue / 2) * 2;
-			}
-			// const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
-			/*
-			if (!buttonsValue && callButtons.selected.id < 3) {
-				callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
-			}
-			*/
-			// console.log('buttonsValue', buttonsValue, callButtons.selected.id);
-			switch (callButtons.selected.id) {
-				case 1:
-					// pulsante singolo
-					// buttons.onSelect(buttonsValue);
-					if (buttonsValue > 13) {
-						buttons.onSelect(buttons.values.find(x => x.id == 1), true);
-					}
-					divided.onSelect(divided.values.find(x => x.id === 1));
-					digi.onSelect(null);
-					key = MtmControlEnum.Divided;
-					break;
-				case 2:
-					// pulsante doppio
-					// buttons.onSelect(buttonsValue);
-					if (buttonsValue > 26) {
-						buttons.onSelect(buttons.values.find(x => x.id == 2), true);
-					}
-					divided.onSelect(divided.values.find(x => x.id === 2));
-					digi.onSelect(null);
-					key = MtmControlEnum.Divided;
-					break;
-				case 3:
-					// digital keypad
-					// buttons.onSelect(null);
-					divided.onSelect(divided.values.find(x => x.id === 1));
-					digi.onSelect(digi.values.find(x => x.name === 'DIGI'));
-					key = MtmControlEnum.Keypad;
-					break;
-				case 4:
-					// digital keypad + DIGI 1
-					// buttons.onSelect(null);
-					divided.onSelect(divided.values.find(x => x.id === 1));
-					digi.onSelect(digi.values.find(x => x.name === 'DIGI1'));
-					key = MtmControlEnum.Digi;
-					break;
-				case 5:
-					// digital keypad + DIGI 2
-					// buttons.onSelect(null);
-					divided.onSelect(divided.values.find(x => x.id === 2));
-					digi.onSelect(digi.values.find(x => x.name === 'DIGI2D'));
-					key = MtmControlEnum.Digi;
-					break;
-			}
-			/*
-			console.log(
-				'buttons', buttonsValue,
-				'divided', divided.selected.id,
-				'digi', digi.selected.id
-			);
-			*/
-		}
-		return key;
+		callButtons.values.forEach(x => x.disabled = true);
+		filteredRows.forEach(r => {
+			const dividedId = r[divided.index];
+			const digiId = r[digi.index];
+			// console.log(dividedId, digiId);
+			callButtons.values.forEach(v => {
+				let name = '';
+				switch (v.id) {
+					case 1:
+						// pulsante singolo
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === 1);
+						name = 'pulsante singolo';
+						break;
+					case 2:
+						// pulsante doppio
+						v.disabled = v.disabled && !(dividedId === 2 && digiId === 1);
+						name = 'pulsante doppio';
+						break;
+					case 3:
+						// digital keypad
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI').id);
+						name = 'digital keypad';
+						break;
+					case 4:
+						// digital keypad + DIGI 1
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI1').id);
+						name = 'digital keypad + DIGI 1';
+						break;
+					case 5:
+						// digital keypad + DIGI 2
+						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+						v.disabled = v.disabled && !(dividedId === 2 && digiId === digi.values.find(x => x.name === 'DIGI2D').id);
+						name = 'digital keypad + DIGI 2';
+						break;
+				}
+			});
+			callButtons.updateState();
+		});
 	}
 
 	doReorder() {
@@ -282,182 +346,10 @@ export default class MtmConfigurator {
 		// console.log('doReorder');
 	}
 
-	getRows__(key?: MtmControlEnum, value?: MtmValue) {
-		this.currentKey = key;
-		const knownTecnology = this.options.find(x => x.key === MtmControlEnum.KnownTecnology);
-		const constrainedDimension = this.options.find(x => x.key === MtmControlEnum.ConstrainedDimension);
-		const controls = this.options.map(x => {
-			const index = this.cols.indexOf(x);
-			if (index !== -1 && x.key !== key) {
-				switch (x.key) {
-					case MtmControlEnum.System:
-						x.lazy = knownTecnology.selected.id !== 2;
-						break;
-					case MtmControlEnum.ModuleSize:
-						x.lazy = constrainedDimension.selected.id !== 2;
-						break;
-				}
-				return x;
-			} else {
-				return { index };
-			}
-		}).filter(x => x.index !== -1).map(x => x as MtmControl).filter(x => x.selected && x.selected.id !== -1);
-		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-		if (buttons.selected.id !== -1) {
-			// console.log(buttons.index);
-			// console.log('onSearch', buttons.selected.id);
-			controls.unshift(buttons);
-		}
-		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
-		if (divided.selected.id !== -1) {
-			// console.log('onSearch', divided.selected.id);
-			controls.unshift(divided);
-		}
-		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
-		if (digi.selected.id !== -1) {
-			// console.log('onSearch', digi.selected.id);
-			controls.unshift(digi);
-		}
-		if (key) {
-			// force clicked item
-			controls.unshift(MtmDataService.optionWithKey(key));
-		}
-		let filteredRows = this.rows.filter(x => {
-			return controls.reduce((has, c) => {
-				if (c.key === key) {
-					return has && x[c.index] === (value ? value.id : c.selected.id);
-				} else if (c.lazy) {
-					return has;
-				} else {
-					return has && x[c.index] === c.selected.id;
-				}
-			}, true);
-		});
-		const lazyControls = controls.filter(c => c.lazy);
-		// console.log(controls.filter(c => c.lazy).map(x => x.key + ':' + x.selected.id));
-		lazyControls.forEach(c => {
-			const strictRows = filteredRows.filter(x => x[c.index] === c.selected.id);
-			/*
-			if (c.key === MtmControlEnum.Buttons) {
-				filteredRows.forEach(x => {
-					console.log(c.key, c.selected.id, x[c.index]);
-				});
-			}
-			*/
-			if (strictRows.length) {
-				filteredRows = strictRows;
-			}
-		});
-		return filteredRows;
-	}
-
-	getRows(key?: MtmControlEnum, value?: MtmValue) {
-		this.currentKey = key;
-		const controls = this.options.map(x => {
-			const index = this.cols.indexOf(x);
-			if (index !== -1) {
-				return x;
-			} else {
-				return { index };
-			}
-		}).filter(x => x.index !== -1).map(x => x as MtmControl);
-		let selected = controls.filter(x => x.selected && x.selected.id !== -1);
-		let unselected = controls.filter(x => !(x.selected && x.selected.id !== -1));
-		unselected.forEach(x => {
-			x.values.forEach(v => v.disabled = true);
-		});
-		/*
-		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-		if (buttons.selected && buttons.selected.id !== -1) {
-			selected.unshift(buttons);
-		} else {
-			buttons.values.forEach(v => {
-				v.disabled = false;
-			});
-			buttons.updateState();
-		}
-		*/
-		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
-		if (divided.selected && divided.selected.id !== -1) {
-			selected.unshift(divided);
-		} else {
-			divided.values.forEach(v => {
-				v.disabled = false;
-			});
-			divided.updateState();
-		}
-		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
-		if (digi.selected && digi.selected.id !== -1) {
-			selected.unshift(digi);
-		} else {
-			digi.values.forEach(v => {
-				v.disabled = false;
-			});
-			digi.updateState();
-		}
-		let filteredRows = this.rows.filter(x => {
-			return selected.reduce((has, c) => {
-				if (c.key === key) {
-					return has && x[c.index] === (value ? value.id : c.selected.id);
-				} else {
-					return has && x[c.index] === c.selected.id;
-				}
-			}, true);
-		});
-		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		callButtons.values.forEach(x => x.disabled = true);
-		filteredRows.forEach(r => {
-			unselected.forEach(control => {
-				control.values.forEach(v => {
-					if (v.id === r[control.index]) {
-						v.disabled = false;
-					}
-				});
-				control.updateState();
-			});
-			const dividedId = r[divided.index];
-			const digiId = r[digi.index];
-			// console.log(dividedId, digiId);
-			callButtons.values.forEach(v => {
-				let name = '';
-				switch (v.id) {
-					case 1:
-						// pulsante singolo
-						v.disabled = v.disabled && !(dividedId === 1 && digiId === 1);
-						name = 'pulsante singolo';
-						break;
-					case 2:
-						// pulsante doppio
-						v.disabled = v.disabled && !(dividedId === 2 && digiId === 1);
-						name = 'pulsante doppio';
-						break;
-					case 3:
-						// digital keypad
-						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI').id);
-						name = 'digital keypad';
-						break;
-					case 4:
-						// digital keypad + DIGI 1
-						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-						v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(x => x.name === 'DIGI1').id);
-						name = 'digital keypad + DIGI 1';
-						break;
-					case 5:
-						// digital keypad + DIGI 2
-						// query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-						v.disabled = v.disabled && !(dividedId === 2 && digiId === digi.values.find(x => x.name === 'DIGI2D').id);
-						name = 'digital keypad + DIGI 2';
-						break;
-				}
-			});
-			callButtons.updateState();
-		});
-		return filteredRows;
-	}
-
 	onSearch(key?: MtmControlEnum) {
 		const filteredRows = this.getRows(key);
+		this.setApartmentNumberState(filteredRows);
+		this.setCallButtonsState(filteredRows);
 		// console.log(filteredRows.length);
 		if (filteredRows.length > 0) {
 			const row = filteredRows[0];
@@ -735,6 +627,11 @@ export default class MtmConfigurator {
 		};
 		onScroll();
 		window.addEventListener('scroll', onScroll, false);
+	}
+
+	addRecapScrollFixed() {
+		const inner = this.element.querySelector('.section--recap--fixed > .inner') as HTMLElement;
+		inner.classList.add('fixed');
 	}
 
 	animate() {

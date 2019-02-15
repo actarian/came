@@ -648,6 +648,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           key: MtmControlEnum.Finish,
           name: locale.finishName,
           type: MtmControlType.Group,
+          defaultId: 2,
           lazy: true
         }, {
           key: MtmControlEnum.ModuleSize,
@@ -711,8 +712,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           name: locale.apartmentNumberName,
           type: MtmControlType.Select,
           sortType: MtmSortType.Numeric,
-          lazy: true,
           nullable: true,
+          lazy: true,
           className: 'control--list--sm'
         }, {
           key: MtmControlEnum.Divided,
@@ -755,43 +756,47 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           key: MtmControlEnum.KnownTecnology,
           name: locale.knownTecnologyName,
           type: MtmControlType.Group,
+          className: 'control--group--sm',
           values: [{
             id: 1,
             name: locale.buttonNoName
           }, {
             id: 2,
             name: locale.buttonYesName
-          }],
-          className: 'control--group--sm'
+          }]
         }, {
           key: MtmControlEnum.ConstrainedDimension,
           name: locale.constrainedDimensionName,
           type: MtmControlType.Group,
+          className: 'control--group--sm',
           values: [{
             id: 1,
             name: locale.buttonNoName
           }, {
             id: 2,
             name: locale.buttonYesName
-          }],
-          className: 'control--group--sm'
+          }]
         }, {
           key: MtmControlEnum.ApartmentNumber,
           name: locale.apartmentNumberName,
           type: MtmControlType.Select,
+          sortType: MtmSortType.Numeric,
+          nullable: true,
+          lazy: true,
+          className: 'control--list--sm',
           values: new Array(exports.MAX_APARTMENTS).fill(0).map(function (x, i) {
             return {
               id: i + 1,
               name: (i + 1).toFixed(0),
               value: i + 1
             };
-          }),
-          className: 'control--list--sm'
+          })
         }, {
           key: MtmControlEnum.CallButtons,
           name: locale.callButtonsName,
           type: MtmControlType.List,
           lazy: true,
+          className: 'control--list--sm',
           values: [{
             id: 1,
             name: locale.buttonSingleName
@@ -807,8 +812,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           }, {
             id: 5,
             name: locale.buttonDigitalDigi2Name
-          }],
-          className: 'control--list--sm'
+          }]
         }, {
           key: MtmControlEnum.Default,
           name: 'name',
@@ -1082,6 +1086,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "sort",
       value: function sort(index) {
+        var _this3 = this;
+
         var paths = new data_service_1.MtmPaths();
         this.index = index;
 
@@ -1132,12 +1138,26 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             return x.price = 0;
           });
         }
-        /*
-        if (this.values.length) {
-            this.values[0].selected = true;
-        }
-        */
 
+        if (this.key === constants_1.MtmControlEnum.Finish) {
+          console.log(this.values.map(function (x) {
+            return x.name;
+          }));
+        }
+
+        if (this.values.length && this.defaultId) {
+          // this.values[0].selected = true;
+          var defaultValue = this.values.find(function (x) {
+            return x.id === _this3.defaultId;
+          });
+
+          if (defaultValue) {
+            defaultValue.selected = true;
+            this.currentItem = defaultValue;
+            this.values.splice(this.values.indexOf(defaultValue), 1);
+            this.values.unshift(defaultValue);
+          }
+        }
       }
     }, {
       key: "selected",
@@ -2139,13 +2159,14 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.stickyContents = stickys.map(function (x) {
         return x.querySelector('[sticky-content]');
       }); // this.addMediaScrollListener();
+      // this.addRecapScrollListener();
 
-      this.addRecapScrollListener();
+      this.addRecapScrollFixed();
       data_service_1.default.fetch(function (cols, rows) {
         _this.cols = cols;
         _this.rows = rows;
-        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), // MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
-        data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
+        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), // MtmDataService.optionWithKey(MtmControlEnum.Buttons),
+        data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
             // console.log('MtmConfigurator.didChange', control.key, item);
@@ -2158,10 +2179,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
                 break;
 
-              case constants_1.MtmControlEnum.ApartmentNumber:
-                _this.onSearch(_this.didSelectCallButton());
-
-                break;
+              /*
+              case MtmControlEnum.ApartmentNumber:
+              this.onSearch(this.didSelectApartmentNumber());
+              break;
+              */
 
               case constants_1.MtmControlEnum.CallButtons:
                 _this.onSearch(_this.didSelectCallButton());
@@ -2189,33 +2211,162 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }
 
     _createClass(MtmConfigurator, [{
+      key: "getRows",
+      value: function getRows(key, value) {
+        var _this2 = this;
+
+        this.currentKey = key;
+        var controls = this.options.map(function (x) {
+          var index = _this2.cols.indexOf(x);
+
+          if (index !== -1) {
+            return x;
+          } else {
+            return {
+              index: index
+            };
+          }
+        }).filter(function (x) {
+          return x.index !== -1;
+        }).map(function (x) {
+          return x;
+        });
+        var selected = controls.filter(function (x) {
+          return x.selected && x.selected.id !== -1;
+        });
+        var unselected = controls.filter(function (x) {
+          return !(x.selected && x.selected.id !== -1);
+        });
+        unselected.forEach(function (x) {
+          x.values.forEach(function (v) {
+            return v.disabled = true;
+          });
+        });
+        /*
+        const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
+        if (buttons.selected && buttons.selected.id !== -1) {
+            selected.unshift(buttons);
+        } else {
+            buttons.values.forEach(v => {
+                v.disabled = false;
+            });
+            buttons.updateState();
+        }
+        */
+
+        var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
+
+        if (divided.selected && divided.selected.id !== -1) {
+          selected.unshift(divided);
+        } else {
+          divided.values.forEach(function (v) {
+            v.disabled = false;
+          });
+          divided.updateState();
+        }
+
+        var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
+
+        if (digi.selected && digi.selected.id !== -1) {
+          selected.unshift(digi);
+        } else {
+          digi.values.forEach(function (v) {
+            v.disabled = false;
+          });
+          digi.updateState();
+        }
+
+        var apartmentNumber = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ApartmentNumber;
+        });
+
+        if (apartmentNumber.selected && apartmentNumber.selected.id !== -1) {
+          selected.unshift(apartmentNumber);
+        }
+
+        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
+        var filteredRows = this.rows.filter(function (x) {
+          return selected.reduce(function (has, c) {
+            if (c.key === constants_1.MtmControlEnum.ApartmentNumber) {
+              var buttonId = x[buttons.index];
+              var buttonValue = buttons.values.find(function (v) {
+                return v.id === buttonId;
+              });
+              return has && apartmentNumber.selected.value <= buttonValue.value;
+            } else if (c.key === key) {
+              if (value) {
+                if (value.id === -1) {
+                  return true;
+                } else {
+                  return has && x[c.index] === value.id;
+                }
+              } else {
+                return has && x[c.index] === c.selected.id;
+              }
+            } else {
+              return has && x[c.index] === c.selected.id;
+            }
+          }, true);
+        });
+        filteredRows.forEach(function (r) {
+          unselected.forEach(function (c) {
+            c.values.forEach(function (v) {
+              if (v.id === r[c.index]) {
+                v.disabled = false;
+              }
+            });
+            c.updateState();
+          });
+        });
+        return filteredRows;
+      }
+    }, {
+      key: "didSelectApartmentNumber",
+      value: function didSelectApartmentNumber() {
+        var key;
+        var apartmentNumber = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ApartmentNumber;
+        });
+        key = constants_1.MtmControlEnum.ApartmentNumber;
+        return key;
+      }
+    }, {
+      key: "setApartmentNumberState",
+      value: function setApartmentNumberState(filteredRows) {
+        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons); // filteredRows = this.getRows(MtmControlEnum.Buttons, buttons.values.find(x => x.value === -1));
+
+        var apartmentNumber = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.ApartmentNumber;
+        });
+        apartmentNumber.values.forEach(function (x) {
+          return x.disabled = true;
+        });
+        filteredRows.forEach(function (r) {
+          var buttonId = r[buttons.index];
+          var button = buttons.values.find(function (b) {
+            return b.id === buttonId;
+          });
+          apartmentNumber.values.forEach(function (v) {
+            v.disabled = v.disabled && !(button.value >= v.value);
+          });
+          apartmentNumber.updateState();
+        });
+      }
+    }, {
       key: "didSelectCallButton",
       value: function didSelectCallButton() {
         var key;
         var callButtons = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.CallButtons;
         });
-        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
         var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
         var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
 
         if (callButtons.selected.id !== -1) {
-          /*
-          const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
-          let apartmentNumberValue = apartmentNumber.selected.value;
-          if (callButtons.selected.id === 2) {
-              apartmentNumberValue = Math.ceil(apartmentNumberValue / 2) * 2;
-          }
-          const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
-          if (!firstValue && callButtons.selected.id < 3) {
-              callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
-          }
-          */
           // console.log('firstValue', firstValue);
           switch (callButtons.selected.id) {
             case 1:
               // pulsante singolo
-              // buttons.onSelect(firstValue);
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 1;
               }));
@@ -2225,7 +2376,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
             case 2:
               // pulsante doppio
-              // buttons.onSelect(firstValue);
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 2;
               }));
@@ -2235,7 +2385,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
             case 3:
               // digital keypad
-              // buttons.onSelect(null);
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 1;
               }));
@@ -2247,7 +2396,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
             case 4:
               // digital keypad + DIGI 1
-              // buttons.onSelect(null);
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 1;
               }));
@@ -2259,7 +2407,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
             case 5:
               // digital keypad + DIGI 2
-              // buttons.onSelect(null);
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 2;
               }));
@@ -2279,7 +2426,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           */
 
         } else {
-          buttons.currentItem = null;
           divided.currentItem = null;
           digi.currentItem = null;
         }
@@ -2287,111 +2433,66 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         return key;
       }
     }, {
-      key: "didSelectCallButton__",
-      value: function didSelectCallButton__() {
-        var key;
+      key: "setCallButtonsState",
+      value: function setCallButtonsState(filteredRows) {
+        var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
+        var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
         var callButtons = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.CallButtons;
         });
+        callButtons.values.forEach(function (x) {
+          return x.disabled = true;
+        });
+        filteredRows.forEach(function (r) {
+          var dividedId = r[divided.index];
+          var digiId = r[digi.index]; // console.log(dividedId, digiId);
 
-        if (callButtons.selected) {
-          var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
-          var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
-          var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
-          var buttonsValue = buttons.selected.value;
+          callButtons.values.forEach(function (v) {
+            var name = '';
 
-          if (callButtons.selected.id === 2) {
-            buttonsValue = Math.ceil(buttonsValue / 2) * 2;
-          } // const firstValue = buttons.values.find(v => v.value >= apartmentNumberValue);
+            switch (v.id) {
+              case 1:
+                // pulsante singolo
+                v.disabled = v.disabled && !(dividedId === 1 && digiId === 1);
+                name = 'pulsante singolo';
+                break;
 
-          /*
-          if (!buttonsValue && callButtons.selected.id < 3) {
-              callButtons.onSelect(callButtons.values.find(x => x.id == 3), true);
-          }
-          */
-          // console.log('buttonsValue', buttonsValue, callButtons.selected.id);
+              case 2:
+                // pulsante doppio
+                v.disabled = v.disabled && !(dividedId === 2 && digiId === 1);
+                name = 'pulsante doppio';
+                break;
 
+              case 3:
+                // digital keypad
+                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(function (x) {
+                  return x.name === 'DIGI';
+                }).id);
+                name = 'digital keypad';
+                break;
 
-          switch (callButtons.selected.id) {
-            case 1:
-              // pulsante singolo
-              // buttons.onSelect(buttonsValue);
-              if (buttonsValue > 13) {
-                buttons.onSelect(buttons.values.find(function (x) {
-                  return x.id == 1;
-                }), true);
-              }
+              case 4:
+                // digital keypad + DIGI 1
+                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(function (x) {
+                  return x.name === 'DIGI1';
+                }).id);
+                name = 'digital keypad + DIGI 1';
+                break;
 
-              divided.onSelect(divided.values.find(function (x) {
-                return x.id === 1;
-              }));
-              digi.onSelect(null);
-              key = constants_1.MtmControlEnum.Divided;
-              break;
-
-            case 2:
-              // pulsante doppio
-              // buttons.onSelect(buttonsValue);
-              if (buttonsValue > 26) {
-                buttons.onSelect(buttons.values.find(function (x) {
-                  return x.id == 2;
-                }), true);
-              }
-
-              divided.onSelect(divided.values.find(function (x) {
-                return x.id === 2;
-              }));
-              digi.onSelect(null);
-              key = constants_1.MtmControlEnum.Divided;
-              break;
-
-            case 3:
-              // digital keypad
-              // buttons.onSelect(null);
-              divided.onSelect(divided.values.find(function (x) {
-                return x.id === 1;
-              }));
-              digi.onSelect(digi.values.find(function (x) {
-                return x.name === 'DIGI';
-              }));
-              key = constants_1.MtmControlEnum.Keypad;
-              break;
-
-            case 4:
-              // digital keypad + DIGI 1
-              // buttons.onSelect(null);
-              divided.onSelect(divided.values.find(function (x) {
-                return x.id === 1;
-              }));
-              digi.onSelect(digi.values.find(function (x) {
-                return x.name === 'DIGI1';
-              }));
-              key = constants_1.MtmControlEnum.Digi;
-              break;
-
-            case 5:
-              // digital keypad + DIGI 2
-              // buttons.onSelect(null);
-              divided.onSelect(divided.values.find(function (x) {
-                return x.id === 2;
-              }));
-              digi.onSelect(digi.values.find(function (x) {
-                return x.name === 'DIGI2D';
-              }));
-              key = constants_1.MtmControlEnum.Digi;
-              break;
-          }
-          /*
-          console.log(
-              'buttons', buttonsValue,
-              'divided', divided.selected.id,
-              'digi', digi.selected.id
-          );
-          */
-
-        }
-
-        return key;
+              case 5:
+                // digital keypad + DIGI 2
+                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
+                v.disabled = v.disabled && !(dividedId === 2 && digiId === digi.values.find(function (x) {
+                  return x.name === 'DIGI2D';
+                }).id);
+                name = 'digital keypad + DIGI 2';
+                break;
+            }
+          });
+          callButtons.updateState();
+        });
       }
     }, {
       key: "doReorder",
@@ -2496,249 +2597,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         }); // console.log('doReorder');
       }
     }, {
-      key: "getRows__",
-      value: function getRows__(key, value) {
-        var _this2 = this;
-
-        this.currentKey = key;
-        var knownTecnology = this.options.find(function (x) {
-          return x.key === constants_1.MtmControlEnum.KnownTecnology;
-        });
-        var constrainedDimension = this.options.find(function (x) {
-          return x.key === constants_1.MtmControlEnum.ConstrainedDimension;
-        });
-        var controls = this.options.map(function (x) {
-          var index = _this2.cols.indexOf(x);
-
-          if (index !== -1 && x.key !== key) {
-            switch (x.key) {
-              case constants_1.MtmControlEnum.System:
-                x.lazy = knownTecnology.selected.id !== 2;
-                break;
-
-              case constants_1.MtmControlEnum.ModuleSize:
-                x.lazy = constrainedDimension.selected.id !== 2;
-                break;
-            }
-
-            return x;
-          } else {
-            return {
-              index: index
-            };
-          }
-        }).filter(function (x) {
-          return x.index !== -1;
-        }).map(function (x) {
-          return x;
-        }).filter(function (x) {
-          return x.selected && x.selected.id !== -1;
-        });
-        var buttons = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Buttons);
-
-        if (buttons.selected.id !== -1) {
-          // console.log(buttons.index);
-          // console.log('onSearch', buttons.selected.id);
-          controls.unshift(buttons);
-        }
-
-        var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
-
-        if (divided.selected.id !== -1) {
-          // console.log('onSearch', divided.selected.id);
-          controls.unshift(divided);
-        }
-
-        var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
-
-        if (digi.selected.id !== -1) {
-          // console.log('onSearch', digi.selected.id);
-          controls.unshift(digi);
-        }
-
-        if (key) {
-          // force clicked item
-          controls.unshift(data_service_1.default.optionWithKey(key));
-        }
-
-        var filteredRows = this.rows.filter(function (x) {
-          return controls.reduce(function (has, c) {
-            if (c.key === key) {
-              return has && x[c.index] === (value ? value.id : c.selected.id);
-            } else if (c.lazy) {
-              return has;
-            } else {
-              return has && x[c.index] === c.selected.id;
-            }
-          }, true);
-        });
-        var lazyControls = controls.filter(function (c) {
-          return c.lazy;
-        }); // console.log(controls.filter(c => c.lazy).map(x => x.key + ':' + x.selected.id));
-
-        lazyControls.forEach(function (c) {
-          var strictRows = filteredRows.filter(function (x) {
-            return x[c.index] === c.selected.id;
-          });
-          /*
-          if (c.key === MtmControlEnum.Buttons) {
-              filteredRows.forEach(x => {
-                  console.log(c.key, c.selected.id, x[c.index]);
-              });
-          }
-          */
-
-          if (strictRows.length) {
-            filteredRows = strictRows;
-          }
-        });
-        return filteredRows;
-      }
-    }, {
-      key: "getRows",
-      value: function getRows(key, value) {
-        var _this3 = this;
-
-        this.currentKey = key;
-        var controls = this.options.map(function (x) {
-          var index = _this3.cols.indexOf(x);
-
-          if (index !== -1) {
-            return x;
-          } else {
-            return {
-              index: index
-            };
-          }
-        }).filter(function (x) {
-          return x.index !== -1;
-        }).map(function (x) {
-          return x;
-        });
-        var selected = controls.filter(function (x) {
-          return x.selected && x.selected.id !== -1;
-        });
-        var unselected = controls.filter(function (x) {
-          return !(x.selected && x.selected.id !== -1);
-        });
-        unselected.forEach(function (x) {
-          x.values.forEach(function (v) {
-            return v.disabled = true;
-          });
-        });
-        /*
-        const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
-        if (buttons.selected && buttons.selected.id !== -1) {
-            selected.unshift(buttons);
-        } else {
-            buttons.values.forEach(v => {
-                v.disabled = false;
-            });
-            buttons.updateState();
-        }
-        */
-
-        var divided = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Divided);
-
-        if (divided.selected && divided.selected.id !== -1) {
-          selected.unshift(divided);
-        } else {
-          divided.values.forEach(function (v) {
-            v.disabled = false;
-          });
-          divided.updateState();
-        }
-
-        var digi = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Digi);
-
-        if (digi.selected && digi.selected.id !== -1) {
-          selected.unshift(digi);
-        } else {
-          digi.values.forEach(function (v) {
-            v.disabled = false;
-          });
-          digi.updateState();
-        }
-
-        var filteredRows = this.rows.filter(function (x) {
-          return selected.reduce(function (has, c) {
-            if (c.key === key) {
-              return has && x[c.index] === (value ? value.id : c.selected.id);
-            } else {
-              return has && x[c.index] === c.selected.id;
-            }
-          }, true);
-        });
-        var callButtons = this.options.find(function (x) {
-          return x.key === constants_1.MtmControlEnum.CallButtons;
-        });
-        callButtons.values.forEach(function (x) {
-          return x.disabled = true;
-        });
-        filteredRows.forEach(function (r) {
-          unselected.forEach(function (control) {
-            control.values.forEach(function (v) {
-              if (v.id === r[control.index]) {
-                v.disabled = false;
-              }
-            });
-            control.updateState();
-          });
-          var dividedId = r[divided.index];
-          var digiId = r[digi.index]; // console.log(dividedId, digiId);
-
-          callButtons.values.forEach(function (v) {
-            var name = '';
-
-            switch (v.id) {
-              case 1:
-                // pulsante singolo
-                v.disabled = v.disabled && !(dividedId === 1 && digiId === 1);
-                name = 'pulsante singolo';
-                break;
-
-              case 2:
-                // pulsante doppio
-                v.disabled = v.disabled && !(dividedId === 2 && digiId === 1);
-                name = 'pulsante doppio';
-                break;
-
-              case 3:
-                // digital keypad
-                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-                v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(function (x) {
-                  return x.name === 'DIGI';
-                }).id);
-                name = 'digital keypad';
-                break;
-
-              case 4:
-                // digital keypad + DIGI 1
-                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-                v.disabled = v.disabled && !(dividedId === 1 && digiId === digi.values.find(function (x) {
-                  return x.name === 'DIGI1';
-                }).id);
-                name = 'digital keypad + DIGI 1';
-                break;
-
-              case 5:
-                // digital keypad + DIGI 2
-                // query[buttons.index] = buttons.values.find(x => x.name === '48').id;
-                v.disabled = v.disabled && !(dividedId === 2 && digiId === digi.values.find(function (x) {
-                  return x.name === 'DIGI2D';
-                }).id);
-                name = 'digital keypad + DIGI 2';
-                break;
-            }
-          });
-          callButtons.updateState();
-        });
-        return filteredRows;
-      }
-    }, {
       key: "onSearch",
       value: function onSearch(key) {
-        var filteredRows = this.getRows(key); // console.log(filteredRows.length);
+        var filteredRows = this.getRows(key);
+        this.setApartmentNumberState(filteredRows);
+        this.setCallButtonsState(filteredRows); // console.log(filteredRows.length);
 
         if (filteredRows.length > 0) {
           var row = filteredRows[0];
@@ -2761,7 +2624,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "calcOptions__",
       value: function calcOptions__(row) {
-        var _this4 = this;
+        var _this3 = this;
 
         var prices = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Price);
         var controls = [// MtmControlEnum.CallButtons,
@@ -2801,11 +2664,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           control.values.forEach(function (v) {
             query[control.index] = v.id;
 
-            var rows = _this4.rows.filter(function (r) {
+            var rows = _this3.rows.filter(function (r) {
               return controls.reduce(function (has, c, i) {
                 if (c === control) {
                   return has && r[c.index] === query[c.index];
-                } else if (c.lazy && c.key !== _this4.currentKey) {
+                } else if (c.lazy && c.key !== _this3.currentKey) {
                   return has;
                 } else {
                   return has && r[c.index] === query[c.index];
@@ -3014,7 +2877,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "render",
       value: function render() {
-        var _this5 = this;
+        var _this4 = this;
 
         var outlet = this.element.querySelector('.options-outlet');
         this.options.map(function (x) {
@@ -3023,7 +2886,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           return outlet.appendChild(x);
         });
         this.options.forEach(function (x) {
-          return x.element = _this5.element.querySelector(".option--".concat(x.key));
+          return x.element = _this4.element.querySelector(".option--".concat(x.key));
         }); // console.log('render.outlet', outlet);
       }
     }, {
@@ -3067,12 +2930,18 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         window.addEventListener('scroll', onScroll, false);
       }
     }, {
+      key: "addRecapScrollFixed",
+      value: function addRecapScrollFixed() {
+        var inner = this.element.querySelector('.section--recap--fixed > .inner');
+        inner.classList.add('fixed');
+      }
+    }, {
       key: "animate",
       value: function animate() {
-        var _this6 = this;
+        var _this5 = this;
 
         this.stickys.forEach(function (node, i) {
-          var content = _this6.stickyContents[i];
+          var content = _this5.stickyContents[i];
           var top = parseInt(node.getAttribute('sticky')) || 0;
           var rect = rect_1.default.fromNode(node);
           var maxtop = node.offsetHeight - content.offsetHeight;
@@ -3088,13 +2957,13 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "loop",
       value: function loop() {
-        var _this7 = this;
+        var _this6 = this;
 
         this.animate();
 
         if (this.playing) {
           window.requestAnimationFrame(function () {
-            _this7.loop();
+            _this6.loop();
           });
         }
       }

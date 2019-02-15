@@ -31,11 +31,13 @@
 	}
 }
 
+/*
 .control--group--sm {
-	&>.btn {
-		min-height: 42px;
+	& > .btn {
+		min-height: 80px;
 	}
 }
+*/
 
 .control--list {
 	display: flex;
@@ -58,15 +60,17 @@
 
 }
 
+/*
 .control--list--sm {
 	.btn--select {
-		min-height: 42px;
+		min-height: 80px;
 
 		.form-control--select {
-			height: 42px;
+			height: 80px;
 		}
 	}
 }
+*/
 
 .control--grid {
 	display: flex;
