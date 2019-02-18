@@ -101,6 +101,11 @@ a {
 		border: 2px solid #00b0ec;
 	}
 
+	&.active,
+	&.selected {
+		background: #f0f8ff;
+	}
+
 	&.disabled {
 		display: inline-flex;
 		opacity: 1;
@@ -133,6 +138,11 @@ a {
 	*:not(:hover) &.active,
 	*:not(:hover) &.selected {
 		border: 2px solid #00b0ec;
+	}
+
+	&.active,
+	&.selected {
+		background: #f0f8ff;
 	}
 
 	&.disabled {
@@ -210,6 +220,11 @@ a {
 	*:not(:hover) &.active,
 	*:not(:hover) &.selected {
 		border: 2px solid #00b0ec;
+	}
+
+	&.active,
+	&.selected {
+		background: #f0f8ff;
 	}
 
 	option {

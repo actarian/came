@@ -558,7 +558,8 @@ export default class MtmConfigurator {
 		const price = parseFloat(result.price);
 		const paths = new MtmPaths();
 		if (paths.showPrices == '1') {
-			this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = `€ ${price.toFixed(2)}`);
+			const priceString = price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+			this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = `€ ${priceString}`);
 		} else {
 			this.element.querySelectorAll('.result-price').forEach(x => x.innerHTML = ``);
 		}

@@ -75,6 +75,8 @@ a {
   *:not(:hover) .btn--option.active,
   *:not(:hover) .btn--option.selected {
     border: 2px solid #00b0ec; }
+  .btn--option.active, .btn--option.selected {
+    background: #f0f8ff; }
   .btn--option.disabled {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -108,6 +110,8 @@ a {
   *:not(:hover) .btn--system.active,
   *:not(:hover) .btn--system.selected {
     border: 2px solid #00b0ec; }
+  .btn--system.active, .btn--system.selected {
+    background: #f0f8ff; }
   .btn--system.disabled {
     pointer-events: none;
     background: #f8f8f8;
@@ -168,6 +172,8 @@ a {
   *:not(:hover) .btn--select.active,
   *:not(:hover) .btn--select.selected {
     border: 2px solid #00b0ec; }
+  .btn--select.active, .btn--select.selected {
+    background: #f0f8ff; }
   .btn--select option {
     font-size: 16px;
     line-height: 1.875;

@@ -2839,8 +2839,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var paths = new data_service_1.MtmPaths();
 
         if (paths.showPrices == '1') {
+          var priceString = price.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
           this.element.querySelectorAll('.result-price').forEach(function (x) {
-            return x.innerHTML = "\u20AC ".concat(price.toFixed(2));
+            return x.innerHTML = "\u20AC ".concat(priceString);
           });
         } else {
           this.element.querySelectorAll('.result-price').forEach(function (x) {
