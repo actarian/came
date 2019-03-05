@@ -121,7 +121,7 @@ strong {
 
 		img {
 			display: block;
-			width: 23%;
+			width: 20vh; // 24%;
 			margin: 0 auto;
 		}
 
@@ -149,6 +149,24 @@ strong {
 			}
 		}
 	}
+
+	/*
+	@media screen and (max-width: 1440px) {
+		.picture {
+			img {
+				width: 40%;
+			}
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+		.picture {
+			img {
+				width: 80%;
+			}
+		}
+	}
+	*/
 
 	@media screen and (max-width: 768px) {}
 

@@ -69,7 +69,7 @@ export class MtmControls {
 		return [{
 			key: MtmControlEnum.Code, name: 'Code'
 		}, {
-			key: MtmControlEnum.Digi, name: 'Digi', lazy: true,
+			key: MtmControlEnum.Digi, name: 'Digi', lazy: true, nullable: true,
 		}, {
 			key: MtmControlEnum.ButtonType, name: 'ButtonType', lazy: true,
 		}, {

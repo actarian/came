@@ -18,6 +18,7 @@ export class MtmPaths {
 	parts: string = 'data/parts.json';
 	localizations: string = 'data/localizations.json';
 	configurator: string = 'http://websolute.came.com/came_configurator';
+	viewKitUrl: string = 'http://websolute.came.com/came_configurator/view_kit/';
 	showPrices: string = '1';
 
 	constructor() {

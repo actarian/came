@@ -12,14 +12,16 @@ export class MtmValue {
 	data?: any;
 
 	getPrice?(): string {
-		return this.price > 0 ? `<span class="price">+ € ${this.price.toFixed(2)}</span>` : `<span class="price"></span>`;
+		const priceString = this.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+		return this.price > 0 ? `<span class="price">+ € ${priceString}</span>` : `<span class="price"></span>`;
 	}
 
 	updatePrice?(element: HTMLElement): void {
 		if (element) {
 			const priceElement = element.querySelector(`[data-id="${this.id}"] .price`);
 			if (priceElement) {
-				priceElement.innerHTML = this.price > 0 ? `+ € ${this.price.toFixed(2)}` : ``;
+				const priceString = this.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+				priceElement.innerHTML = this.price > 0 ? `+ € ${priceString}` : ``;
 			}
 		}
 	}

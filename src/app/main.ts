@@ -36,10 +36,10 @@ export default class MtmConfigurator {
 			let options = [
 				MtmDataService.newControlByKey(MtmControlEnum.KnownTecnology),
 				MtmDataService.newControlByKey(MtmControlEnum.ConstrainedDimension),
+				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.newControlByKey(MtmControlEnum.ApartmentNumber),
 				// MtmDataService.optionWithKey(MtmControlEnum.Buttons),
 				MtmDataService.newControlByKey(MtmControlEnum.CallButtons),
-				MtmDataService.optionWithKey(MtmControlEnum.AudioVideo),
 				MtmDataService.optionWithKey(MtmControlEnum.Keypad),
 				MtmDataService.optionWithKey(MtmControlEnum.Proximity),
 				MtmDataService.optionWithKey(MtmControlEnum.DigitalDisplay),
@@ -199,13 +199,15 @@ export default class MtmConfigurator {
 				case 1:
 					// pulsante singolo
 					divided.onSelect(divided.values.find(x => x.id === 1));
-					digi.currentItem = null;
+					// digi.currentItem = null;
+					digi.onSelect(digi.values.find(x => x.id === 1));
 					key = MtmControlEnum.Divided;
 					break;
 				case 2:
 					// pulsante doppio
 					divided.onSelect(divided.values.find(x => x.id === 2));
-					digi.currentItem = null;
+					// digi.currentItem = null;
+					digi.onSelect(digi.values.find(x => x.id === 1));
 					key = MtmControlEnum.Divided;
 					break;
 				case 3:
@@ -302,10 +304,10 @@ export default class MtmConfigurator {
 		if (constrainedDimension.selected.id === 2) {
 			controls.push(moduleSize.element);
 		}
+		const audioVideo = this.options.find(x => x.key === MtmControlEnum.AudioVideo);
 		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
 		const buttons = this.options.find(x => x.key === MtmControlEnum.Buttons);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
-		const audioVideo = this.options.find(x => x.key === MtmControlEnum.AudioVideo);
 		const keypad = this.options.find(x => x.key === MtmControlEnum.Keypad);
 		const proximity = this.options.find(x => x.key === MtmControlEnum.Proximity);
 		const digitalDisplay = this.options.find(x => x.key === MtmControlEnum.DigitalDisplay);
@@ -313,6 +315,7 @@ export default class MtmConfigurator {
 		const hearingModule = this.options.find(x => x.key === MtmControlEnum.HearingModule);
 		const finish = this.options.find(x => x.key === MtmControlEnum.Finish);
 		const mount = this.options.find(x => x.key === MtmControlEnum.Mount);
+		controls.push(audioVideo.element);
 		if (apartmentNumber && apartmentNumber.element) {
 			controls.push(apartmentNumber.element);
 		}
@@ -320,7 +323,6 @@ export default class MtmConfigurator {
 			controls.push(buttons.element);
 		}
 		controls.push(callButtons.element);
-		controls.push(audioVideo.element);
 		controls.push(keypad.element);
 		controls.push(proximity.element);
 		controls.push(digitalDisplay.element);
@@ -577,7 +579,7 @@ export default class MtmConfigurator {
 		this.element.querySelector('.result-system').innerHTML = result.system;
 		this.element.querySelector('.result-mount').innerHTML = result.mount;
 		const code = result.code.replace(/\//g, '|');
-		this.element.querySelector('.result-cta').setAttribute('href', `${paths.configurator}/view_kit/${code}`);
+		this.element.querySelector('.result-cta').setAttribute('href', `${paths.viewKitUrl}${code}`);
 		const picture = this.element.querySelector('.media>.picture');
 		picture.classList.add('loading');
 		const image = new Image();

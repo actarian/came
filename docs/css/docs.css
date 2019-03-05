@@ -104,6 +104,8 @@ a {
   min-height: 80px; }
   .noprice .btn--system {
     min-height: 60px; }
+  .btn--system .icon {
+    mix-blend-mode: multiply; }
   .btn--system, .btn--system:active, .btn--system:focus {
     border: 2px solid #e5e5e5; }
   .btn--system:hover,
@@ -116,8 +118,6 @@ a {
     pointer-events: none;
     background: #f8f8f8;
     color: #bbb; }
-    .btn--system.disabled .icon {
-      mix-blend-mode: multiply; }
   .btn--system .icon {
     width: 80px;
     -webkit-box-flex: 0;
@@ -412,7 +412,24 @@ strong {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
-          user-select: none; }
+          user-select: none;
+  /*
+	@media screen and (max-width: 1440px) {
+		.picture {
+			img {
+				width: 40%;
+			}
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+		.picture {
+			img {
+				width: 80%;
+			}
+		}
+	}
+	*/ }
   .media .picture {
     position: relative;
     -webkit-box-align: center;
@@ -426,7 +443,7 @@ strong {
             user-select: none; }
     .media .picture img {
       display: block;
-      width: 23%;
+      width: 20vh;
       margin: 0 auto; }
     .media .picture.loading img {
       opacity: 0.2; }

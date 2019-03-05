@@ -636,7 +636,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         }, {
           key: MtmControlEnum.Digi,
           name: 'Digi',
-          lazy: true
+          lazy: true,
+          nullable: true
         }, {
           key: MtmControlEnum.ButtonType,
           name: 'ButtonType',
@@ -1634,7 +1635,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     _createClass(MtmValue, [{
       key: "getPrice",
       value: function getPrice() {
-        return this.price > 0 ? "<span class=\"price\">+ \u20AC ".concat(this.price.toFixed(2), "</span>") : "<span class=\"price\"></span>";
+        var priceString = this.price.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        return this.price > 0 ? "<span class=\"price\">+ \u20AC ".concat(priceString, "</span>") : "<span class=\"price\"></span>";
       }
     }, {
       key: "updatePrice",
@@ -1643,7 +1648,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           var priceElement = element.querySelector("[data-id=\"".concat(this.id, "\"] .price"));
 
           if (priceElement) {
-            priceElement.innerHTML = this.price > 0 ? "+ \u20AC ".concat(this.price.toFixed(2)) : "";
+            var priceString = this.price.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+            priceElement.innerHTML = this.price > 0 ? "+ \u20AC ".concat(priceString) : "";
           }
         }
       }
@@ -1707,6 +1716,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     this.parts = 'data/parts.json';
     this.localizations = 'data/localizations.json';
     this.configurator = 'http://websolute.came.com/came_configurator';
+    this.viewKitUrl = 'http://websolute.came.com/came_configurator/view_kit/';
     this.showPrices = '1';
 
     if (window.hasOwnProperty('paths')) {
@@ -2173,8 +2183,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       data_service_1.default.fetch(function (cols, rows) {
         _this.cols = cols;
         _this.rows = rows;
-        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), // MtmDataService.optionWithKey(MtmControlEnum.Buttons),
-        data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
+        var options = [data_service_1.default.newControlByKey(constants_1.MtmControlEnum.KnownTecnology), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ConstrainedDimension), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.AudioVideo), data_service_1.default.newControlByKey(constants_1.MtmControlEnum.ApartmentNumber), // MtmDataService.optionWithKey(MtmControlEnum.Buttons),
+        data_service_1.default.newControlByKey(constants_1.MtmControlEnum.CallButtons), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Keypad), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Proximity), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.DigitalDisplay), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.InfoModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.HearingModule), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Finish), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.System), data_service_1.default.optionWithKey(constants_1.MtmControlEnum.ModuleSize)];
         options.forEach(function (x) {
           return x.didChange = function (item, control) {
             // console.log('MtmConfigurator.didChange', control.key, item);
@@ -2377,8 +2387,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               // pulsante singolo
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 1;
+              })); // digi.currentItem = null;
+
+              digi.onSelect(digi.values.find(function (x) {
+                return x.id === 1;
               }));
-              digi.currentItem = null;
               key = constants_1.MtmControlEnum.Divided;
               break;
 
@@ -2386,8 +2399,11 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               // pulsante doppio
               divided.onSelect(divided.values.find(function (x) {
                 return x.id === 2;
+              })); // digi.currentItem = null;
+
+              digi.onSelect(digi.values.find(function (x) {
+                return x.id === 1;
               }));
-              digi.currentItem = null;
               key = constants_1.MtmControlEnum.Divided;
               break;
 
@@ -2530,6 +2546,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           controls.push(moduleSize.element);
         }
 
+        var audioVideo = this.options.find(function (x) {
+          return x.key === constants_1.MtmControlEnum.AudioVideo;
+        });
         var apartmentNumber = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.ApartmentNumber;
         });
@@ -2538,9 +2557,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         });
         var callButtons = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.CallButtons;
-        });
-        var audioVideo = this.options.find(function (x) {
-          return x.key === constants_1.MtmControlEnum.AudioVideo;
         });
         var keypad = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.Keypad;
@@ -2563,6 +2579,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var mount = this.options.find(function (x) {
           return x.key === constants_1.MtmControlEnum.Mount;
         });
+        controls.push(audioVideo.element);
 
         if (apartmentNumber && apartmentNumber.element) {
           controls.push(apartmentNumber.element);
@@ -2573,7 +2590,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         }
 
         controls.push(callButtons.element);
-        controls.push(audioVideo.element);
         controls.push(keypad.element);
         controls.push(proximity.element);
         controls.push(digitalDisplay.element);
@@ -2869,7 +2885,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         this.element.querySelector('.result-system').innerHTML = result.system;
         this.element.querySelector('.result-mount').innerHTML = result.mount;
         var code = result.code.replace(/\//g, '|');
-        this.element.querySelector('.result-cta').setAttribute('href', "".concat(paths.configurator, "/view_kit/").concat(code));
+        this.element.querySelector('.result-cta').setAttribute('href', "".concat(paths.viewKitUrl).concat(code));
         var picture = this.element.querySelector('.media>.picture');
         picture.classList.add('loading');
         var image = new Image();
