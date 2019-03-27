@@ -79,7 +79,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.ModuleSize, name: locale.moduleSizeName, description: locale.moduleSizeDescription, type: MtmControlType.Group
 		}, {
-			key: MtmControlEnum.Mount, name: locale.mountName, type: MtmControlType.List, lazy: true,
+			key: MtmControlEnum.Mount, name: locale.mountName, type: MtmControlType.List, lazy: true, dynamicPicture: true,
 		}, {
 			key: MtmControlEnum.System, name: locale.systemName, description: locale.systemDescription, type: MtmControlType.Grid
 		}, {

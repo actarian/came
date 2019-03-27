@@ -25,7 +25,7 @@
 	"buttonYesName": "Sì",
 	"buttonSingleName": "Pulsante singolo",
 	"buttonDoubleName": "Pulsante doppio",
-	"buttonDigitalName": "Digitale",
-	"buttonDigitalDigi1Name": "Digitale + 1",
-	"buttonDigitalDigi2Name": "Digitale + 2"
+	"buttonDigitalName": "Digital Keypad",
+	"buttonDigitalDigi1Name": "Digital Keypad + Pulsante singolo",
+	"buttonDigitalDigi2Name": "Digital Keypad + Pulsante doppio"
 }

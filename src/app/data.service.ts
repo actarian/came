@@ -290,7 +290,11 @@ export default class MtmDataService {
 				const rows = kits.map((x: any) => values.filter((key: string) => colsPool[key]).map((key: string) => {
 					x.finish = (x.finish === 'Standard' ? localizations.buttonAluminumName : x.finish);
 					const col = colsPool[key];
-					return col.addValue(x[key], x.price);
+					let code: string = null;
+					if (key === MtmControlEnum.Mount) {
+						code = x.mounting;
+					}
+					return col.addValue(x[key], x.price, code);
 				}));
 				cols.forEach((x, i) => x.sort(i));
 				MtmDataService.kits = kits;

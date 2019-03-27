@@ -24,6 +24,14 @@ a {
 		font-size: 16px;
 		line-height: 1.875;
 		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+
+		img {
+			max-width: 40px;
+			max-height: 40px;
+			margin-right: 10px;
+		}
 	}
 
 	.price {

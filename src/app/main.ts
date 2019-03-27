@@ -1,4 +1,4 @@
-import { MtmControlEnum } from "./controls/constants";
+import { MtmControlEnum, MtmControlType } from "./controls/constants";
 import { MtmControl } from "./controls/control";
 import { MtmValue } from "./controls/value";
 import MtmDataService, { MtmPaths } from "./data.service";
@@ -50,11 +50,32 @@ export default class MtmConfigurator {
 				MtmDataService.optionWithKey(MtmControlEnum.System),
 				MtmDataService.optionWithKey(MtmControlEnum.ModuleSize),
 			];
+			const paths = new MtmPaths();
+			const mount = MtmDataService.optionWithKey(MtmControlEnum.Mount);
+			mount.resolvePicture = (item: MtmValue): string => {
+				const part = MtmDataService.parts.find(x => x.id === parseInt(item.code));
+				// console.log(item, part);
+				const code = part.code;
+				return paths.viewKitUrl.replace('/came_configurator/view_kit/', '/sites/default/files/styles/thumbnail/public/2019-02/' + code + '.jpg?itok=CL3r017w');
+			};
 			options.forEach(x => x.didChange = (item: MtmValue, control: MtmControl) => {
 				// console.log('MtmConfigurator.didChange', control.key, item);
 				switch (control.key) {
 					case MtmControlEnum.KnownTecnology:
+						if (item.id === 1) {
+							// opzione no
+							const systems = MtmDataService.optionWithKey(MtmControlEnum.System);
+							systems.onSelect(null);
+						}
+						this.doReorder();
+						this.onSearch(this.didSelectCallButton());
+						break;
 					case MtmControlEnum.ConstrainedDimension:
+						if (item.id === 1) {
+							// opzione no
+							const moduleSizes = MtmDataService.optionWithKey(MtmControlEnum.ModuleSize);
+							moduleSizes.onSelect(null);
+						}
 						this.doReorder();
 						this.onSearch(this.didSelectCallButton());
 						break;
@@ -83,7 +104,7 @@ export default class MtmConfigurator {
 		});
 	}
 
-	getRows(key?: MtmControlEnum, value?: MtmValue) {
+	getRows(key?: MtmControlEnum, value?: MtmValue, skipCallButtons: boolean = false) {
 		this.currentKey = key;
 		const controls = this.options.map(x => {
 			const index = this.cols.indexOf(x);
@@ -95,9 +116,6 @@ export default class MtmConfigurator {
 		}).filter(x => x.index !== -1).map(x => x as MtmControl);
 		let selected = controls.filter(x => x.selected && x.selected.id !== -1);
 		let unselected = controls.filter(x => !(x.selected && x.selected.id !== -1));
-		unselected.forEach(x => {
-			x.values.forEach(v => v.disabled = true);
-		});
 		/*
 		const buttons = MtmDataService.optionWithKey(MtmControlEnum.Buttons);
 		if (buttons.selected && buttons.selected.id !== -1) {
@@ -109,23 +127,25 @@ export default class MtmConfigurator {
 			buttons.updateState();
 		}
 		*/
-		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
-		if (divided.selected && divided.selected.id !== -1) {
-			selected.unshift(divided);
-		} else {
-			divided.values.forEach(v => {
-				v.disabled = false;
-			});
-			divided.updateState();
-		}
-		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
-		if (digi.selected && digi.selected.id !== -1) {
-			selected.unshift(digi);
-		} else {
-			digi.values.forEach(v => {
-				v.disabled = false;
-			});
-			digi.updateState();
+		if (!skipCallButtons) {
+			const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
+			if (divided.selected && divided.selected.id !== -1) {
+				selected.unshift(divided);
+			} else {
+				divided.values.forEach(v => {
+					v.disabled = false;
+				});
+				divided.updateState();
+			}
+			const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
+			if (digi.selected && digi.selected.id !== -1) {
+				selected.unshift(digi);
+			} else {
+				digi.values.forEach(v => {
+					v.disabled = false;
+				});
+				digi.updateState();
+			}
 		}
 		const apartmentNumber = this.options.find(x => x.key === MtmControlEnum.ApartmentNumber);
 		if (apartmentNumber.selected && apartmentNumber.selected.id !== -1) {
@@ -153,16 +173,26 @@ export default class MtmConfigurator {
 				}
 			}, true);
 		});
-		filteredRows.forEach(r => {
-			unselected.forEach(c => {
-				c.values.forEach(v => {
-					if (v.id === r[c.index]) {
-						v.disabled = false;
-					}
-				});
-				c.updateState();
+		if (!skipCallButtons) {
+			unselected.forEach(x => {
+				x.values.forEach(v => v.disabled = true);
 			});
-		});
+			filteredRows.forEach((r, i) => {
+				unselected.forEach(c => {
+					c.values.forEach(v => {
+						/*
+						if (i < 10 && c.key === MtmControlEnum.Keypad) {
+							console.log(c, v, v.id, r[c.index]);
+						}
+						*/
+						if (v.id === r[c.index]) {
+							v.disabled = false;
+						}
+					});
+					c.updateState();
+				});
+			});
+		}
 		return filteredRows;
 	}
 
@@ -245,6 +275,7 @@ export default class MtmConfigurator {
 	}
 
 	setCallButtonsState(filteredRows: number[][]) {
+		filteredRows = this.getRows(this.currentKey, null, true);
 		const divided = MtmDataService.optionWithKey(MtmControlEnum.Divided);
 		const digi = MtmDataService.optionWithKey(MtmControlEnum.Digi);
 		const callButtons = this.options.find(x => x.key === MtmControlEnum.CallButtons);
@@ -557,6 +588,7 @@ export default class MtmConfigurator {
 				result[c.key] = null;
 			}
 		});
+		// console.log(result);
 		const price = parseFloat(result.price);
 		const paths = new MtmPaths();
 		if (paths.showPrices == '1') {
@@ -673,4 +705,4 @@ export default class MtmConfigurator {
 }
 
 const configurator = new MtmConfigurator(`.configurator`);
-configurator.play();
+// configurator.play();

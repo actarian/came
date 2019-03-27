@@ -43,11 +43,19 @@ strong {
 	}
 }
 
+[sticky-content] {
+	@media screen and (min-width: 769px) {
+		position: sticky;
+		top: 60px;
+	}
+}
+
 .section {
 	position: relative;
 	width: 100%;
 	padding: 0;
 	margin: 0 auto;
+	overflow: unset;
 }
 
 .section--subheader {

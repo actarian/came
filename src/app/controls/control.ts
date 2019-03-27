@@ -21,6 +21,10 @@ export class MtmControl {
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
 	defaultId?: number;
+	dynamicPicture?: boolean = false;
+	resolvePicture?: Function = (item: MtmValue): string => {
+		return null;
+	}
 
 	constructor(options: MtmControl) {
 		/*
@@ -77,9 +81,15 @@ export class MtmControl {
 	}
 
 	getChildTemplate?(item: MtmValue): string {
-		return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
-		<span class="label">${item.name}</span>${item.getPrice()}
-	</button>`;
+		if (this.dynamicPicture) {
+			return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
+			<span class="label"><img class="picture" src="${this.resolvePicture(item)}" /> ${item.name}</span>${item.getPrice()}
+		</button>`;
+		} else {
+			return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
+			<span class="label">${item.name}</span>${item.getPrice()}
+		</button>`;
+		}
 	}
 
 	getFragment?(): DocumentFragment {
@@ -108,10 +118,13 @@ export class MtmControl {
 		const buttons = Array.prototype.slice.call(button.parentNode.childNodes);
 		buttons.forEach((x: Element) => x.classList.remove('selected'));
 		this.values.forEach(x => x.selected = false);
+		let item: MtmValue;
 		const id = parseInt(button.getAttribute('data-id'));
-		const item: MtmValue = this.values.find(x => x.id === id);
+		item = this.values.find(x => x.id === id);
 		if (this.currentItem === item) {
-			item.selected = false;
+			if (item) {
+				item.selected = false;
+			}
 			this.currentItem = null;
 		} else {
 			button.classList.add('selected');
@@ -124,6 +137,13 @@ export class MtmControl {
 		// console.log('MtmControl.onClick', 'button', button, 'item', item);
 	}
 
+	unselect?() {
+		const buttons = Array.prototype.slice.call(this.element.querySelectorAll('.selected'));
+		buttons.forEach((x: Element) => x.classList.remove('selected'));
+		this.values.forEach(x => x.selected = false);
+		this.currentItem = null;
+	}
+
 	onSelect?(value: MtmValue, prevent: boolean = false) {
 		this.values.forEach(x => x.selected = false);
 		this.currentItem = value;
@@ -134,6 +154,8 @@ export class MtmControl {
 				const button = group.querySelector(`[data-id="${value.id}"]`) as HTMLButtonElement;
 				this.onClick(button, prevent);
 			}
+		} else {
+			this.unselect();
 		}
 	}
 
@@ -153,7 +175,7 @@ export class MtmControl {
 		}
 	}
 
-	addValue?(name: string, price: number): number {
+	addValue?(name: string, price: number, code: string = null): number {
 		name = name && name.toString().trim() !== '' ? name.toString() : 'No';
 		if (name === 'No' &&
 			(this.key === MtmControlEnum.AudioVideo || this.key === MtmControlEnum.System)) {
@@ -166,7 +188,7 @@ export class MtmControl {
 				console.log(this.key, name);
 			}
 			*/
-			item = new MtmValue({ id: ++this.count, name, price, value: parseInt(name) });
+			item = new MtmValue({ id: ++this.count, name, price, value: parseInt(name), code: code });
 			this.values.push(item);
 			/*
 			if (this.key === 'buttons') {
@@ -214,9 +236,11 @@ export class MtmControl {
 		if (paths.showPrices !== '1') {
 			this.values.forEach((x, i) => x.price = 0);
 		}
+		/*
 		if (this.key === MtmControlEnum.Finish) {
 			console.log(this.values.map(x => x.name));
 		}
+		*/
 		if (this.values.length && this.defaultId) {
 			// this.values[0].selected = true;
 			const defaultValue = this.values.find(x => x.id === this.defaultId);

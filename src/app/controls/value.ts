@@ -2,6 +2,7 @@
 export class MtmValue {
 	id: number;
 	name: string;
+	code?: string;
 	price?: number = 0;
 	count?: number = 1;
 	order?: number = 0;
