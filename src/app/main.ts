@@ -1,4 +1,4 @@
-import { MtmControlEnum, MtmControlType } from "./controls/constants";
+import { MtmControlEnum } from "./controls/constants";
 import { MtmControl } from "./controls/control";
 import { MtmValue } from "./controls/value";
 import MtmDataService, { MtmPaths } from "./data.service";
@@ -27,6 +27,12 @@ export default class MtmConfigurator {
 		const stickys = [].slice.call(this.element.querySelectorAll('[sticky]'));
 		this.stickys = stickys;
 		this.stickyContents = stickys.map(x => x.querySelector('[sticky-content]'));
+		const clearCta = this.element.querySelector('.clear-cta');
+		if (clearCta) {
+			clearCta.addEventListener('click', () => {
+				this.onClear();
+			});
+		}
 		// this.addMediaScrollListener();
 		// this.addRecapScrollListener();
 		this.addRecapScrollFixed();
@@ -53,10 +59,20 @@ export default class MtmConfigurator {
 			const paths = new MtmPaths();
 			const mount = MtmDataService.optionWithKey(MtmControlEnum.Mount);
 			mount.resolvePicture = (item: MtmValue): string => {
+				const name = item.name.toLowerCase().replace(/[\s|\W]+/g, '-');
+				console.log(name);
+				/*
+				surface-mount
+				flush-mount
+				flush-mount-rainshield
+				*/
+				return `${paths.assets}img/mtm-configurator/${name}.jpg`;
+                /*
 				const part = MtmDataService.parts.find(x => x.id === parseInt(item.code));
 				// console.log(item, part);
 				const code = part.code;
-				return paths.viewKitUrl.replace('/came_configurator/view_kit/', '/sites/default/files/styles/thumbnail/public/2019-02/' + code + '.jpg?itok=CL3r017w');
+                return paths.viewKitUrl.replace('/came_configurator/view_kit/', '/sites/default/files/styles/thumbnail/public/2019-02/' + code + '.jpg?itok=CL3r017w');
+                */
 			};
 			options.forEach(x => x.didChange = (item: MtmValue, control: MtmControl) => {
 				// console.log('MtmConfigurator.didChange', control.key, item);
@@ -102,6 +118,16 @@ export default class MtmConfigurator {
 			console.log('error', error);
 
 		});
+	}
+
+	onClear() {
+		this.options.forEach(x => {
+			x.onSelect(null);
+			x.setDefaultValue();
+			x.updateState();
+		});
+		this.doReorder();
+		this.onSearch(this.didSelectCallButton());
 	}
 
 	getRows(key?: MtmControlEnum, value?: MtmValue, skipCallButtons: boolean = false) {

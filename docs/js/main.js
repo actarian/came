@@ -1079,6 +1079,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
               button.classList.add('disabled');
             } else {
               button.classList.remove('disabled');
+            }
+
+            if (x.selected) {
+              button.classList.add('selected');
+            } else {
+              button.classList.remove('selected');
             } // console.log(x.disabled);
 
           });
@@ -1126,8 +1132,6 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }, {
       key: "sort",
       value: function sort(index) {
-        var _this3 = this;
-
         var paths = new data_service_1.MtmPaths();
         this.index = index;
 
@@ -1184,6 +1188,13 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         }
         */
 
+
+        this.setDefaultValue();
+      }
+    }, {
+      key: "setDefaultValue",
+      value: function setDefaultValue() {
+        var _this3 = this;
 
         if (this.values.length && this.defaultId) {
           // this.values[0].selected = true;
@@ -2213,8 +2224,16 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       this.stickys = stickys;
       this.stickyContents = stickys.map(function (x) {
         return x.querySelector('[sticky-content]');
-      }); // this.addMediaScrollListener();
+      });
+      var clearCta = this.element.querySelector('.clear-cta');
+
+      if (clearCta) {
+        clearCta.addEventListener('click', function () {
+          _this.onClear();
+        });
+      } // this.addMediaScrollListener();
       // this.addRecapScrollListener();
+
 
       this.addRecapScrollFixed();
       data_service_1.default.fetch(function (cols, rows) {
@@ -2226,12 +2245,21 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var mount = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount);
 
         mount.resolvePicture = function (item) {
-          var part = data_service_1.default.parts.find(function (x) {
-            return x.id === parseInt(item.code);
-          }); // console.log(item, part);
+          var name = item.name.toLowerCase().replace(/[\s|\W]+/g, '-');
+          console.log(name);
+          /*
+          surface-mount
+          flush-mount
+          flush-mount-rainshield
+          */
 
-          var code = part.code;
+          return "".concat(paths.assets, "img/mtm-configurator/").concat(name, ".jpg");
+          /*
+          const part = MtmDataService.parts.find(x => x.id === parseInt(item.code));
+          // console.log(item, part);
+          const code = part.code;
           return paths.viewKitUrl.replace('/came_configurator/view_kit/', '/sites/default/files/styles/thumbnail/public/2019-02/' + code + '.jpg?itok=CL3r017w');
+          */
         };
 
         options.forEach(function (x) {
@@ -2296,6 +2324,17 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     }
 
     _createClass(MtmConfigurator, [{
+      key: "onClear",
+      value: function onClear() {
+        this.options.forEach(function (x) {
+          x.onSelect(null);
+          x.setDefaultValue();
+          x.updateState();
+        });
+        this.doReorder();
+        this.onSearch(this.didSelectCallButton());
+      }
+    }, {
       key: "getRows",
       value: function getRows(key, value) {
         var _this2 = this;

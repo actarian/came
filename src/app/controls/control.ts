@@ -170,6 +170,11 @@ export class MtmControl {
 				} else {
 					button.classList.remove('disabled');
 				}
+				if (x.selected) {
+					button.classList.add('selected');
+				} else {
+					button.classList.remove('selected');
+				}
 				// console.log(x.disabled);
 			});
 		}
@@ -241,6 +246,10 @@ export class MtmControl {
 			console.log(this.values.map(x => x.name));
 		}
 		*/
+		this.setDefaultValue();
+	}
+
+	setDefaultValue() {
 		if (this.values.length && this.defaultId) {
 			// this.values[0].selected = true;
 			const defaultValue = this.values.find(x => x.id === this.defaultId);

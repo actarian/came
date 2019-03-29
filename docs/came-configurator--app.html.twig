@@ -4,7 +4,9 @@
     parts: '{{ site_root }}/came_configurator/export/parts',
     localizations: '{{ localizations }}',
     assets: '{{ site_root }}/modules/custom/came_configurator/app/',
-	showPrices: '{{ show_prices }}'
+    showPrices: '{{ show_prices }}',
+    viewKitUrl: '{{ site_root }}{{ view_kit_url }}'
+
   };
 </script>
 
@@ -72,13 +74,13 @@
         <div class="block">
           <div class="info-group">
             <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
-            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="#">{{ 'Contact us' | t}}</a></div>
+            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="http://websolute.came.com/en/public/support#contact-us">{{ 'Contact us' | t}}</a></div>
           </div>
         </div>
         <div class="block">
           <div class="info-group">
             <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
-            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="#">{{ 'Faq' | t }}</a></div>
+            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="http://websolute.came.com/en/public/support#faq">{{ 'Faq' | t }}</a></div>
           </div>
         </div>
       </div>
@@ -90,18 +92,21 @@
         <div class="block hidden-sm-down">
           <div class="info-group">
             <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
-            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="#">{{ 'Contact us' | t}}</a></div>
+            <div class="info">{{ 'For assistance and technical support, the toll-free number'| t }} <strong>800.295.830</strong>, {{ 'is available from Monday to Friday, from 8:30 am to 5:30 pm.' | t }} <a href="http://websolute.came.com/en/public/support#contact-us">{{ 'Contact us' | t}}</a></div>
           </div>
         </div>
         <div class="block hidden-sm-down">
           <div class="info-group">
             <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
-            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="#">{{ 'Faq' | t }}</a></div>
+            <div class="info">{{ 'Find the answers to the most frequently asked questions about the technologies of CAME modular entry panel.' | t }} <a href="http://websolute.came.com/en/public/support#faq">{{ 'Faq' | t }}</a></div>
           </div>
         </div>
         <div class="block block--hilight">
           <div class="result-price"></div>
-          <a href="#" target="_blank" class="btn btn--cta result-cta">{{ 'Find an installer' | t }}</a>
+		  <div class="group group-ctas">
+		    <a href="#" target="_blank" class="btn btn--cta result-cta">{{ 'Find an installer' | t }}</a>
+		    <button type="button" class="btn btn--secondary clear-cta">Clear</button>
+		  </div>
         </div>
       </div>
     </div>
