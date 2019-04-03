@@ -290,11 +290,12 @@ strong {
 		border: 2px solid #e5e5e5;
 		border-radius: 4px;
 		padding: 20px;
+		white-space: nowrap;
 
 		.result-price {
 			display: block;
 			text-align: center;
-			font-size: 30px;
+			font-size: 25px;
 			font-weight: 500;
 			white-space: nowrap;
 			padding: 0 10px;
@@ -310,6 +311,21 @@ strong {
 				display: none;
 			}
 		}
+
+		.btn--cta {
+			font-size: 13px;
+		}
+
+		@media screen and (min-width: 1024px) and (max-width: 1159px) {
+			.result-price {
+				font-size: 20px;
+				min-width: 0;
+				padding: 0 10px 0 0;
+				width: auto;
+				flex: 1 0 auto;
+			}
+		}
+
 	}
 
 	.info-group {

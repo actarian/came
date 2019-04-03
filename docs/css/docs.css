@@ -580,11 +580,12 @@ strong {
   background: white;
   border: 2px solid #e5e5e5;
   border-radius: 4px;
-  padding: 20px; }
+  padding: 20px;
+  white-space: nowrap; }
   .section--recap .block--hilight .result-price {
     display: block;
     text-align: center;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 500;
     white-space: nowrap;
     padding: 0 10px;
@@ -597,6 +598,17 @@ strong {
     border: none; }
     .noprice .section--recap .block--hilight > .result-price {
       display: none; }
+  .section--recap .block--hilight .btn--cta {
+    font-size: 13px; }
+  @media screen and (min-width: 1024px) and (max-width: 1159px) {
+    .section--recap .block--hilight .result-price {
+      font-size: 20px;
+      min-width: 0;
+      padding: 0 10px 0 0;
+      width: auto;
+      -webkit-box-flex: 1;
+          -ms-flex: 1 0 auto;
+              flex: 1 0 auto; } }
 
 .section--recap .info-group {
   display: -webkit-box;
