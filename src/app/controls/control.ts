@@ -21,6 +21,7 @@ export class MtmControl {
 	currentItem?: MtmValue = null;
 	didChange?: Function = null;
 	defaultId?: number;
+	defaultNames?: string;
 	dynamicPicture?: boolean = false;
 	resolvePicture?: Function = (item: MtmValue): string => {
 		return null;
@@ -247,12 +248,26 @@ export class MtmControl {
 		}
 		*/
 		this.setDefaultValue();
+		this.setDefaultNames();
 	}
 
 	setDefaultValue() {
 		if (this.values.length && this.defaultId) {
 			// this.values[0].selected = true;
 			const defaultValue = this.values.find(x => x.id === this.defaultId);
+			if (defaultValue) {
+				defaultValue.selected = true;
+				this.currentItem = defaultValue;
+				this.values.splice(this.values.indexOf(defaultValue), 1);
+				this.values.unshift(defaultValue);
+			}
+		}
+	}
+
+	setDefaultNames() {
+		if (this.values.length && this.defaultNames) {
+			// this.values[0].selected = true;
+			const defaultValue = this.values.find(x => this.defaultNames.indexOf(x.name) !== -1);
 			if (defaultValue) {
 				defaultValue.selected = true;
 				this.currentItem = defaultValue;

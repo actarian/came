@@ -75,7 +75,7 @@ export class MtmControls {
 		}, {
 			key: MtmControlEnum.SingleModuleFrame, disabled: true,
 		}, {
-			key: MtmControlEnum.Finish, name: locale.finishName, type: MtmControlType.Group, defaultId: 2, lazy: true,
+			key: MtmControlEnum.Finish, name: locale.finishName, type: MtmControlType.Group, defaultNames: ['Aluminium', 'Alluminio'], lazy: true, // defaultId: 2,
 		}, {
 			key: MtmControlEnum.ModuleSize, name: locale.moduleSizeName, description: locale.moduleSizeDescription, type: MtmControlType.Group
 		}, {

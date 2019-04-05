@@ -649,7 +649,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           key: MtmControlEnum.Finish,
           name: locale.finishName,
           type: MtmControlType.Group,
-          defaultId: 2,
+          defaultNames: ['Aluminium', 'Alluminio'],
           lazy: true
         }, {
           key: MtmControlEnum.ModuleSize,
@@ -1190,6 +1190,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
 
 
         this.setDefaultValue();
+        this.setDefaultNames();
       }
     }, {
       key: "setDefaultValue",
@@ -1200,6 +1201,25 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           // this.values[0].selected = true;
           var defaultValue = this.values.find(function (x) {
             return x.id === _this3.defaultId;
+          });
+
+          if (defaultValue) {
+            defaultValue.selected = true;
+            this.currentItem = defaultValue;
+            this.values.splice(this.values.indexOf(defaultValue), 1);
+            this.values.unshift(defaultValue);
+          }
+        }
+      }
+    }, {
+      key: "setDefaultNames",
+      value: function setDefaultNames() {
+        var _this4 = this;
+
+        if (this.values.length && this.defaultNames) {
+          // this.values[0].selected = true;
+          var defaultValue = this.values.find(function (x) {
+            return _this4.defaultNames.indexOf(x.name) !== -1;
           });
 
           if (defaultValue) {
@@ -2245,8 +2265,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         var mount = data_service_1.default.optionWithKey(constants_1.MtmControlEnum.Mount);
 
         mount.resolvePicture = function (item) {
-          var name = item.name.toLowerCase().replace(/[\s|\W]+/g, '-');
-          console.log(name);
+          var name = item.name.toLowerCase().replace(/[\s|\W]+/g, '-'); // console.log(name);
+
           /*
           surface-mount
           flush-mount
@@ -2329,6 +2349,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
         this.options.forEach(function (x) {
           x.onSelect(null);
           x.setDefaultValue();
+          x.setDefaultNames();
           x.updateState();
         });
         this.doReorder();

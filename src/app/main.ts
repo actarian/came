@@ -60,7 +60,7 @@ export default class MtmConfigurator {
 			const mount = MtmDataService.optionWithKey(MtmControlEnum.Mount);
 			mount.resolvePicture = (item: MtmValue): string => {
 				const name = item.name.toLowerCase().replace(/[\s|\W]+/g, '-');
-				console.log(name);
+				// console.log(name);
 				/*
 				surface-mount
 				flush-mount
@@ -124,6 +124,7 @@ export default class MtmConfigurator {
 		this.options.forEach(x => {
 			x.onSelect(null);
 			x.setDefaultValue();
+			x.setDefaultNames();
 			x.updateState();
 		});
 		this.doReorder();
