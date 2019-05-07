@@ -57,7 +57,7 @@
         <!-- QUESTIONS -->
         <div class="sidebar__item options-outlet"></div>
         <!-- QUESTIONS -->
-		<div class="sidebar__info">{{ disclaimer | t }}</div>
+		<div>{{ disclaimer | t }}</div>
 		<!--
         <div class="sidebar__item">
           <div class="h2">{{ 'Complete the intercom system with the receiver you prefer' | t }}</div>
@@ -74,44 +74,44 @@
   <section class="section section--recap hidden-md-up">
     <div class="inner">
       <div class="container">
-	  	{% if contact|length > 0 %}
         <div class="block">
           <div class="info-group">
-			  <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
+			{% if contact|length > 0 %}
+              <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
               <div class="info">{{ contact }}</div>
+			{% endif %}
           </div>
         </div>
-		{% endif %}
-	    {% if faq|length > 0 %}
         <div class="block">
           <div class="info-group">
+		    {% if faq|length > 0 %}
               <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
               <div class="info">{{ faq }}</div>
+			{% endif %}
           </div>
         </div>
-		{% endif %}
       </div>
     </div>
   </section>
   <section class="section section--recap section--recap--fixed">
     <div class="inner">
       <div class="container">
-		{% if contact|length > 0 %}
         <div class="block hidden-sm-down">
           <div class="info-group">
+		    {% if contact|length > 0 %}
               <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/chat.svg" /></div>
               <div class="info">{{ contact }}</div>
+			{% endif %}
           </div>
         </div>
-		{% endif %}
-        {% if faq|length > 0 %}
         <div class="block hidden-sm-down">
           <div class="info-group">
-		      <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
+		    {% if faq|length > 0 %}
+              <div class="icon"><img src="{{ app_root }}/img/mtm-configurator/faq.svg" /></div>
               <div class="info">{{ faq }}</a></div>
-		  </div>
+			{% endif %}
+          </div>
         </div>
-        {% endif %}
         <div class="block block--hilight">
           <div class="result-price"></div>
 		  <div class="group group-ctas">

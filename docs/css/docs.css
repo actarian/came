@@ -516,6 +516,10 @@ strong {
     .sidebar__item .btn--cta {
       width: 100%; } }
 
+.sidebar__info {
+  font-size: 10px;
+  line-height: 1.3; }
+
 .option {
   padding-top: 20px;
   margin-bottom: 30px; }
