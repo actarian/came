@@ -31,13 +31,13 @@ a {
 			line-height: 1.875;
 			font-weight: 700;
 		}
+	}
 
-		.price {
-			font-size: 16px;
-			line-height: 1.25;
-			font-weight: 500;
-			white-space: nowrap;
-		}
+	.price {
+		font-size: 15px;
+		line-height: 1.25;
+		font-weight: 500;
+		white-space: nowrap;
 	}
 
 	&.btn--picture {
@@ -69,10 +69,10 @@ a {
 			.text {
 				font-size: 14px;
 			}
+		}
 
-			.price {
-				font-size: 14px;
-			}
+		.price {
+			font-size: 14px;
 		}
 	}
 
@@ -194,12 +194,10 @@ a {
 	}
 
 	.noprice & {
-
 		.icon {
 			width: 60px;
 			flex: 0 0 60px;
 		}
-
 	}
 
 	.price {

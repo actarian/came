@@ -30,11 +30,11 @@ a {
       font-size: 16px;
       line-height: 1.875;
       font-weight: 700; }
-    .btn .label .price {
-      font-size: 16px;
-      line-height: 1.25;
-      font-weight: 500;
-      white-space: nowrap; }
+  .btn .price {
+    font-size: 15px;
+    line-height: 1.25;
+    font-weight: 500;
+    white-space: nowrap; }
   .btn.btn--picture {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -64,7 +64,7 @@ a {
   @media screen and (max-width: 767px) {
     .btn .label .text {
       font-size: 14px; }
-    .btn .label .price {
+    .btn .price {
       font-size: 14px; } }
   .btn.selected:after {
     content: "\E009";
