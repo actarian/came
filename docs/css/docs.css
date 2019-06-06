@@ -13,27 +13,58 @@ a {
     border: none;
     outline: 0; }
   .btn .label {
-    font-size: 16px;
-    line-height: 1.875;
-    font-weight: 700;
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
     -webkit-box-align: center;
         -ms-flex-align: center;
-            align-items: center; }
-    .btn .label img {
-      max-height: 40px;
-      margin-right: 10px; }
-  .btn .price {
-    font-size: 16px;
-    line-height: 1.25;
-    font-weight: 500;
-    white-space: nowrap; }
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
+    .btn .label .text {
+      font-size: 16px;
+      line-height: 1.875;
+      font-weight: 700; }
+    .btn .label .price {
+      font-size: 16px;
+      line-height: 1.25;
+      font-weight: 500;
+      white-space: nowrap; }
+  .btn.btn--picture {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row; }
+    .btn.btn--picture .picture {
+      -webkit-box-flex: 1;
+          -ms-flex: 1 1 40%;
+              flex: 1 1 40%;
+      margin-right: 10px;
+      text-align: right; }
+      .btn.btn--picture .picture img {
+        display: inline-block;
+        max-height: 40px;
+        mix-blend-mode: multiply; }
+    .btn.btn--picture .label {
+      -webkit-box-flex: 1;
+          -ms-flex: 1 1 60%;
+              flex: 1 1 60%;
+      -webkit-box-align: start;
+          -ms-flex-align: start;
+              align-items: flex-start;
+      min-width: 220px; }
   @media screen and (max-width: 767px) {
-    .btn .label {
+    .btn .label .text {
       font-size: 14px; }
-    .btn .price {
+    .btn .label .price {
       font-size: 14px; } }
   .btn.selected:after {
     content: "\E009";
@@ -568,6 +599,10 @@ strong {
   padding: 20px 10px;
   font-size: 13px;
   line-height: 1.38; }
+  .section--recap .block p {
+    font-size: 13px;
+    line-height: 1.38;
+    margin: 0; }
 
 .section--recap .block--hilight {
   display: -webkit-box;

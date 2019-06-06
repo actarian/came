@@ -24,7 +24,7 @@ export class MtmGrid extends MtmControl {
 
 	getChildTemplate?(item: MtmValue): string {
 		return `<div class="btn btn--system ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
-		<img class="icon" src="${this.paths.assets}img/mtm-configurator/${item.getKey()}.jpg" title="${item.name}" />${item.getPrice()}
+		<img class="icon" src="${this.paths.assets}img/mtm-configurator/${item.getKey()}.jpg" title="${item.locale}" />${item.getPrice()}
 		<button type="button" class="btn btn--info">i</button>
 	</div>`;
 	}

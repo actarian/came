@@ -62,10 +62,10 @@ export enum MtmControlEnum {
 
 export class MtmControls {
 
-	static selectNone = { id: -1, name: 'Select', value: -1 };
+	static selectNone = { id: -1, name: 'Select', locale: 'Select', value: -1 };
 
 	static withLocale(locale: { [key: string]: string; }): any[] {
-		MtmControls.selectNone.name = locale.selectNone || 'Select';
+		MtmControls.selectNone.locale = locale.selectNone || 'Select';
 		return [{
 			key: MtmControlEnum.Code, name: 'Code'
 		}, {

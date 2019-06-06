@@ -83,12 +83,12 @@ export class MtmControl {
 
 	getChildTemplate?(item: MtmValue): string {
 		if (this.dynamicPicture) {
-			return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
-			<span class="label"><img class="picture" src="${this.resolvePicture(item)}" /> ${item.name}</span>${item.getPrice()}
+			return `<button type="button" class="btn btn--option btn--picture ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
+			<span class="picture"><img src="${this.resolvePicture(item)}" /></span><span class="label"><span class="text">${item.locale}</span>${item.getPrice()}</span>
 		</button>`;
 		} else {
 			return `<button type="button" class="btn btn--option ${item.selected ? `selected` : ``} ${item.active ? `active` : ``}" data-id="${item.id}">
-			<span class="label">${item.name}</span>${item.getPrice()}
+			<span class="label"><span class="text">${item.locale}</span>${item.getPrice()}</span>
 		</button>`;
 		}
 	}
@@ -181,8 +181,7 @@ export class MtmControl {
 		}
 	}
 
-	addValue?(name: string, price: number, code: string = null): number {
-		name = name && name.toString().trim() !== '' ? name.toString() : 'No';
+	addValue?(name: string, locale: string, price: number, code: string = null): number {
 		if (name === 'No' &&
 			(this.key === MtmControlEnum.AudioVideo || this.key === MtmControlEnum.System)) {
 			return -1;
@@ -194,7 +193,7 @@ export class MtmControl {
 				console.log(this.key, name);
 			}
 			*/
-			item = new MtmValue({ id: ++this.count, name, price, value: parseInt(name), code: code });
+			item = new MtmValue({ id: ++this.count, name, locale, price, value: parseInt(name), code: code });
 			this.values.push(item);
 			/*
 			if (this.key === 'buttons') {

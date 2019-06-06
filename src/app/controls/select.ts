@@ -21,14 +21,14 @@ export class MtmSelect extends MtmControl {
 		<div class="control control--list ${this.className}">
 			<div class="btn btn--select">
 				<select class="form-control form-control--select"></select>
-				<span class="label"></span>
+				<span class="label"><span class="text"></span></span>
 			</div>
 		</div>
 	</div>`;
 	}
 
 	getChildTemplate?(item: MtmValue): string {
-		return `<option class="${item.selected ? `selected` : ``} ${item.disabled ? `disabled` : ``} ${item.active ? `active` : ``}" value="${item.id}" data-id="${item.id}">${item.name}</option>`;
+		return `<option class="${item.selected ? `selected` : ``} ${item.disabled ? `disabled` : ``} ${item.active ? `active` : ``}" value="${item.id}" data-id="${item.id}">${item.locale}</option>`;
 	}
 
 	render?(): DocumentFragment {
@@ -69,8 +69,8 @@ export class MtmSelect extends MtmControl {
 			this.currentItem = item;
 			// console.log(select.value, id, item);
 			if (item && this.element) {
-				const label = this.element.querySelector('.label');
-				label.innerHTML = item.name;
+				const label = this.element.querySelector('.label>.text');
+				label.innerHTML = item.locale;
 			}
 			if (typeof this.didChange === 'function') {
 				this.didChange(item, this);
@@ -91,8 +91,8 @@ export class MtmSelect extends MtmControl {
 		if (value) {
 			value.selected = true;
 			if (this.element) {
-				const label = this.element.querySelector('.label');
-				label.innerHTML = value.name;
+				const label = this.element.querySelector('.label>.text');
+				label.innerHTML = value.locale;
 				const select = this.element.querySelector('select') as HTMLSelectElement;
 				this.values.forEach((x, i) => {
 					x.selected = false;

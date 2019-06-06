@@ -210,7 +210,7 @@ export default class MtmDataService {
 				});
 				const partsKeys = this.partsKeys;
 				const keysPool: any = {};
-				const kits = all[0].map((x: any) => {
+				const kits = all[0].map((x: any, i: number) => {
 					let price = 0;
 					partsKeys.forEach((key: string) => {
 						if (x.hasOwnProperty(key)) {
@@ -287,15 +287,32 @@ export default class MtmDataService {
 				const cols: MtmControl[] = values.map((x: string) => MtmDataService.newControlByKey(x));
 				const colsPool: any = {};
 				cols.forEach((x: MtmControl) => colsPool[x.key] = x);
+				const valueMap: { [key: string]: string } = {};
 				const rows = kits.map((x: any) => values.filter((key: string) => colsPool[key]).map((key: string) => {
-					x.finish = (x.finish === 'Standard' ? localizations.buttonAluminumName : x.finish);
+					// x.finish = (x.finish === 'Standard' ? localizations.buttonAluminumName : x.finish);
 					const col = colsPool[key];
 					let code: string = null;
 					if (key === MtmControlEnum.Mount) {
 						code = x.mounting;
 					}
-					return col.addValue(x[key], x.price, code);
+					const originalValue = x[key];
+					let value = originalValue;
+					if (typeof value === 'string') {
+						value = value.trim();
+						if (key !== 'code' && parseInt(value).toString() !== value) {
+							value = value.trim();
+							valueMap[value] = value;
+						}
+					}
+					if (value && value.toString().trim() !== '') {
+						value = value.toString();
+					} else {
+						value = 'No';
+					}
+					const locale = localizations[value] || value;
+					return col.addValue(value, locale, x.price, code);
 				}));
+				console.log(JSON.stringify(valueMap));
 				cols.forEach((x, i) => x.sort(i));
 				MtmDataService.kits = kits;
 				MtmDataService.parts = parts;
@@ -321,7 +338,7 @@ export default class MtmDataService {
 				const csv = text.split('\n');
 				const cols = MtmDataService.parseCsvArray(csv.shift() || '').map(x => MtmDataService.renameColumn(x.trim())).map(x => MtmDataService.newControlByKey(x));
 				const records = csv.map(x => MtmDataService.parseCsvArray(x).map(x => x.trim()));
-				const rows = records.map((values: string[]) => values.map((value: string, i: number) => cols[i].addValue(value, 0)).filter(x => x));
+				const rows = records.map((values: string[]) => values.map((value: string, i: number) => cols[i].addValue(value, value, 0)).filter(x => x));
 				cols.forEach((x, i) => x.sort(i));
 				MtmDataService.cols = cols;
 				MtmDataService.rows = rows;

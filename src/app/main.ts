@@ -606,7 +606,7 @@ export default class MtmConfigurator {
 			if (row[i]) {
 				const value = c.values.find(v => v.id === row[i]);
 				if (value) {
-					result[c.key] = value.name;
+					result[c.key] = value.locale;
 					// c.onSelect(value, true);
 				} else {
 					result[c.key] = '-';

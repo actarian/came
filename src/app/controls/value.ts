@@ -2,6 +2,7 @@
 export class MtmValue {
 	id: number;
 	name: string;
+	locale: string;
 	code?: string;
 	price?: number = 0;
 	count?: number = 1;
@@ -34,6 +35,7 @@ export class MtmValue {
 	constructor(options?: MtmValue) {
 		if (options) {
 			Object.assign(this, options);
+			this.locale = this.locale || this.name;
 		}
 	}
 

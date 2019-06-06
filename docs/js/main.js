@@ -629,7 +629,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     _createClass(MtmControls, null, [{
       key: "withLocale",
       value: function withLocale(locale) {
-        MtmControls.selectNone.name = locale.selectNone || 'Select';
+        MtmControls.selectNone.locale = locale.selectNone || 'Select';
         return [{
           key: MtmControlEnum.Code,
           name: 'Code'
@@ -838,6 +838,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   MtmControls.selectNone = {
     id: -1,
     name: 'Select',
+    locale: 'Select',
     value: -1
   };
   exports.MtmControls = MtmControls;
@@ -956,9 +957,9 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
         if (this.dynamicPicture) {
-          return "<button type=\"button\" class=\"btn btn--option ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t\t<span class=\"label\"><img class=\"picture\" src=\"").concat(this.resolvePicture(item), "\" /> ").concat(item.name, "</span>").concat(item.getPrice(), "\n\t\t</button>");
+          return "<button type=\"button\" class=\"btn btn--option btn--picture ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t\t<span class=\"picture\"><img src=\"").concat(this.resolvePicture(item), "\" /></span><span class=\"label\"><span class=\"text\">").concat(item.locale, "</span>").concat(item.getPrice(), "</span>\n\t\t</button>");
         } else {
-          return "<button type=\"button\" class=\"btn btn--option ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t\t<span class=\"label\">").concat(item.name, "</span>").concat(item.getPrice(), "\n\t\t</button>");
+          return "<button type=\"button\" class=\"btn btn--option ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t\t<span class=\"label\"><span class=\"text\">").concat(item.locale, "</span>").concat(item.getPrice(), "</span>\n\t\t</button>");
         }
       }
     }, {
@@ -1092,9 +1093,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
       }
     }, {
       key: "addValue",
-      value: function addValue(name, price) {
-        var code = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-        name = name && name.toString().trim() !== '' ? name.toString() : 'No';
+      value: function addValue(name, locale, price) {
+        var code = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
         if (name === 'No' && (this.key === constants_1.MtmControlEnum.AudioVideo || this.key === constants_1.MtmControlEnum.System)) {
           return -1;
@@ -1111,6 +1111,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           item = new value_1.MtmValue({
             id: ++this.count,
             name: name,
+            locale: locale,
             price: price,
             value: parseInt(name),
             code: code
@@ -1318,7 +1319,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<div class=\"btn btn--system ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"").concat(this.paths.assets, "img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.name, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
+        return "<div class=\"btn btn--system ".concat(item.selected ? "selected" : "", " ").concat(item.active ? "active" : "", "\" data-id=\"").concat(item.id, "\">\n\t\t<img class=\"icon\" src=\"").concat(this.paths.assets, "img/mtm-configurator/").concat(item.getKey(), ".jpg\" title=\"").concat(item.locale, "\" />").concat(item.getPrice(), "\n\t\t<button type=\"button\" class=\"btn btn--info\">i</button>\n\t</div>");
       }
     }]);
 
@@ -1532,12 +1533,12 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
     _createClass(MtmSelect, [{
       key: "getTemplate",
       value: function getTemplate() {
-        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
+        return "<div class=\"option option--".concat(this.key, "\">\n\t\t<div class=\"title\">").concat(this.name, "</div>").concat(this.description ? "<div class=\"subtitle\">".concat(this.description, "</div>") : "", "\n\t\t<div class=\"control control--list ").concat(this.className, "\">\n\t\t\t<div class=\"btn btn--select\">\n\t\t\t\t<select class=\"form-control form-control--select\"></select>\n\t\t\t\t<span class=\"label\"><span class=\"text\"></span></span>\n\t\t\t</div>\n\t\t</div>\n\t</div>");
       }
     }, {
       key: "getChildTemplate",
       value: function getChildTemplate(item) {
-        return "<option class=\"".concat(item.selected ? "selected" : "", " ").concat(item.disabled ? "disabled" : "", " ").concat(item.active ? "active" : "", "\" value=\"").concat(item.id, "\" data-id=\"").concat(item.id, "\">").concat(item.name, "</option>");
+        return "<option class=\"".concat(item.selected ? "selected" : "", " ").concat(item.disabled ? "disabled" : "", " ").concat(item.active ? "active" : "", "\" value=\"").concat(item.id, "\" data-id=\"").concat(item.id, "\">").concat(item.locale, "</option>");
       }
     }, {
       key: "render",
@@ -1596,8 +1597,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           this.currentItem = item; // console.log(select.value, id, item);
 
           if (item && this.element) {
-            var label = this.element.querySelector('.label');
-            label.innerHTML = item.name;
+            var label = this.element.querySelector('.label>.text');
+            label.innerHTML = item.locale;
           }
 
           if (typeof this.didChange === 'function') {
@@ -1625,8 +1626,8 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
           value.selected = true;
 
           if (this.element) {
-            var label = this.element.querySelector('.label');
-            label.innerHTML = value.name;
+            var label = this.element.querySelector('.label>.text');
+            label.innerHTML = value.locale;
             var select = this.element.querySelector('select');
             this.values.forEach(function (x, i) {
               x.selected = false;
@@ -1691,6 +1692,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       if (options) {
         Object.assign(this, options);
+        this.locale = this.locale || this.name;
       }
     }
 
@@ -1915,7 +1917,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           });
           var partsKeys = _this.partsKeys;
           var keysPool = {};
-          var kits = all[0].map(function (x) {
+          var kits = all[0].map(function (x, i) {
             var price = 0;
             partsKeys.forEach(function (key) {
               if (x.hasOwnProperty(key)) {
@@ -2003,11 +2005,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           cols.forEach(function (x) {
             return colsPool[x.key] = x;
           });
+          var valueMap = {};
           var rows = kits.map(function (x) {
             return values.filter(function (key) {
               return colsPool[key];
             }).map(function (key) {
-              x.finish = x.finish === 'Standard' ? localizations.buttonAluminumName : x.finish;
+              // x.finish = (x.finish === 'Standard' ? localizations.buttonAluminumName : x.finish);
               var col = colsPool[key];
               var code = null;
 
@@ -2015,9 +2018,29 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                 code = x.mounting;
               }
 
-              return col.addValue(x[key], x.price, code);
+              var originalValue = x[key];
+              var value = originalValue;
+
+              if (typeof value === 'string') {
+                value = value.trim();
+
+                if (key !== 'code' && parseInt(value).toString() !== value) {
+                  value = value.trim();
+                  valueMap[value] = value;
+                }
+              }
+
+              if (value && value.toString().trim() !== '') {
+                value = value.toString();
+              } else {
+                value = 'No';
+              }
+
+              var locale = localizations[value] || value;
+              return col.addValue(value, locale, x.price, code);
             });
           });
+          console.log(JSON.stringify(valueMap));
           cols.forEach(function (x, i) {
             return x.sort(i);
           });
@@ -2057,7 +2080,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           });
           var rows = records.map(function (values) {
             return values.map(function (value, i) {
-              return cols[i].addValue(value, 0);
+              return cols[i].addValue(value, value, 0);
             }).filter(function (x) {
               return x;
             });
@@ -2983,7 +3006,7 @@ var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
             });
 
             if (value) {
-              result[c.key] = value.name; // c.onSelect(value, true);
+              result[c.key] = value.locale; // c.onSelect(value, true);
             } else {
               result[c.key] = '-';
             }

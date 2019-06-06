@@ -283,6 +283,12 @@ strong {
 		padding: 20px 10px;
 		font-size: 13px;
 		line-height: 1.38;
+
+		& p {
+			font-size: 13px;
+			line-height: 1.38;
+			margin: 0;
+		}
 	}
 
 	.block--hilight {
